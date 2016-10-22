@@ -1,3 +1,7 @@
+# enfore lf line ending
+*.xml eol=lf
+*.java eol=lf
+
 # apk-files
 *.apk filter=lfs diff=lfs merge=lfs -text
 *.APK filter=lfs diff=lfs merge=lfs -text
