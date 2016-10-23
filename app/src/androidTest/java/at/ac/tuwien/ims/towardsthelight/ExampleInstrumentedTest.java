@@ -1,4 +1,4 @@
-package at.ac.tuwien.ims.uemultimediatemplate;
+package at.ac.tuwien.ims.towardsthelight;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -20,7 +20,5 @@ public class ExampleInstrumentedTest {
     public void useAppContext() throws Exception {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
-
-        assertEquals("at.ac.tuwien.ims.uemultimediatemplate", appContext.getPackageName());
     }
 }

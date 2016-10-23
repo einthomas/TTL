@@ -1,4 +1,4 @@
-package at.ac.tuwien.ims.uemultimediatemplate;
+package at.ac.tuwien.ims.towardsthelight;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
