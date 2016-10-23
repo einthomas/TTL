@@ -4,6 +4,7 @@
 /local.properties
 /.idea/workspace.xml
 /.idea/libraries
+/.idea
 
 # mac stuff
 .DS_Store
