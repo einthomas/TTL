@@ -62,8 +62,8 @@ public class GameLoop implements Runnable {
                 canvas = surfaceHolder.lockCanvas(null);
                 synchronized (surfaceHolder) {
                     if (canvas != null) {
-                        //gameSurfaceView.onDraw(canvas);
-                        gameSurfaceView.draw(canvas);
+                        gameSurfaceView.onDraw(canvas);
+                        //gameSurfaceView.draw(canvas);
                     }
                 }
             } finally {

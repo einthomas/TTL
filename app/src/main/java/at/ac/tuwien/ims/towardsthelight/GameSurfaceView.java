@@ -16,9 +16,12 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     private Thread gameLoopThread;
     private Paint paint;
 
-    public GameSurfaceView(Context context, AttributeSet attrs, int defStyle) {
-        super(context, attrs, defStyle);
+    //public GameSurfaceView(Context context, AttributeSet attrs, int defStyle) {
+    public GameSurfaceView(Context context, AttributeSet attrs) {
+        //super(context, attrs, defStyle);
+        super(context, attrs);
         getHolder().addCallback(this);
+        setFocusable(true);
 
         // TODO: initialize assets
 

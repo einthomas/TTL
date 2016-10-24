@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Towards the Light</string>
+    <string name="start_game">Start game</string>
+
+    <string name="title_activity_fullscreen">FullscreenActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
 </resources>
