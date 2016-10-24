@@ -5,6 +5,7 @@
 /.idea/workspace.xml
 /.idea/libraries
 /.idea
+build.gradle
 
 # mac stuff
 .DS_Store
@@ -13,5 +14,5 @@
 /build
 /captures
 .externalNativeBuild
-
+/app/build
 
