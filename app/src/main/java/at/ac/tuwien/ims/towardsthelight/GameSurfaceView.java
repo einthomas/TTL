@@ -17,8 +17,8 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     private Thread gameLoopThread;
     private Paint paint;
 
-    int gameWidth = 9 * 16;
-    int gameHeight = 16 * 16;
+    int gameWidth = 8 * 8;
+    int gameHeight = 15 * 8;
 
     Matrix gameMatrix = new Matrix();
     Matrix gameMatrixInverse = new Matrix();
@@ -112,7 +112,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         canvas.drawRect(0, 0, gameWidth, gameHeight, paint);
 
         paint.setARGB(255, 0, 0, 0);
-        canvas.drawRect(player.x - 8, 13 * 16, player.x + 8, 14 * 16, paint);
+        canvas.drawRect(Math.round(player.x - 4), 10 * 8, Math.round(player.x + 4), 11 * 8, paint);
     }
 
     public void draw(Canvas canvas) {
