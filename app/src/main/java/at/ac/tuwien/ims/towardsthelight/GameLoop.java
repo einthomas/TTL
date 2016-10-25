@@ -2,17 +2,18 @@ package at.ac.tuwien.ims.towardsthelight;
 
 import android.graphics.Canvas;
 import android.view.SurfaceHolder;
+import android.view.SurfaceView;
 
 public class GameLoop implements Runnable {
 
     private SurfaceHolder surfaceHolder;
-    private GameSurfaceView gameSurfaceView;
+    private SurfaceView surfaceView;
     private boolean running;
     private float previousFrameTime;
 
-    public GameLoop(SurfaceHolder surfaceHolder, GameSurfaceView gameSurfaceView) {
+    public GameLoop(SurfaceHolder surfaceHolder, SurfaceView surfaceView) {
         this.surfaceHolder = surfaceHolder;
-        this.gameSurfaceView = gameSurfaceView;
+        this.surfaceView = surfaceView;
     }
 
     /**
@@ -62,8 +63,7 @@ public class GameLoop implements Runnable {
                 canvas = surfaceHolder.lockCanvas(null);
                 synchronized (surfaceHolder) {
                     if (canvas != null) {
-                        gameSurfaceView.onDraw(canvas);
-                        //gameSurfaceView.draw(canvas);
+                        surfaceView.draw(canvas);
                     }
                 }
             } finally {

@@ -4,17 +4,11 @@
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="at.ac.tuwien.ims.towardsthelight.MainActivity">
 
-    <Button
-        android:id="@+id/btnStartGameActivity"
-        android:text="@string/start_game"
+    <at.ac.tuwien.ims.towardsthelight.MenuSurfaceView
+        android:id="@+id/menu_drawing_area"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:onClick="startGameActivity"/>
+        android:layout_height="match_parent" />
 
 </RelativeLayout>

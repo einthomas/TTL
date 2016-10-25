@@ -1,6 +1,7 @@
 package at.ac.tuwien.ims.towardsthelight;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -10,14 +11,18 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
-public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callback {
+public class MenuSurfaceView extends SurfaceView implements SurfaceHolder.Callback {
 
     private GameLoop gameLoop;
     private Thread gameLoopThread;
     private Paint paint;
+    private Context context;
 
-    public GameSurfaceView(Context context, AttributeSet attrs) {
+    public MenuSurfaceView(Context context, AttributeSet attrs) {
         super(context, attrs);
+
+        this.context = context;
+
         getHolder().addCallback(this);
         setFocusable(true);
 
@@ -60,11 +65,11 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        context.startActivity(new Intent(context, GameActivity.class));
         return false;
     }
 
-    @Override
     public void draw(Canvas canvas) {
-        canvas.drawColor(Color.GRAY);
+        canvas.drawColor(Color.BLUE);
     }
 }
