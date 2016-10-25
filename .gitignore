@@ -15,4 +15,4 @@ build.gradle
 /captures
 .externalNativeBuild
 /app/build
-
+/app/build.gradle
