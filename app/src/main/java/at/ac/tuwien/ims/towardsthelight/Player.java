@@ -5,6 +5,6 @@ package at.ac.tuwien.ims.towardsthelight;
  */
 
 public class Player {
-    float x, y;
-    float vx, vy;
+    public float x, y;
+    public float vx, vy;
 }
