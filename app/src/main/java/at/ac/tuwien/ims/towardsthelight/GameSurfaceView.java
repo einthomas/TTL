@@ -11,6 +11,10 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import at.ac.tuwien.ims.towardsthelight.level.Level;
+import at.ac.tuwien.ims.towardsthelight.level.LevelInfo;
+import at.ac.tuwien.ims.towardsthelight.level.Obstacle;
+
 public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callback {
 
     private GameLoop gameLoop;
@@ -24,6 +28,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     Matrix gameMatrixInverse = new Matrix();
 
     Player player = new Player();
+    Level selectedLevel;
 
     public GameSurfaceView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -33,6 +38,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         // TODO: initialize assets
 
         paint = new Paint();
+        selectedLevel = new Level(context, new LevelInfo("level1.txt", 999, 1));
     }
 
     /**
@@ -77,8 +83,8 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
                 (width - gameWidth * scale) / 2,
                 (height - gameHeight * scale) / 2
         );
-
-        gameMatrix.preScale(scale, scale);
+        gameMatrix.preScale(scale, -scale);
+        gameMatrix.preTranslate(0, -gameHeight);
 
         gameMatrix.invert(gameMatrixInverse);
     }
@@ -106,9 +112,19 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         Paint paint = new Paint();
         paint.setARGB(255, 255, 255, 255);
 
-        canvas.drawRect(0, 0, gameWidth, gameHeight, paint);
+        //canvas.drawRect(0, 0, gameWidth, gameHeight, paint);
 
-        paint.setARGB(255, 0, 0, 0);
+        for (int i = selectedLevel.obstacles.size() - 1; i >= 0; i--) {
+            Obstacle obstacle = selectedLevel.obstacles.get(i);
+            if (obstacle.gridPositionY * 8 + 8 > gameHeight) {
+                break;
+            }
+
+            canvas.drawRect(obstacle.gridPositionX * 8, obstacle.gridPositionY * 8 + 8,
+                            obstacle.gridPositionX * 8 + 8, obstacle.gridPositionY * 8, paint);
+        }
+
+        paint.setARGB(255, 255, 0, 0);
         canvas.drawRect(Math.round(player.x - 4), 10 * 8, Math.round(player.x + 4), 11 * 8, paint);
     }
 }
