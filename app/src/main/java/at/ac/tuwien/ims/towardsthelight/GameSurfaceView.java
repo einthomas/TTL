@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -27,8 +28,10 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     Matrix gameMatrix = new Matrix();
     Matrix gameMatrixInverse = new Matrix();
 
-    Player player = new Player();
+    public Player player = new Player();
     Level selectedLevel;
+
+    boolean boost = false;
 
     public GameSurfaceView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -101,10 +104,28 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
         player.x = position[0];
 
+        if (position[1] < 4 * 8 && position[1] > 2 * 8 && event.getAction() == MotionEvent.ACTION_MOVE) {
+            boost = true;
+        }  else {
+            boost = false;
+        }
+
         return true;
     }
 
     public void draw(Canvas canvas) {
+
+        if (boost) {
+            player.velocityY += 4.0 / 60f;
+        } else {
+            player.velocityY -= 16.0 / 60f;
+            if (player.velocityY < 2.0) {
+                player.velocityY = 2;
+            }
+        }
+
+        player.y += player.velocityY / 60 * 8.0;
+
         canvas.drawColor(Color.BLACK);
 
         canvas.setMatrix(gameMatrix);
@@ -112,19 +133,29 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         Paint paint = new Paint();
         paint.setARGB(255, 255, 255, 255);
 
+        RectF playerRect = new RectF(Math.round(player.x - 4), 4 * 8, Math.round(player.x + 4), 5 * 8);
+
         //canvas.drawRect(0, 0, gameWidth, gameHeight, paint);
 
         for (int i = selectedLevel.obstacles.size() - 1; i >= 0; i--) {
             Obstacle obstacle = selectedLevel.obstacles.get(i);
-            if (obstacle.gridPositionY * 8 + 8 > gameHeight) {
+            if (obstacle.gridPositionY * 8 - player.y > gameHeight) {
                 break;
             }
 
-            canvas.drawRect(obstacle.gridPositionX * 8, obstacle.gridPositionY * 8 + 8,
-                            obstacle.gridPositionX * 8 + 8, obstacle.gridPositionY * 8, paint);
+            RectF rect = new RectF(
+                obstacle.gridPositionX * 8, obstacle.gridPositionY * 8 - player.y,
+                obstacle.gridPositionX * 8 + 8, obstacle.gridPositionY * 8 + 8 - player.y
+            );
+
+            if (RectF.intersects(rect, playerRect)) {
+                player.velocityY = 1;
+            }
+
+            canvas.drawRect(rect, paint);
         }
 
         paint.setARGB(255, 255, 0, 0);
-        canvas.drawRect(Math.round(player.x - 4), 10 * 8, Math.round(player.x + 4), 11 * 8, paint);
+        canvas.drawRect(playerRect, paint);
     }
 }

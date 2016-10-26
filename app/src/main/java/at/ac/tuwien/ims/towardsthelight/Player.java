@@ -6,5 +6,5 @@ package at.ac.tuwien.ims.towardsthelight;
 
 public class Player {
     public float x, y;
-    public float vx, vy;
+    public float vx, velocityY;
 }
