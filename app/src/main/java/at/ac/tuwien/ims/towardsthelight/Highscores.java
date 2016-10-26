@@ -32,8 +32,6 @@ public class Highscores {
     }
 
     public Score getHighscore(int level) {
-        database.beginTransaction();
-
         Cursor cursor = database.rawQuery(
             "SELECT time, score FROM highscore WHERE level = ?;", new String[] {
                 Integer.toString(level)
@@ -42,35 +40,20 @@ public class Highscores {
 
         Score score = null;
         if (cursor.moveToNext()) {
-            score = new Score(cursor.getInt(1), cursor.getInt(2));
+            score = new Score(cursor.getInt(0), cursor.getInt(1));
         }
 
         cursor.close();
-
-        database.endTransaction();
 
         return score;
     }
 
     public void putHighscore(int level, Score score) {
-        database.beginTransaction();
-
-        /*
-        database.execSQL(
-            "INSERT INTO highscore VALUES (?, ?, ?);", new Integer[] {
-                level,
-                score.time,
-                score.score
-            }
-        );*/
-
         ContentValues record = new ContentValues();
         record.put("level", level);
         record.put("time", score.time);
         record.put("score", score.score);
 
         database.insert("highscore", null, record);
-
-        database.endTransaction();
     }
 }
