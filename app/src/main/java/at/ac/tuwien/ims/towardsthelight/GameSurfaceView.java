@@ -15,13 +15,14 @@ import android.view.SurfaceView;
 import at.ac.tuwien.ims.towardsthelight.level.Level;
 import at.ac.tuwien.ims.towardsthelight.level.LevelInfo;
 import at.ac.tuwien.ims.towardsthelight.level.Obstacle;
+import at.ac.tuwien.ims.towardsthelight.ui.InGameUI;
 
 public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callback {
 
-    private final int BLOCK_WIDTH = 8;
-    private final int BLOCK_HEIGHT = 8;
-    private final int BLOCK_COUNT_WIDTH = 8;
-    private final int BLOCK_COUNT_HEIGHT = 15;
+    private final int BLOCK_WIDTH = 4;
+    private final int BLOCK_HEIGHT = 4;
+    private final int BLOCK_COUNT_WIDTH = 16;
+    private final int BLOCK_COUNT_HEIGHT = 30;
 
     private final int GAME_WIDTH = BLOCK_COUNT_WIDTH * BLOCK_WIDTH;
     private final int GAME_HEIGHT = BLOCK_COUNT_HEIGHT * BLOCK_HEIGHT;
@@ -36,7 +37,12 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     private Player player;
     private Level selectedLevel;
 
-    boolean boost = false;
+    private InGameUI inGameUI;
+
+    private boolean boost = false;
+
+    private int fps = 0;
+    private int iterationCounter = 0;
 
     public GameSurfaceView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -48,8 +54,9 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         gameMatrix = new Matrix();
         gameMatrixInverse = new Matrix();
         player = new Player();
+        inGameUI = new InGameUI();
         paint = new Paint();
-        selectedLevel = new Level(context, new LevelInfo("level1.txt", 999, 1));
+        selectedLevel = new Level(context, new LevelInfo("level2.txt", 999, 1));
     }
 
     /**
@@ -121,7 +128,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
     public void draw(Canvas canvas) {
         if (boost) {
-            player.velocityY += Player.BOOST_Y / 60f;
+            player.velocityY += Player.BOOST_Y / 60;
         } else {
             player.velocityY -= 16.0 / 60f;
             if (player.velocityY < 2.0) {
@@ -166,5 +173,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
         paint.setARGB(255, 255, 0, 0);
         canvas.drawRect(playerRect, paint);
+
+        inGameUI.draw(canvas, gameLoop.getFPS());
     }
 }
