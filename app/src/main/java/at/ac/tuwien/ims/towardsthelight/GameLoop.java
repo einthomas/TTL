@@ -9,7 +9,8 @@ public class GameLoop implements Runnable {
     private SurfaceHolder surfaceHolder;
     private SurfaceView surfaceView;
     private boolean running;
-    private float previousFrameTime;
+    private double previousFrameTime;
+    private double deltaTime;
 
     public GameLoop(SurfaceHolder surfaceHolder, SurfaceView surfaceView) {
         this.surfaceHolder = surfaceHolder;
@@ -23,19 +24,31 @@ public class GameLoop implements Runnable {
         this.running = running;
     }
 
-    public void updateGame(float timePerFrame) {
+    public void updateGame(double timePerFrame) {
     }
 
     /**
      * Calculate how long the last frame has needed to draw the screen
+     *
+     * @author Thomas Koch
      * @return the length of the last frame
      */
-    public float getDeltaTime() {
-        float currentFrameTime = System.currentTimeMillis() / 1000.0f;
-        float deltaTime = currentFrameTime - previousFrameTime;
+    public double getDeltaTime() {
+        double currentFrameTime = System.currentTimeMillis() / 1000.0;
+        double deltaTime = currentFrameTime - previousFrameTime;
         previousFrameTime = currentFrameTime;
 
         return deltaTime;
+    }
+
+    /**
+     * Calculates FPS
+     *
+     * @author Thomas Koch
+     * @return the frames per second
+     */
+    public int getFPS() {
+        return (int) Math.round(1.0 / deltaTime);
     }
 
     /**
@@ -44,10 +57,9 @@ public class GameLoop implements Runnable {
     @Override
     public void run() {
         Canvas canvas = null;
-        float deltaTime;
 
         running = true;
-        previousFrameTime = System.currentTimeMillis();
+        previousFrameTime = System.currentTimeMillis() / 1000.0f;
 
         // Gameloop
         while (running) {
@@ -72,10 +84,12 @@ public class GameLoop implements Runnable {
                 }
             }
 
+            /*
             try {
                 Thread.sleep(1000 / 60);
             } catch (InterruptedException e) {
             }
+            */
         }
 
         // "Destroy"
