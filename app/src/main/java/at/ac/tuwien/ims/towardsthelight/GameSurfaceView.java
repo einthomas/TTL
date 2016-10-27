@@ -18,18 +18,23 @@ import at.ac.tuwien.ims.towardsthelight.level.Obstacle;
 
 public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callback {
 
+    private final int BLOCK_WIDTH = 8;
+    private final int BLOCK_HEIGHT = 8;
+    private final int BLOCK_COUNT_WIDTH = 8;
+    private final int BLOCK_COUNT_HEIGHT = 15;
+
+    private final int GAME_WIDTH = BLOCK_COUNT_WIDTH * BLOCK_WIDTH;
+    private final int GAME_HEIGHT = BLOCK_COUNT_HEIGHT * BLOCK_HEIGHT;
+
     private GameLoop gameLoop;
     private Thread gameLoopThread;
     private Paint paint;
 
-    int gameWidth = 8 * 8;
-    int gameHeight = 15 * 8;
+    private Matrix gameMatrix;
+    private Matrix gameMatrixInverse;
 
-    Matrix gameMatrix = new Matrix();
-    Matrix gameMatrixInverse = new Matrix();
-
-    public Player player = new Player();
-    Level selectedLevel;
+    private Player player;
+    private Level selectedLevel;
 
     boolean boost = false;
 
@@ -40,6 +45,9 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
         // TODO: initialize assets
 
+        gameMatrix = new Matrix();
+        gameMatrixInverse = new Matrix();
+        player = new Player();
         paint = new Paint();
         selectedLevel = new Level(context, new LevelInfo("level1.txt", 999, 1));
     }
@@ -71,23 +79,21 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         gameMatrix.reset();
 
         float screenAspectRatio = (float) width / height;
-        float gameAspectRatio = (float) gameWidth / gameHeight;
+        float gameAspectRatio = (float) GAME_WIDTH / GAME_HEIGHT;
 
         float scale;
         if (screenAspectRatio > gameAspectRatio) {
-            // fit to height
-            scale = (float) height / gameHeight;
+            scale = (float) height / GAME_HEIGHT;   // fit to height
         } else {
-            // fit to width
-            scale = (float) width / gameWidth;
+            scale = (float) width / GAME_WIDTH;     // fit to width
         }
 
-        gameMatrix.preTranslate(
-                (width - gameWidth * scale) / 2,
-                (height - gameHeight * scale) / 2
+        gameMatrix.preTranslate(                    // center
+                (width - GAME_WIDTH * scale) / 2,
+                (height - GAME_HEIGHT * scale) / 2
         );
-        gameMatrix.preScale(scale, -scale);
-        gameMatrix.preTranslate(0, -gameHeight);
+        gameMatrix.preScale(scale, -scale);         // mirror about x axis
+        gameMatrix.preTranslate(0, -GAME_HEIGHT);
 
         gameMatrix.invert(gameMatrixInverse);
     }
@@ -104,9 +110,9 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
         player.x = position[0];
 
-        if (position[1] < 4 * 8 && position[1] > 2 * 8 && event.getAction() == MotionEvent.ACTION_MOVE) {
+        if (position[1] < 4 * BLOCK_WIDTH && position[1] > 2 * BLOCK_HEIGHT && event.getAction() == MotionEvent.ACTION_MOVE) {
             boost = true;
-        }  else {
+        } else {
             boost = false;
         }
 
@@ -114,13 +120,12 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     }
 
     public void draw(Canvas canvas) {
-
         if (boost) {
-            player.velocityY += 4.0 / 60f;
+            player.velocityY += Player.BOOST_Y / 60f;
         } else {
             player.velocityY -= 16.0 / 60f;
             if (player.velocityY < 2.0) {
-                player.velocityY = 2;
+                player.velocityY = Player.MIN_VELOCITY_Y;
             }
         }
 
@@ -133,23 +138,27 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         Paint paint = new Paint();
         paint.setARGB(255, 255, 255, 255);
 
-        RectF playerRect = new RectF(Math.round(player.x - 4), 4 * 8, Math.round(player.x + 4), 5 * 8);
+        RectF playerRect = new RectF(
+                Math.round(player.x - BLOCK_WIDTH / 2), BLOCK_HEIGHT * 4,
+                Math.round(player.x + BLOCK_WIDTH / 2), BLOCK_HEIGHT * 5
+        );
 
-        //canvas.drawRect(0, 0, gameWidth, gameHeight, paint);
-
+        // draw level
         for (int i = selectedLevel.obstacles.size() - 1; i >= 0; i--) {
             Obstacle obstacle = selectedLevel.obstacles.get(i);
-            if (obstacle.gridPositionY * 8 - player.y > gameHeight) {
+            if (obstacle.gridPositionY * BLOCK_HEIGHT - player.y > GAME_HEIGHT) {
                 break;
             }
 
             RectF rect = new RectF(
-                obstacle.gridPositionX * 8, obstacle.gridPositionY * 8 - player.y,
-                obstacle.gridPositionX * 8 + 8, obstacle.gridPositionY * 8 + 8 - player.y
+                    obstacle.gridPositionX * BLOCK_WIDTH,                             // left
+                    obstacle.gridPositionY * BLOCK_HEIGHT - player.y,                 // top
+                    obstacle.gridPositionX * BLOCK_WIDTH + BLOCK_WIDTH,               // right
+                    obstacle.gridPositionY * BLOCK_HEIGHT + BLOCK_HEIGHT - player.y   // bottom
             );
 
             if (RectF.intersects(rect, playerRect)) {
-                player.velocityY = 1;
+                player.velocityY = Player.SLOWED_VELOCITY_Y;
             }
 
             canvas.drawRect(rect, paint);
