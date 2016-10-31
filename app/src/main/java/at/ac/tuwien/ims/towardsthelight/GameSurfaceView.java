@@ -125,15 +125,15 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
     public void draw(Canvas canvas) {
         if (boost) {
-            player.velocityY += Player.BOOST_Y / 60;
+            player.velocityY += Player.BOOST_Y * gameLoop.getDeltaTime();
         } else {
-            player.velocityY -= 16.0 / 60f;
+            player.velocityY -= 16.0 * gameLoop.getDeltaTime();
             if (player.velocityY < 2.0) {
                 player.velocityY = Player.MIN_VELOCITY_Y;
             }
         }
 
-        player.y += player.velocityY / 60 * 8.0;
+        player.y += player.velocityY * gameLoop.getDeltaTime() * 8.0;
 
         canvas.drawColor(Color.BLACK);
 

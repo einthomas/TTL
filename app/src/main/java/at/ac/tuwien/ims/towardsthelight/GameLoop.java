@@ -33,7 +33,7 @@ public class GameLoop implements Runnable {
      * @author Thomas Koch
      * @return the length of the last frame
      */
-    public double getDeltaTime() {
+    private double calculateDeltaTime() {
         double currentFrameTime = System.currentTimeMillis() / 1000.0;
         double deltaTime = currentFrameTime - previousFrameTime;
         previousFrameTime = currentFrameTime;
@@ -51,6 +51,10 @@ public class GameLoop implements Runnable {
         return (int) Math.round(1.0 / deltaTime);
     }
 
+    public double getDeltaTime() {
+        return deltaTime;
+    }
+
     /**
      * Executes the game loop
      */
@@ -59,12 +63,12 @@ public class GameLoop implements Runnable {
         Canvas canvas;
 
         running = true;
-        previousFrameTime = System.currentTimeMillis() / 1000.0f;
+        previousFrameTime = System.currentTimeMillis() / 1000.0;
 
         // Gameloop
         while (running) {
             // Frame independence
-            deltaTime = getDeltaTime();
+            deltaTime = calculateDeltaTime();
 
             // Update
             updateGame(deltaTime);
