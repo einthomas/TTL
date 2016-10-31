@@ -56,7 +56,7 @@ public class GameLoop implements Runnable {
      */
     @Override
     public void run() {
-        Canvas canvas = null;
+        Canvas canvas;
 
         running = true;
         previousFrameTime = System.currentTimeMillis() / 1000.0f;

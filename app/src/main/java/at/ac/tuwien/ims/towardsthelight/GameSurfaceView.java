@@ -41,9 +41,6 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
     private boolean boost = false;
 
-    private int fps = 0;
-    private int iterationCounter = 0;
-
     public GameSurfaceView(Context context, AttributeSet attrs) {
         super(context, attrs);
         getHolder().addCallback(this);
@@ -157,18 +154,20 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
                 break;
             }
 
-            RectF rect = new RectF(
-                    obstacle.gridPositionX * BLOCK_WIDTH,                             // left
-                    obstacle.gridPositionY * BLOCK_HEIGHT - player.y,                 // top
-                    obstacle.gridPositionX * BLOCK_WIDTH + BLOCK_WIDTH,               // right
-                    obstacle.gridPositionY * BLOCK_HEIGHT + BLOCK_HEIGHT - player.y   // bottom
-            );
+            if (obstacle.gridPositionY * BLOCK_HEIGHT + BLOCK_HEIGHT - player.y > 0) {
+                RectF rect = new RectF(
+                        obstacle.gridPositionX * BLOCK_WIDTH,                             // left
+                        obstacle.gridPositionY * BLOCK_HEIGHT - player.y,                 // top
+                        obstacle.gridPositionX * BLOCK_WIDTH + BLOCK_WIDTH,               // right
+                        obstacle.gridPositionY * BLOCK_HEIGHT + BLOCK_HEIGHT - player.y   // bottom
+                );
 
-            if (RectF.intersects(rect, playerRect)) {
-                player.velocityY = Player.SLOWED_VELOCITY_Y;
+                if (RectF.intersects(rect, playerRect)) {
+                    player.velocityY = Player.SLOWED_VELOCITY_Y;
+                }
+
+                canvas.drawRect(rect, paint);
             }
-
-            canvas.drawRect(rect, paint);
         }
 
         paint.setARGB(255, 255, 0, 0);
