@@ -37,6 +37,8 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     private Player player;
     private Level selectedLevel;
 
+    RectF playerRect;
+
     private InGameUI inGameUI;
 
     private boolean boost = false;
@@ -123,31 +125,23 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         return true;
     }
 
-    public void drawView(Canvas canvas) {
+    public void updateGame(float delta) {
         if (boost) {
-            player.velocityY += Player.BOOST_Y * gameLoop.getDeltaTime();
+            player.velocityY += Player.BOOST_Y * delta;
         } else {
-            player.velocityY -= 16.0 * gameLoop.getDeltaTime();
+            player.velocityY -= 16.0 * delta;
             if (player.velocityY < 2.0) {
                 player.velocityY = Player.MIN_VELOCITY_Y;
             }
         }
 
-        player.y += player.velocityY * gameLoop.getDeltaTime() * 8.0;
+        player.y += player.velocityY * delta * 8.0;
 
-        canvas.drawColor(Color.BLACK);
-
-        canvas.setMatrix(gameMatrix);
-
-        Paint paint = new Paint();
-        paint.setARGB(255, 255, 255, 255);
-
-        RectF playerRect = new RectF(
+        playerRect = new RectF(
             Math.round(player.x - BLOCK_WIDTH / 2), BLOCK_HEIGHT * 4,
             Math.round(player.x + BLOCK_WIDTH / 2), BLOCK_HEIGHT * 5
         );
 
-        // draw level
         for (int i = selectedLevel.obstacles.size() - 1; i >= 0; i--) {
             Obstacle obstacle = selectedLevel.obstacles.get(i);
             if (obstacle.gridPositionY * BLOCK_HEIGHT - player.y > GAME_HEIGHT) {
@@ -165,6 +159,32 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
                 if (RectF.intersects(rect, playerRect)) {
                     player.velocityY = Player.SLOWED_VELOCITY_Y;
                 }
+            }
+        }
+    }
+
+    public void drawGame(Canvas canvas) {
+        canvas.drawColor(Color.BLACK);
+
+        canvas.setMatrix(gameMatrix);
+
+        Paint paint = new Paint();
+        paint.setARGB(255, 255, 255, 255);
+
+        // draw level
+        for (int i = selectedLevel.obstacles.size() - 1; i >= 0; i--) {
+            Obstacle obstacle = selectedLevel.obstacles.get(i);
+            if (obstacle.gridPositionY * BLOCK_HEIGHT - player.y > GAME_HEIGHT) {
+                break;
+            }
+
+            if (obstacle.gridPositionY * BLOCK_HEIGHT + BLOCK_HEIGHT - player.y > 0) {
+                RectF rect = new RectF(
+                    obstacle.gridPositionX * BLOCK_WIDTH,                             // left
+                    obstacle.gridPositionY * BLOCK_HEIGHT - player.y,                 // top
+                    obstacle.gridPositionX * BLOCK_WIDTH + BLOCK_WIDTH,               // right
+                    obstacle.gridPositionY * BLOCK_HEIGHT + BLOCK_HEIGHT - player.y   // bottom
+                );
 
                 canvas.drawRect(rect, paint);
             }
