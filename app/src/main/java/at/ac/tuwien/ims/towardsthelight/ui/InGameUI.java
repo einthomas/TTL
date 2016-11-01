@@ -8,6 +8,8 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
 
+import java.util.Locale;
+
 import at.ac.tuwien.ims.towardsthelight.R;
 
 public class InGameUI {
@@ -25,8 +27,8 @@ public class InGameUI {
 
         uiFont = new SpriteFont(
             BitmapFactory.decodeResource(context, R.drawable.hud_font, options),
-            "0123456789:♥♡",
-            new int[]{3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 1, 5, 5}
+            "0123456789:.♥♡",
+            new int[]{3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 1, 1, 5, 5}
         );
 
         matrix = new Matrix();
@@ -38,17 +40,25 @@ public class InGameUI {
 
         Paint paint = new Paint();
 
+        String health = "";
+        for (int i = 0; i < lifes; i++) {
+            health += '♥';
+        }
+        for (int i = lifes; i < 3; i++) {
+            health += '♡';
+        }
+        uiFont.drawText(canvas, paint, health, 1, -41);
+
+        uiFont.drawText(canvas, paint, score + "", 1, -34);
+        uiFont.drawText(canvas, paint,
+            time / 1000 / 60 + ":" +
+            String.format(Locale.US, "%02d", time / 1000 % 60) + "." +
+            time / 100 % 10,
+            1, -27
+        );
+
         // display fps
-        String text = "" + this.fps;
-        paint.setTextSize(70f);
-        paint.setARGB(255, 255, 0, 0);
-
-        /*Rect bounds = new Rect();
-        paint.getTextBounds(text, 0, text.length(), bounds);
-
-        canvas.drawText(this.fps + "", 0, bounds.height(), paint);*/
-
-        uiFont.drawText(canvas, paint, this.fps + "", 10, -10);
+        uiFont.drawText(canvas, paint, this.fps + "", 1, -20);
 
         this.fps = (this.fps * 9 + fps) / 10;
 

@@ -44,6 +44,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
     private InGameUI inGameUI;
 
+    private int time = 0;
     private boolean boost = false;
 
     public GameSurfaceView(Context context, AttributeSet attrs) {
@@ -136,6 +137,8 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
     public synchronized void updateGame(float delta) {
         // runs in gameLoopThread
+        time += Math.round(delta * 1000);
+
         if (boost) {
             player.velocityY += Player.BOOST_Y * delta;
         } else {
@@ -204,6 +207,6 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         paint.setARGB(255, 255, 0, 0);
         canvas.drawRect(playerRect, paint);
 
-        inGameUI.draw(canvas, gameLoop.getFPS(), 0, 0, 0);
+        inGameUI.draw(canvas, gameLoop.getFPS(), 1234, time, 2);
     }
 }
