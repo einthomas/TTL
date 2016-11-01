@@ -57,7 +57,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         gameMatrix = new Matrix();
         gameMatrixInverse = new Matrix();
         player = new Player();
-        inGameUI = new InGameUI();
+        inGameUI = new InGameUI(context.getResources());
         paint = new Paint();
         selectedLevel = new Level(context, new LevelInfo("level2.txt", 999, 1));
     }
@@ -204,6 +204,6 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         paint.setARGB(255, 255, 0, 0);
         canvas.drawRect(playerRect, paint);
 
-        inGameUI.draw(canvas, gameLoop.getFPS());
+        inGameUI.draw(canvas, gameLoop.getFPS(), 0, 0, 0);
     }
 }
