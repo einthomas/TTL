@@ -45,6 +45,8 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     private InGameUI inGameUI;
 
     private int time = 0;
+    private int lifes = 3;
+    private float invincibilityTime = 0;
     private boolean boost = false;
 
     public GameSurfaceView(Context context, AttributeSet attrs) {
@@ -61,6 +63,8 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         inGameUI = new InGameUI(context.getResources());
         paint = new Paint();
         selectedLevel = new Level(context, new LevelInfo("level2.txt", 999, 1));
+
+        player.x = 32;
     }
 
     /**
@@ -138,6 +142,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     public synchronized void updateGame(float delta) {
         // runs in gameLoopThread
         time += Math.round(delta * 1000);
+        invincibilityTime = Math.max(invincibilityTime - delta, 0);
 
         if (boost) {
             player.velocityY += Player.BOOST_Y * delta;
@@ -171,6 +176,10 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
                 if (RectF.intersects(rect, playerRect)) {
                     player.velocityY = Player.SLOWED_VELOCITY_Y;
+                    if (invincibilityTime == 0) {
+                        lifes--;
+                        invincibilityTime = Player.INVINCIBILITY_TIME;
+                    }
                 }
             }
         }
@@ -207,6 +216,6 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         paint.setARGB(255, 255, 0, 0);
         canvas.drawRect(playerRect, paint);
 
-        inGameUI.draw(canvas, gameLoop.getFPS(), 1234, time, 2);
+        inGameUI.draw(canvas, gameLoop.getFPS(), 1234, time, lifes);
     }
 }

@@ -41,10 +41,11 @@ public class InGameUI {
         Paint paint = new Paint();
 
         String health = "";
-        for (int i = 0; i < lifes; i++) {
+        int hearts = 0;
+        for (; hearts < lifes; hearts++) {
             health += '♥';
         }
-        for (int i = lifes; i < 3; i++) {
+        for (; hearts < 3; hearts++) {
             health += '♡';
         }
         uiFont.drawText(canvas, paint, health, 1, -41);
