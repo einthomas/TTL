@@ -123,7 +123,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         return true;
     }
 
-    public void draw(Canvas canvas) {
+    public void drawView(Canvas canvas) {
         if (boost) {
             player.velocityY += Player.BOOST_Y * gameLoop.getDeltaTime();
         } else {
@@ -143,8 +143,8 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         paint.setARGB(255, 255, 255, 255);
 
         RectF playerRect = new RectF(
-                Math.round(player.x - BLOCK_WIDTH / 2), BLOCK_HEIGHT * 4,
-                Math.round(player.x + BLOCK_WIDTH / 2), BLOCK_HEIGHT * 5
+            Math.round(player.x - BLOCK_WIDTH / 2), BLOCK_HEIGHT * 4,
+            Math.round(player.x + BLOCK_WIDTH / 2), BLOCK_HEIGHT * 5
         );
 
         // draw level
@@ -156,10 +156,10 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
             if (obstacle.gridPositionY * BLOCK_HEIGHT + BLOCK_HEIGHT - player.y > 0) {
                 RectF rect = new RectF(
-                        obstacle.gridPositionX * BLOCK_WIDTH,                             // left
-                        obstacle.gridPositionY * BLOCK_HEIGHT - player.y,                 // top
-                        obstacle.gridPositionX * BLOCK_WIDTH + BLOCK_WIDTH,               // right
-                        obstacle.gridPositionY * BLOCK_HEIGHT + BLOCK_HEIGHT - player.y   // bottom
+                    obstacle.gridPositionX * BLOCK_WIDTH,                             // left
+                    obstacle.gridPositionY * BLOCK_HEIGHT - player.y,                 // top
+                    obstacle.gridPositionX * BLOCK_WIDTH + BLOCK_WIDTH,               // right
+                    obstacle.gridPositionY * BLOCK_HEIGHT + BLOCK_HEIGHT - player.y   // bottom
                 );
 
                 if (RectF.intersects(rect, playerRect)) {

@@ -7,14 +7,14 @@ import android.view.SurfaceView;
 public class GameLoop implements Runnable {
 
     private SurfaceHolder surfaceHolder;
-    private SurfaceView surfaceView;
+    private GameSurfaceView gameSurfaceView;
     private boolean running;
     private double previousFrameTime;
     private double deltaTime;
 
-    public GameLoop(SurfaceHolder surfaceHolder, SurfaceView surfaceView) {
+    public GameLoop(SurfaceHolder surfaceHolder, GameSurfaceView gameSurfaceView) {
         this.surfaceHolder = surfaceHolder;
-        this.surfaceView = surfaceView;
+        this.gameSurfaceView = gameSurfaceView;
     }
 
     /**
@@ -79,7 +79,7 @@ public class GameLoop implements Runnable {
                 canvas = surfaceHolder.lockCanvas(null);
                 synchronized (surfaceHolder) {
                     if (canvas != null) {
-                        surfaceView.draw(canvas);
+                        gameSurfaceView.drawView(canvas);
                     }
                 }
             } finally {
