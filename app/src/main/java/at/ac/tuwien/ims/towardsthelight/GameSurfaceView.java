@@ -130,7 +130,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
         player.x = position[0];
 
-        if (position[1] < 4 * BLOCK_WIDTH && position[1] > 2 * BLOCK_HEIGHT && event.getAction() == MotionEvent.ACTION_MOVE) {
+        if (position[1] > 4 * BLOCK_HEIGHT && event.getAction() == MotionEvent.ACTION_MOVE) {
             boost = true;
         } else {
             boost = false;
@@ -156,8 +156,8 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         player.y += player.velocityY * delta * 8.0;
 
         playerRect = new RectF(
-            Math.round(player.x - BLOCK_WIDTH / 2), BLOCK_HEIGHT * 4,
-            Math.round(player.x + BLOCK_WIDTH / 2), BLOCK_HEIGHT * 5
+            Math.round(player.x - BLOCK_WIDTH / 2), BLOCK_HEIGHT * 8,
+            Math.round(player.x + BLOCK_WIDTH / 2), BLOCK_HEIGHT * 9
         );
 
         for (int i = selectedLevel.obstacles.size() - 1; i >= 0; i--) {
