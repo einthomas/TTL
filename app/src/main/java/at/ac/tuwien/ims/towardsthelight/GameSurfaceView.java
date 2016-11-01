@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.RectF;
+import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -29,6 +30,8 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
     private GameLoop gameLoop;
     private Thread gameLoopThread;
+
+    // allocated in UI thread, only used in gameLoopThread
     private Paint paint;
 
     private Matrix gameMatrix;
@@ -44,6 +47,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     private boolean boost = false;
 
     public GameSurfaceView(Context context, AttributeSet attrs) {
+        // runs in UI thread
         super(context, attrs);
         getHolder().addCallback(this);
         setFocusable(true);
@@ -62,6 +66,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
      * Stops the game loop and the game loop thread.
      */
     private void endGame() {
+        // runs in UI thread
         gameLoop.setRunning(false);
         try {
             gameLoopThread.join();
@@ -75,6 +80,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
      */
     @Override
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
+        // runs in UI thread
         gameLoop = new GameLoop(surfaceHolder, this);
         gameLoopThread = new Thread(gameLoop);
         gameLoopThread.start();
@@ -82,6 +88,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+        // runs in UI thread
         gameMatrix.reset();
 
         float screenAspectRatio = (float) width / height;
@@ -106,11 +113,13 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
+        // runs in UI thread
         endGame();
     }
 
     @Override
-    public boolean onTouchEvent(MotionEvent event) {
+    public synchronized boolean onTouchEvent(MotionEvent event) {
+        // runs in UI thread
         float[] position = new float[]{event.getX(), event.getY()};
         gameMatrixInverse.mapPoints(position);
 
@@ -125,7 +134,8 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         return true;
     }
 
-    public void updateGame(float delta) {
+    public synchronized void updateGame(float delta) {
+        // runs in gameLoopThread
         if (boost) {
             player.velocityY += Player.BOOST_Y * delta;
         } else {
@@ -163,7 +173,8 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         }
     }
 
-    public void drawGame(Canvas canvas) {
+    public synchronized void drawGame(Canvas canvas) {
+        // runs in gameLoopThread
         canvas.drawColor(Color.BLACK);
 
         canvas.setMatrix(gameMatrix);

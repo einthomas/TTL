@@ -14,6 +14,10 @@ public class GameLoop implements Runnable {
     public GameLoop(SurfaceHolder surfaceHolder, GameSurfaceView gameSurfaceView) {
         this.surfaceHolder = surfaceHolder;
         this.gameSurfaceView = gameSurfaceView;
+
+        // set it here to avoid the case where
+        // setRunning is called before run
+        running = true;
     }
 
     /**
@@ -54,7 +58,6 @@ public class GameLoop implements Runnable {
     public void run() {
         Canvas canvas;
 
-        running = true;
         previousFrameTime = System.currentTimeMillis();
 
         // Gameloop
