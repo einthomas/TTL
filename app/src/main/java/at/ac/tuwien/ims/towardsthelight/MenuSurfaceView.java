@@ -1,5 +1,6 @@
 package at.ac.tuwien.ims.towardsthelight;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Canvas;
@@ -16,15 +17,11 @@ public class MenuSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     private GameLoop gameLoop;
     private Thread gameLoopThread;
     private Paint paint;
-    private Context context;
 
     public MenuSurfaceView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
-        this.context = context;
-
         getHolder().addCallback(this);
-        setFocusable(true);
 
         // TODO: initialize assets
 
@@ -65,11 +62,15 @@ public class MenuSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        context.startActivity(new Intent(context, GameActivity.class));
-        return false;
+        if (event.getAction() == MotionEvent.ACTION_UP) {
+            getContext().startActivity(new Intent(getContext(), GameActivity.class));
+        }
+
+        return true;
     }
 
     public void draw(Canvas canvas) {
+        super.draw(canvas);
         canvas.drawColor(Color.BLUE);
     }
 }
