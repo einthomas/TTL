@@ -41,7 +41,7 @@ public class Level {
         bitmap = BitmapFactory.decodeResource(context.getResources(), levelInfo.imageResource, options);
         rect = new Rect(0, 0, GAME_HEIGHT, GAME_WIDTH);
         rectSource = new Rect(0, bitmap.getHeight() - 114, bitmap.getWidth(), bitmap.getHeight());
-        
+
         // process collision image
         Bitmap collisionImage = BitmapFactory.decodeResource(context.getResources(), levelInfo.collisionResource, options);
 

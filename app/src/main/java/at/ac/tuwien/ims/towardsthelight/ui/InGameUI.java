@@ -34,32 +34,31 @@ public class InGameUI {
         matrix = new Matrix();
     }
 
-    public void draw(Canvas canvas, int fps, int score, int time, int lifes) {
+    public void draw(Canvas canvas, int fps, int score, int time, int lives) {
         //canvas.setMatrix(matrix);
-        canvas.scale(1, -1); // mirror work-around
 
         Paint paint = new Paint();
 
         String health = "";
         int hearts = 0;
-        for (; hearts < lifes; hearts++) {
+        for (; hearts < lives; hearts++) {
             health += '♥';
         }
         for (; hearts < 3; hearts++) {
             health += '♡';
         }
-        uiFont.drawText(canvas, paint, health, 1, -41);
+        uiFont.drawText(canvas, paint, health, 1, 106);
 
-        uiFont.drawText(canvas, paint, score + "", 1, -34);
+        uiFont.drawText(canvas, paint, score + "", 1, 99);
         uiFont.drawText(canvas, paint,
             time / 1000 / 60 + ":" +
             String.format(Locale.US, "%02d", time / 1000 % 60) + "." +
             time / 100 % 10,
-            1, -27
+            1, 92
         );
 
         // display fps
-        uiFont.drawText(canvas, paint, this.fps + "", 1, -20);
+        uiFont.drawText(canvas, paint, this.fps + "", 1, 85);
 
         this.fps = (this.fps * 9 + fps) / 10;
 

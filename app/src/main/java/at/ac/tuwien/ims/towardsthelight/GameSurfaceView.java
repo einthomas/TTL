@@ -161,11 +161,11 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         player.y += playerYDelta;
 
         playerRect = new RectF(
-                Math.round(player.x - BLOCK_WIDTH / 2), BLOCK_HEIGHT * 9,
-                Math.round(player.x + BLOCK_WIDTH / 2), BLOCK_HEIGHT * 8
+                Math.round(player.x - Player.SIZE_X / 2), GAME_HEIGHT - Player.SIZE_Y * 7,
+                Math.round(player.x + Player.SIZE_X / 2), GAME_HEIGHT - Player.SIZE_Y * 6
         );
 
-        int levelPositionY = selectedLevel.bitmap.getHeight() + Math.round(-GAME_HEIGHT * (selectedLevel.bitmap.getHeight() / GAME_HEIGHT - 1) + player.y - GAME_HEIGHT + Player.SIZE_Y * 8);
+        int levelPositionY = selectedLevel.bitmap.getHeight() + Math.round(-GAME_HEIGHT * (selectedLevel.bitmap.getHeight() / GAME_HEIGHT - 1) + player.y - GAME_HEIGHT + Player.SIZE_Y * 6);
 
         for (int y = Math.round(levelPositionY - Player.SIZE_Y / 2); y <= levelPositionY + Player.SIZE_Y / 2; y++) {
             for (int x = Math.round(player.x - Player.SIZE_X / 2); x <= player.x + Player.SIZE_X / 2; x++) {
