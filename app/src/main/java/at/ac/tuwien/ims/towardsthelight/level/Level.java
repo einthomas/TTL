@@ -21,7 +21,6 @@ public class Level {
     public static final byte COLLECTABLE = 2;
 
     public LevelInfo levelInfo;
-    public ArrayList<Obstacle> obstacles;
     public int width, height;
     public Rect rect, rectSource;
     public Bitmap bitmap;
@@ -38,8 +37,6 @@ public class Level {
     public Level(Context context, final int GAME_HEIGHT, final int GAME_WIDTH, LevelInfo levelInfo) {
         this.context = context;
         this.levelInfo = levelInfo;
-
-        obstacles = new ArrayList<>();
 
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inScaled = false;
