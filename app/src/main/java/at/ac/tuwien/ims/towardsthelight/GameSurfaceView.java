@@ -15,15 +15,14 @@ import android.view.SurfaceView;
 
 import at.ac.tuwien.ims.towardsthelight.level.Level;
 import at.ac.tuwien.ims.towardsthelight.level.LevelInfo;
-import at.ac.tuwien.ims.towardsthelight.level.Obstacle;
 import at.ac.tuwien.ims.towardsthelight.ui.InGameUI;
 
 public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callback {
 
-    private final int BLOCK_WIDTH = 4;
-    private final int BLOCK_HEIGHT = 4;
-    private final int BLOCK_COUNT_WIDTH = 16;
-    private final int BLOCK_COUNT_HEIGHT = 30;
+    private final int BLOCK_WIDTH = 64;
+    private final int BLOCK_HEIGHT = 114;
+    private final int BLOCK_COUNT_WIDTH = 1;
+    private final int BLOCK_COUNT_HEIGHT = 1;
 
     private final int GAME_WIDTH = BLOCK_COUNT_WIDTH * BLOCK_WIDTH;
     private final int GAME_HEIGHT = BLOCK_COUNT_HEIGHT * BLOCK_HEIGHT;
@@ -36,6 +35,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
     private Matrix gameMatrix;
     private Matrix gameMatrixInverse;
+    private Matrix levelMatrix;
 
     private Player player;
     private Level selectedLevel;
@@ -59,11 +59,13 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
         gameMatrix = new Matrix();
         gameMatrixInverse = new Matrix();
+        levelMatrix = new Matrix();
         player = new Player();
         inGameUI = new InGameUI(context.getResources());
         paint = new Paint();
-        selectedLevel = new Level(context, new LevelInfo("level2.txt", 999, 1));
 
+        selectedLevel = new Level(context, GAME_WIDTH, GAME_HEIGHT, new LevelInfo(999, 1, R.drawable.level1, R.drawable.level1collision));
+        levelMatrix.preTranslate(0, (-GAME_HEIGHT * (selectedLevel.bitmap.getHeight() / GAME_HEIGHT - 1)));
         player.x = 32;
     }
 
@@ -88,7 +90,6 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         // runs in UI thread
         gameLoop = new GameLoop(surfaceHolder, this);
         gameLoopThread = new Thread(gameLoop);
-        gameLoopThread.start();
     }
 
     @Override
@@ -110,8 +111,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
                 (width - GAME_WIDTH * scale) / 2,
                 (height - GAME_HEIGHT * scale) / 2
         );
-        gameMatrix.preScale(scale, -scale);         // mirror about x axis
-        gameMatrix.preTranslate(0, -GAME_HEIGHT);
+        gameMatrix.preScale(scale, scale);
 
         gameMatrix.invert(gameMatrixInverse);
     }
@@ -125,6 +125,10 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     @Override
     public synchronized boolean onTouchEvent(MotionEvent event) {
         // runs in UI thread
+        if (event.getAction() == MotionEvent.ACTION_UP && !gameLoopThread.isAlive()) {
+            gameLoopThread.start();
+        }
+
         float[] position = new float[]{event.getX(), event.getY()};
         gameMatrixInverse.mapPoints(position);
 
@@ -145,7 +149,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         invincibilityTime = Math.max(invincibilityTime - delta, 0);
 
         if (boost) {
-            player.velocityY += Player.BOOST_Y * delta;
+            player.velocityY += Player.BOOST_SPEED * delta;
         } else {
             player.velocityY -= 16.0 * delta;
             if (player.velocityY < 2.0) {
@@ -153,36 +157,34 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
             }
         }
 
-        player.y += player.velocityY * delta * 8.0;
+        float playerYDelta = (float) (player.velocityY * delta * Player.SPEED);
+        player.y += playerYDelta;
 
         playerRect = new RectF(
-            Math.round(player.x - BLOCK_WIDTH / 2), BLOCK_HEIGHT * 8,
-            Math.round(player.x + BLOCK_WIDTH / 2), BLOCK_HEIGHT * 9
+                Math.round(player.x - BLOCK_WIDTH / 2), BLOCK_HEIGHT * 9,
+                Math.round(player.x + BLOCK_WIDTH / 2), BLOCK_HEIGHT * 8
         );
 
-        for (int i = selectedLevel.obstacles.size() - 1; i >= 0; i--) {
-            Obstacle obstacle = selectedLevel.obstacles.get(i);
-            if (obstacle.gridPositionY * BLOCK_HEIGHT - player.y > GAME_HEIGHT) {
-                break;
-            }
+        int levelPositionY = selectedLevel.bitmap.getHeight() + Math.round(-GAME_HEIGHT * (selectedLevel.bitmap.getHeight() / GAME_HEIGHT - 1) + player.y - GAME_HEIGHT + Player.SIZE_Y * 8);
 
-            if (obstacle.gridPositionY * BLOCK_HEIGHT + BLOCK_HEIGHT - player.y > 0) {
-                RectF rect = new RectF(
-                    obstacle.gridPositionX * BLOCK_WIDTH,                             // left
-                    obstacle.gridPositionY * BLOCK_HEIGHT - player.y,                 // top
-                    obstacle.gridPositionX * BLOCK_WIDTH + BLOCK_WIDTH,               // right
-                    obstacle.gridPositionY * BLOCK_HEIGHT + BLOCK_HEIGHT - player.y   // bottom
-                );
-
-                if (RectF.intersects(rect, playerRect)) {
-                    player.velocityY = Player.SLOWED_VELOCITY_Y;
-                    if (invincibilityTime == 0) {
-                        lifes--;
-                        invincibilityTime = Player.INVINCIBILITY_TIME;
+        for (int y = Math.round(levelPositionY - Player.SIZE_Y / 2); y <= levelPositionY + Player.SIZE_Y / 2; y++) {
+            for (int x = Math.round(player.x - Player.SIZE_X / 2); x <= player.x + Player.SIZE_X / 2; x++) {
+                if (selectedLevel.withinBounds(x, y)) {
+                    if (selectedLevel.getCollisionData(x, y) == Level.OBSTACLE) {
+                        player.velocityY = Player.SLOWED_VELOCITY_Y;
+                        if (invincibilityTime == 0) {
+                            lifes--;
+                            invincibilityTime = Player.INVINCIBILITY_TIME;
+                        }
+                        break;
+                    } else {
+                        player.velocityY = Player.MIN_VELOCITY_Y;
                     }
                 }
             }
         }
+
+        levelMatrix.preTranslate(0, playerYDelta);
     }
 
     public synchronized void drawGame(Canvas canvas) {
@@ -194,24 +196,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         Paint paint = new Paint();
         paint.setARGB(255, 255, 255, 255);
 
-        // draw level
-        for (int i = selectedLevel.obstacles.size() - 1; i >= 0; i--) {
-            Obstacle obstacle = selectedLevel.obstacles.get(i);
-            if (obstacle.gridPositionY * BLOCK_HEIGHT - player.y > GAME_HEIGHT) {
-                break;
-            }
-
-            if (obstacle.gridPositionY * BLOCK_HEIGHT + BLOCK_HEIGHT - player.y > 0) {
-                RectF rect = new RectF(
-                    obstacle.gridPositionX * BLOCK_WIDTH,                             // left
-                    obstacle.gridPositionY * BLOCK_HEIGHT - player.y,                 // top
-                    obstacle.gridPositionX * BLOCK_WIDTH + BLOCK_WIDTH,               // right
-                    obstacle.gridPositionY * BLOCK_HEIGHT + BLOCK_HEIGHT - player.y   // bottom
-                );
-
-                canvas.drawRect(rect, paint);
-            }
-        }
+        canvas.drawBitmap(selectedLevel.bitmap, levelMatrix, paint);
 
         paint.setARGB(255, 255, 0, 0);
         canvas.drawRect(playerRect, paint);

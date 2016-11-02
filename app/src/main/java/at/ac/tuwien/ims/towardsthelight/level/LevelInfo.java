@@ -9,11 +9,13 @@ public class LevelInfo {
 
     public int number;
     public int bestTime;
-    public String fileName;
+    public int imageResource;
+    public int collisionResource;
 
-    public LevelInfo(String fileName, int bestTime, int number) {
-        this.fileName = fileName;
+    public LevelInfo(int bestTime, int number, int imageResource, int collisionResource) {
         this.bestTime = bestTime;
         this.number = number;
+        this.imageResource = imageResource;
+        this.collisionResource = collisionResource;
     }
 }
