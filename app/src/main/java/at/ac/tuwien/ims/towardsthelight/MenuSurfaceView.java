@@ -2,6 +2,8 @@ package at.ac.tuwien.ims.towardsthelight;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -14,6 +16,8 @@ public class MenuSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
     private Paint paint;
 
+    private Bitmap logo;
+
     public MenuSurfaceView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
@@ -21,6 +25,10 @@ public class MenuSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         setWillNotDraw(false);
 
         // TODO: initialize assets
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inScaled = false;
+
+        logo = BitmapFactory.decodeResource(context.getResources(), R.drawable.menu_logo, options);
 
         paint = new Paint();
     }
@@ -52,6 +60,11 @@ public class MenuSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     }
 
     public void onDraw(Canvas canvas) {
-        canvas.drawColor(Color.BLUE);
+        canvas.drawColor(Color.BLACK);
+
+        float scale = (float)getWidth() / logo.getWidth();
+        canvas.scale(scale, scale);
+
+        canvas.drawBitmap(logo, 0, 2, paint);
     }
 }
