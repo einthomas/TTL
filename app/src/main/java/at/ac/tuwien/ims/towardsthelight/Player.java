@@ -8,6 +8,7 @@ public class Player {
     public static final float SLOWED_VELOCITY_Y = 8.0f;
     public static final float MIN_VELOCITY_Y = 12.0f;
     public static final float BOOST_SPEED = 4.0f;
+    public static final float INVINCIBILITY_TIME = 1.5f;
     public float x, y;
     public float velocityX, velocityY;
 }

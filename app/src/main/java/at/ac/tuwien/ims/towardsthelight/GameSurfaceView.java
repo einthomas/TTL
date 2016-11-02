@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.RectF;
+import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -28,6 +29,8 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
     private GameLoop gameLoop;
     private Thread gameLoopThread;
+
+    // allocated in UI thread, only used in gameLoopThread
     private Paint paint;
 
     private Matrix gameMatrix;
@@ -37,11 +40,17 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     private Player player;
     private Level selectedLevel;
 
+    RectF playerRect;
+
     private InGameUI inGameUI;
 
+    private int time = 0;
+    private int lifes = 3;
+    private float invincibilityTime = 0;
     private boolean boost = false;
 
     public GameSurfaceView(Context context, AttributeSet attrs) {
+        // runs in UI thread
         super(context, attrs);
         getHolder().addCallback(this);
         setFocusable(true);
@@ -52,17 +61,19 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         gameMatrixInverse = new Matrix();
         levelMatrix = new Matrix();
         player = new Player();
-        inGameUI = new InGameUI();
+        inGameUI = new InGameUI(context.getResources());
         paint = new Paint();
 
         selectedLevel = new Level(context, GAME_WIDTH, GAME_HEIGHT, new LevelInfo(999, 1, R.drawable.level1, R.drawable.level1collision));
         levelMatrix.preTranslate(0, (-GAME_HEIGHT * (selectedLevel.bitmap.getHeight() / GAME_HEIGHT - 1)));
+        player.x = 32;
     }
 
     /**
      * Stops the game loop and the game loop thread.
      */
     private void endGame() {
+        // runs in UI thread
         gameLoop.setRunning(false);
         try {
             gameLoopThread.join();
@@ -76,12 +87,14 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
      */
     @Override
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
+        // runs in UI thread
         gameLoop = new GameLoop(surfaceHolder, this);
         gameLoopThread = new Thread(gameLoop);
     }
 
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+        // runs in UI thread
         gameMatrix.reset();
 
         float screenAspectRatio = (float) width / height;
@@ -105,11 +118,13 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
+        // runs in UI thread
         endGame();
     }
 
     @Override
-    public boolean onTouchEvent(MotionEvent event) {
+    public synchronized boolean onTouchEvent(MotionEvent event) {
+        // runs in UI thread
         if (event.getAction() == MotionEvent.ACTION_UP && !gameLoopThread.isAlive()) {
             gameLoopThread.start();
         }
@@ -119,7 +134,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
         player.x = position[0];
 
-        if (position[1] < 4 * BLOCK_WIDTH && position[1] > 2 * BLOCK_HEIGHT && event.getAction() == MotionEvent.ACTION_MOVE) {
+        if (position[1] > 4 * BLOCK_HEIGHT && event.getAction() == MotionEvent.ACTION_MOVE) {
             boost = true;
         } else {
             boost = false;
@@ -128,43 +143,39 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         return true;
     }
 
-    public void draw(Canvas canvas) {
-        super.draw(canvas);
+    public synchronized void updateGame(float delta) {
+        // runs in gameLoopThread
+        time += Math.round(delta * 1000);
+        invincibilityTime = Math.max(invincibilityTime - delta, 0);
 
         if (boost) {
-            player.velocityY += Player.BOOST_SPEED * gameLoop.getDeltaTime() * Player.SPEED;
+            player.velocityY += Player.BOOST_SPEED * delta;
         } else {
-            player.velocityY -= 2.0 * gameLoop.getDeltaTime() * Player.SPEED;
+            player.velocityY -= 16.0 * delta;
             if (player.velocityY < 2.0) {
                 player.velocityY = Player.MIN_VELOCITY_Y;
             }
         }
 
-        float playerYDelta = (float) (player.velocityY * gameLoop.getDeltaTime() * Player.SPEED);
+        float playerYDelta = (float) (player.velocityY * delta * Player.SPEED);
         player.y += playerYDelta;
 
-        canvas.drawColor(Color.BLACK);
-
-        canvas.setMatrix(gameMatrix);
-
-        Paint paint = new Paint();
-        paint.setARGB(255, 255, 255, 255);
-
-        RectF playerRect = new RectF(
-                Math.round(player.x - Player.SIZE_X / 2), GAME_HEIGHT - Player.SIZE_Y * 5,
-                Math.round(player.x + Player.SIZE_X / 2), GAME_HEIGHT - Player.SIZE_Y * 4
+        playerRect = new RectF(
+                Math.round(player.x - BLOCK_WIDTH / 2), BLOCK_HEIGHT * 9,
+                Math.round(player.x + BLOCK_WIDTH / 2), BLOCK_HEIGHT * 8
         );
 
-        Log.d("playerypos", "" + playerYDelta);
-
-
-        int levelPositionY = selectedLevel.bitmap.getHeight() + Math.round(-GAME_HEIGHT * (selectedLevel.bitmap.getHeight() / GAME_HEIGHT - 1) + player.y - GAME_HEIGHT + Player.SIZE_Y * 4);
+        int levelPositionY = selectedLevel.bitmap.getHeight() + Math.round(-GAME_HEIGHT * (selectedLevel.bitmap.getHeight() / GAME_HEIGHT - 1) + player.y - GAME_HEIGHT + Player.SIZE_Y * 8);
 
         for (int y = Math.round(levelPositionY - Player.SIZE_Y / 2); y <= levelPositionY + Player.SIZE_Y / 2; y++) {
             for (int x = Math.round(player.x - Player.SIZE_X / 2); x <= player.x + Player.SIZE_X / 2; x++) {
                 if (selectedLevel.withinBounds(x, y)) {
                     if (selectedLevel.getCollisionData(x, y) == Level.OBSTACLE) {
                         player.velocityY = Player.SLOWED_VELOCITY_Y;
+                        if (invincibilityTime == 0) {
+                            lifes--;
+                            invincibilityTime = Player.INVINCIBILITY_TIME;
+                        }
                         break;
                     } else {
                         player.velocityY = Player.MIN_VELOCITY_Y;
@@ -173,13 +184,23 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
             }
         }
 
-
         levelMatrix.preTranslate(0, playerYDelta);
+    }
+
+    public synchronized void drawGame(Canvas canvas) {
+        // runs in gameLoopThread
+        canvas.drawColor(Color.BLACK);
+
+        canvas.setMatrix(gameMatrix);
+
+        Paint paint = new Paint();
+        paint.setARGB(255, 255, 255, 255);
+
         canvas.drawBitmap(selectedLevel.bitmap, levelMatrix, paint);
 
         paint.setARGB(255, 255, 0, 0);
         canvas.drawRect(playerRect, paint);
 
-        inGameUI.draw(canvas, gameLoop.getFPS());
+        inGameUI.draw(canvas, gameLoop.getFPS(), 1234, time, lifes);
     }
 }

@@ -2,19 +2,22 @@ package at.ac.tuwien.ims.towardsthelight;
 
 import android.graphics.Canvas;
 import android.view.SurfaceHolder;
-import android.view.SurfaceView;
 
 public class GameLoop implements Runnable {
 
     private SurfaceHolder surfaceHolder;
-    private SurfaceView surfaceView;
+    private GameSurfaceView gameSurfaceView;
     private boolean running;
-    private double previousFrameTime;
-    private double deltaTime;
+    private long previousFrameTime;
+    private float deltaTime;
 
-    public GameLoop(SurfaceHolder surfaceHolder, SurfaceView surfaceView) {
+    public GameLoop(SurfaceHolder surfaceHolder, GameSurfaceView gameSurfaceView) {
         this.surfaceHolder = surfaceHolder;
-        this.surfaceView = surfaceView;
+        this.gameSurfaceView = gameSurfaceView;
+
+        // set it here to avoid the case where
+        // setRunning is called before run
+        running = true;
     }
 
     /**
@@ -24,18 +27,15 @@ public class GameLoop implements Runnable {
         this.running = running;
     }
 
-    public void updateGame(double timePerFrame) {
-    }
-
     /**
      * Calculate how long the last frame has needed to draw the screen
      *
      * @author Thomas Koch
      * @return the length of the last frame
      */
-    private double calculateDeltaTime() {
-        double currentFrameTime = System.currentTimeMillis() / 1000.0;
-        double deltaTime = currentFrameTime - previousFrameTime;
+    private float calculateDeltaTime() {
+        long currentFrameTime = System.currentTimeMillis();
+        float deltaTime = (currentFrameTime - previousFrameTime) / 1000f;
         previousFrameTime = currentFrameTime;
 
         return deltaTime;
@@ -51,10 +51,6 @@ public class GameLoop implements Runnable {
         return (int) Math.round(1.0 / deltaTime);
     }
 
-    public double getDeltaTime() {
-        return deltaTime;
-    }
-
     /**
      * Executes the game loop
      */
@@ -62,8 +58,7 @@ public class GameLoop implements Runnable {
     public void run() {
         Canvas canvas;
 
-        running = true;
-        previousFrameTime = System.currentTimeMillis() / 1000.0;
+        previousFrameTime = System.currentTimeMillis();
 
         // Gameloop
         while (running) {
@@ -71,16 +66,14 @@ public class GameLoop implements Runnable {
             deltaTime = calculateDeltaTime();
 
             // Update
-            updateGame(deltaTime);
+            gameSurfaceView.updateGame(deltaTime);
 
             // Render
             canvas = null;
             try {
                 canvas = surfaceHolder.lockCanvas(null);
-                synchronized (surfaceHolder) {
-                    if (canvas != null) {
-                        surfaceView.draw(canvas);
-                    }
+                if (canvas != null) {
+                    gameSurfaceView.drawGame(canvas);
                 }
             } finally {
                 if (canvas != null) {

@@ -20,12 +20,5 @@ public class MainActivity extends AppCompatActivity {
             View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
         );
         setContentView(R.layout.activity_main);
-
-        Log.d(getClass().getName(), "onCreate: " + getFilesDir().getAbsolutePath());
-        Highscores highscores = new Highscores(getFilesDir().getAbsolutePath() + "/highscore.db");
-
-        highscores.putHighscore(1, new Highscores.Score(180000, 9999));
-        Highscores.Score score = highscores.getHighscore(1);
-        Log.d(getClass().getName(), "onCreate: " + score.score);
     }
 }
