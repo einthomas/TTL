@@ -27,8 +27,6 @@ public class Level {
     private Context context;
     private byte[] collisionData;
 
-    public float t, b;
-
     /**
      * Calls loadLevel to load the level according to the file name which is stored in levelInfo.
      *
@@ -43,11 +41,7 @@ public class Level {
         bitmap = BitmapFactory.decodeResource(context.getResources(), levelInfo.imageResource, options);
         rect = new Rect(0, 0, GAME_HEIGHT, GAME_WIDTH);
         rectSource = new Rect(0, bitmap.getHeight() - 114, bitmap.getWidth(), bitmap.getHeight());
-
-        t = rectSource.top;
-        b = rectSource.bottom;
-
-
+        
         // process collision image
         Bitmap collisionImage = BitmapFactory.decodeResource(context.getResources(), levelInfo.collisionResource, options);
 
