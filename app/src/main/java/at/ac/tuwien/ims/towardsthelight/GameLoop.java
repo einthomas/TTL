@@ -81,6 +81,8 @@ public class GameLoop implements Runnable {
                 }
             }
 
+            Thread.yield();
+
             /*
             try {
                 Thread.sleep(1000 / 60);
