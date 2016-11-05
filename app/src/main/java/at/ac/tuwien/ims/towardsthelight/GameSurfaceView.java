@@ -198,8 +198,10 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
         canvas.drawBitmap(selectedLevel.bitmap, levelMatrix, paint);
 
-        paint.setARGB(255, 255, 0, 0);
-        canvas.drawRect(playerRect, paint);
+        if (invincibilityTime * 5 - Math.floor(invincibilityTime * 5) < 0.5) {
+            paint.setARGB(255, 255, 0, 0);
+            canvas.drawRect(playerRect, paint);
+        }
 
         inGameUI.draw(canvas, gameLoop.getFPS(), 1234, time, lifes);
     }
