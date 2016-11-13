@@ -10,9 +10,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by Felix on 01.11.2016.
+ * @author Felix Kugler
  */
-
 public class SpriteFont {
 
     private Bitmap bitmap;
@@ -47,5 +46,34 @@ public class SpriteFont {
                 destination.left += source.width() + 1;
             }
         }
+    }
+
+    /**
+     * Calculates the dimensions (width, height) of "text"
+     *
+     * @param text the string which dimensions are calculated
+     * @return the dimensions of "text" as an integer array. Index 0 contains the width, index 1 the
+     *         height.
+     * @author Thomas Koch
+     */
+    public int[] getDimensions(String text) {
+        int[] dimensions = new int[2];  // [0] -> width, [1] -> height
+        for (int i = 0; i < text.length(); i++) {
+
+            Rect source = glyphMap.get(text.charAt(i));
+            if (source != null) {
+
+                dimensions[0] += source.width();
+                if (i < text.length() - 1) {
+                    dimensions[0] += 1;
+                }
+
+                if (source.height() > dimensions[1]) {
+                    dimensions[1] = source.height();
+                }
+            }
+        }
+
+        return dimensions;
     }
 }
