@@ -13,8 +13,9 @@ public class TTLSurfaceView extends SurfaceView implements SurfaceHolder.Callbac
     protected final int BLOCK_COUNT_WIDTH = 1;
     protected final int BLOCK_COUNT_HEIGHT = 1;
 
-    protected final int GAME_WIDTH = BLOCK_COUNT_WIDTH * BLOCK_WIDTH;
-    protected final int GAME_HEIGHT = BLOCK_COUNT_HEIGHT * BLOCK_HEIGHT;
+    // minimum width and height of virtual resolution
+    protected final int GAME_WIDTH = 64;
+    protected final int GAME_HEIGHT = 114; // ~9:16 aspect ratio
 
     protected Matrix gameMatrix, gameMatrixInverse;
 
@@ -42,6 +43,12 @@ public class TTLSurfaceView extends SurfaceView implements SurfaceHolder.Callbac
         // runs in UI thread
         gameMatrix.reset();
 
+        // virtual resolution
+        int resolutionX, resolutionY;
+
+        // position of centered view
+        int offsetX, offsetY;
+
         float screenAspectRatio = (float) width / height;
         float gameAspectRatio = (float) GAME_WIDTH / GAME_HEIGHT;
 
@@ -51,13 +58,18 @@ public class TTLSurfaceView extends SurfaceView implements SurfaceHolder.Callbac
         } else {
             scale = (float) width / GAME_WIDTH;     // fit to width
         }
+        resolutionX = Math.round(width / scale);
+        resolutionY = Math.round(height / scale);
 
-        gameMatrix.preTranslate(                    // center
-                (width - GAME_WIDTH * scale) / 2,
-                (height - GAME_HEIGHT * scale) / 2
+        offsetX = (resolutionX - GAME_WIDTH) / 2;
+        offsetY = (resolutionY - GAME_HEIGHT) / 2;
+
+        gameMatrix.setScale(
+            (float)width / resolutionX, (float)height / resolutionY, offsetX, offsetY
         );
-        gameMatrix.preScale(scale, scale);
-
-        gameMatrix.invert(gameMatrixInverse);
+        gameMatrixInverse.setScale(
+            (float)resolutionX / width, (float)resolutionY / height,
+            (float)offsetX * width / resolutionX, (float)offsetY * height / resolutionY
+        );
     }
 }
