@@ -2,6 +2,7 @@ package at.ac.tuwien.ims.towardsthelight;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -39,7 +40,7 @@ public class LevelSelectionSurfaceView extends TTLSurfaceView {
     private ArrayList<LevelInfoPosition> levelInfoPositions;
     private SpriteFont uiFont;
     private Bitmap normalBorder, diamondBorder;
-    private Bitmap bronzeMedal, silverMedal, goldMedal;
+    private Bitmap[] medalBitmaps;
 
     public LevelSelectionSurfaceView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -48,6 +49,7 @@ public class LevelSelectionSurfaceView extends TTLSurfaceView {
 
         levels = new ArrayList<>();
         levelInfoPositions = new ArrayList<>();
+        medalBitmaps = new Bitmap[3];
     }
 
     /**
@@ -89,8 +91,29 @@ public class LevelSelectionSurfaceView extends TTLSurfaceView {
 
                 levelInfoPositions.add(new LevelInfoPosition(levels.get(i).number, borderTop, borderLeft));
 
+
                 // draw border
-                canvas.drawBitmap(normalBorder, borderLeft, borderTop, null);
+                int arrayId = getResources().getIdentifier("level" + (i + 1) + "_medal_points", "array", getContext().getPackageName());
+                TypedArray pointsArray = getResources().obtainTypedArray(arrayId);
+                if (levels.get(i).score.score >= pointsArray.getInt(pointsArray.length() - 1, 0)) {
+                    canvas.drawBitmap(diamondBorder, borderLeft, borderTop, null);
+                } else {
+                    canvas.drawBitmap(normalBorder, borderLeft, borderTop, null);
+                }
+
+
+                // draw medals
+                int medalX = 14;
+                for (int k = 0; k < pointsArray.length() - 1; k++) {
+                    if (levels.get(i).score.score >= pointsArray.getInt(k, 0)) {
+                        canvas.drawBitmap(medalBitmaps[k], medalX, borderTop + 2, null);
+                        medalX += medalBitmaps[k].getWidth() + 1;
+                    } else {
+                        break;
+                    }
+                }
+                pointsArray.recycle();
+
 
                 // draw number
                 text = "" + levels.get(i).number;
@@ -110,8 +133,6 @@ public class LevelSelectionSurfaceView extends TTLSurfaceView {
                 text = "" + levels.get(i).score.score;
                 textDimensions = uiFont.getDimensions(text);
                 uiFont.drawText(canvas, null, text, borderLeft + borderWidth - 2 - textDimensions[0], borderTop + borderHeight - 2 - textDimensions[1]);
-
-                // draw medals
             }
         }
     }
@@ -160,9 +181,9 @@ public class LevelSelectionSurfaceView extends TTLSurfaceView {
 
 
         // load medal bitmaps
-        bronzeMedal = BitmapFactory.decodeResource(getResources(), R.drawable.bronze_medal, options);
-        silverMedal = BitmapFactory.decodeResource(getResources(), R.drawable.silver_medal, options);
-        goldMedal = BitmapFactory.decodeResource(getResources(), R.drawable.gold_medal, options);
+        medalBitmaps[0] = BitmapFactory.decodeResource(getResources(), R.drawable.bronze_medal, options);
+        medalBitmaps[1] = BitmapFactory.decodeResource(getResources(), R.drawable.silver_medal, options);
+        medalBitmaps[2] = BitmapFactory.decodeResource(getResources(), R.drawable.gold_medal, options);
 
 
         loadLevels();
