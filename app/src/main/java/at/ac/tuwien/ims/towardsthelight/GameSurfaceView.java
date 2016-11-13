@@ -129,17 +129,16 @@ public class GameSurfaceView extends TTLSurfaceView {
         time += Math.round(delta * 1000);
         invincibilityTime = Math.max(invincibilityTime - delta, 0);
 
-        if (boost) {
-            player.velocityY += Player.BOOST_ACCELERATION * delta;
-            Log.d(getClass().getName(), "updateGame: " + player.velocityY);
-        } else {
-            // move towards MIN_VELOCITY
-            if (player.velocityY > Player.BASE_VELOCITY_Y) {
-                player.velocityY = Math.max(player.velocityY - Player.DECELERATION * delta, Player.BASE_VELOCITY_Y);
+        // move towards MIN_VELOCITY
+        if (player.velocityY >= Player.BASE_VELOCITY_Y) {
+            if (boost) {
+                player.velocityY += Player.BOOST_ACCELERATION * delta;
             } else {
-                // player might have been slowed by collision
-                player.velocityY = Math.min(player.velocityY + Player.BASE_ACCELERATION * delta, Player.BASE_VELOCITY_Y);
+                player.velocityY = Math.max(player.velocityY - Player.DECELERATION * delta, Player.BASE_VELOCITY_Y);
             }
+        } else {
+            // player might have been slowed by collision
+            player.velocityY = Math.min(player.velocityY + Player.BASE_ACCELERATION * delta, Player.BASE_VELOCITY_Y);
         }
 
         float playerYDelta = (float) (player.velocityY * delta * Player.SPEED);
