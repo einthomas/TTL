@@ -47,31 +47,6 @@ public class LevelSelectionSurfaceView extends TTLSurfaceView {
 
         levels = new ArrayList<>();
         levelInfoPositions = new ArrayList<>();
-
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inScaled = false;
-
-
-        // load ui font
-        uiFont = new SpriteFont(
-                BitmapFactory.decodeResource(getResources(), R.drawable.hud_font, options),
-                "0123456789:.♥♡",
-                new int[] {3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 1, 1, 5, 5}
-        );
-
-
-        // load border bitmaps
-        normalBorder = BitmapFactory.decodeResource(getResources(), R.drawable.normal_border, options);
-        diamondBorder = BitmapFactory.decodeResource(getResources(), R.drawable.diamond_border, options);
-
-
-        // load medal bitmaps
-        bronzeMedal = BitmapFactory.decodeResource(getResources(), R.drawable.bronze_medal, options);
-        silverMedal = BitmapFactory.decodeResource(getResources(), R.drawable.silver_medal, options);
-        goldMedal = BitmapFactory.decodeResource(getResources(), R.drawable.gold_medal, options);
-
-
-        loadLevels();
     }
 
     /**
@@ -88,10 +63,12 @@ public class LevelSelectionSurfaceView extends TTLSurfaceView {
             imageResource = getResources().getIdentifier("level" + i, "drawable", getContext().getPackageName());
             collisionResource = getResources().getIdentifier("level" + i + "collision", "drawable", getContext().getPackageName());
 
-            Log.d("res", "" + imageResource);
-            Log.d("resc", "" + collisionResource);
+            Highscores.Score score = highscores.getHighscore(i);
+            if (score == null) {
+                score = new Highscores.Score(0, 0);
+            }
 
-            levels.add(new LevelInfo(i, highscores.getHighscore(i), imageResource, collisionResource));
+            levels.add(new LevelInfo(i, score, imageResource, collisionResource));
         }
     }
 
@@ -122,14 +99,14 @@ public class LevelSelectionSurfaceView extends TTLSurfaceView {
                 uiFont.drawText(canvas, null, text, borderLeft + 2, borderTop + 2);
 
                 // draw best time
-                //text = "" + levels.get(i).score.time;
-                text = "2:33.6";
+                text = "" + levels.get(i).score.time;
+                //text = "2:33.6";
                 textDimensions = uiFont.getDimensions(text);
                 uiFont.drawText(canvas, null, text, borderLeft + borderWidth - 2 - textDimensions[0], borderTop + 2);
 
                 // draw highscore
-                //text = "" + levels.get(i).score.score;
-                text = "" + (999 * i);
+                text = "" + levels.get(i).score.score;
+                //text = "" + (999 * i);
                 textDimensions = uiFont.getDimensions(text);
                 uiFont.drawText(canvas, null, text, borderLeft + borderWidth - 2 - textDimensions[0], borderTop + borderHeight - 2 - textDimensions[1]);
 
@@ -163,6 +140,31 @@ public class LevelSelectionSurfaceView extends TTLSurfaceView {
     @Override
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
         super.surfaceCreated(surfaceHolder);
+
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inScaled = false;
+
+
+        // load ui font
+        uiFont = new SpriteFont(
+                BitmapFactory.decodeResource(getResources(), R.drawable.hud_font, options),
+                "0123456789:.♥♡",
+                new int[] {3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 1, 1, 5, 5}
+        );
+
+
+        // load border bitmaps
+        normalBorder = BitmapFactory.decodeResource(getResources(), R.drawable.normal_border, options);
+        diamondBorder = BitmapFactory.decodeResource(getResources(), R.drawable.diamond_border, options);
+
+
+        // load medal bitmaps
+        bronzeMedal = BitmapFactory.decodeResource(getResources(), R.drawable.bronze_medal, options);
+        silverMedal = BitmapFactory.decodeResource(getResources(), R.drawable.silver_medal, options);
+        goldMedal = BitmapFactory.decodeResource(getResources(), R.drawable.gold_medal, options);
+
+
+        loadLevels();
     }
 
     @Override
