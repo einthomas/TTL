@@ -12,9 +12,12 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 
 import at.ac.tuwien.ims.towardsthelight.level.Level;
+import at.ac.tuwien.ims.towardsthelight.level.LevelInfo;
 import at.ac.tuwien.ims.towardsthelight.ui.InGameUI;
 
 public class GameSurfaceView extends TTLSurfaceView {
+
+    public LevelInfo levelInfo;
 
     private GameLoop gameLoop;
     private Thread gameLoopThread;
@@ -52,7 +55,7 @@ public class GameSurfaceView extends TTLSurfaceView {
         paint = new Paint();
 
         //selectedLevel = new Level(context, GAME_WIDTH, GAME_HEIGHT, new LevelInfo(999, 1, R.drawable.level1, R.drawable.level1collision));
-        levelMatrix.preTranslate(0, (-GAME_HEIGHT * (selectedLevel.bitmap.getHeight() / GAME_HEIGHT - 1)));
+        //levelMatrix.preTranslate(0, (-GAME_HEIGHT * (selectedLevel.bitmap.getHeight() / GAME_HEIGHT - 1)));
         player.x = 32;
     }
 
@@ -75,6 +78,10 @@ public class GameSurfaceView extends TTLSurfaceView {
     @Override
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
         super.surfaceCreated(surfaceHolder);
+
+        //selectedLevel = new Level(context, GAME_WIDTH, GAME_HEIGHT, new LevelInfo(999, 1, R.drawable.level1, R.drawable.level1collision));
+        selectedLevel = new Level(getContext(), GAME_WIDTH, GAME_HEIGHT, levelInfo);
+        levelMatrix.preTranslate(0, (-GAME_HEIGHT * (selectedLevel.bitmap.getHeight() / GAME_HEIGHT - 1)));
 
         // runs in UI thread
         gameLoop = new GameLoop(surfaceHolder, this);

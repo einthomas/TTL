@@ -53,7 +53,7 @@ public class MenuSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_UP) {
-            getContext().startActivity(new Intent(getContext(), GameActivity.class));
+            getContext().startActivity(new Intent(getContext(), LevelSelectionActivity.class));
         }
 
         return true;

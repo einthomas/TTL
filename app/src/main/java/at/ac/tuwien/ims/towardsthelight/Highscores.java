@@ -4,12 +4,14 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-/**
- * Created by Felix on 26.10.2016.
- */
+import java.io.Serializable;
 
+/**
+ * @author Felix Kugler
+ */
 public class Highscores {
-    public static class Score {
+
+    public static class Score implements Serializable {
         public int score;
         public int time; // number of milliseconds
 
