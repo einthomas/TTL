@@ -8,12 +8,6 @@ import android.view.SurfaceView;
 
 public class TTLSurfaceView extends SurfaceView implements SurfaceHolder.Callback {
 
-    // TODO: remove these
-    protected final int BLOCK_WIDTH = 64;
-    protected final int BLOCK_HEIGHT = 114;
-    protected final int BLOCK_COUNT_WIDTH = 1;
-    protected final int BLOCK_COUNT_HEIGHT = 1;
-
     // minimum width and height of virtual resolution
     protected final int GAME_WIDTH = 64;
     protected final int GAME_HEIGHT = 114; // ~9:16 aspect ratio
