@@ -12,7 +12,7 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
-public class MenuSurfaceView extends SurfaceView implements SurfaceHolder.Callback {
+public class MenuSurfaceView extends TTLSurfaceView {
 
     private Paint paint;
 
