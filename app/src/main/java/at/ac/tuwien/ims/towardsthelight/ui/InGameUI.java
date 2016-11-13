@@ -1,12 +1,9 @@
 package at.ac.tuwien.ims.towardsthelight.ui;
 
 import android.content.res.Resources;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.graphics.Rect;
 
 import java.util.Locale;
 
@@ -14,10 +11,7 @@ import at.ac.tuwien.ims.towardsthelight.R;
 
 public class InGameUI {
 
-    private Matrix matrix;
     private int fps;
-    private final int FPS_REFRESH_RATE = 10;
-    private int iterationCounter;
 
     private SpriteFont uiFont;
 
@@ -31,12 +25,9 @@ public class InGameUI {
             new int[]{3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 1, 1, 5, 5}
         );
 
-        matrix = new Matrix();
     }
 
     public void draw(Canvas canvas, int fps, int score, int time, int lives) {
-        //canvas.setMatrix(matrix);
-
         Paint paint = new Paint();
 
         String health = "";
@@ -61,7 +52,5 @@ public class InGameUI {
         uiFont.drawText(canvas, paint, this.fps + "", 1, 85);
 
         this.fps = (this.fps * 9 + fps) / 10;
-
-        iterationCounter++;
     }
 }
