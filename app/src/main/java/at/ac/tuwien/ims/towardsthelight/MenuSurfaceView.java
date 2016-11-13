@@ -24,7 +24,6 @@ public class MenuSurfaceView extends TTLSurfaceView {
         getHolder().addCallback(this);
         setWillNotDraw(false);
 
-        // TODO: initialize assets
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inScaled = false;
 
@@ -43,6 +42,7 @@ public class MenuSurfaceView extends TTLSurfaceView {
 
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+        super.surfaceChanged(holder, format, width, height);
         invalidate();
     }
 
@@ -62,9 +62,8 @@ public class MenuSurfaceView extends TTLSurfaceView {
     public void onDraw(Canvas canvas) {
         canvas.drawColor(Color.BLACK);
 
-        float scale = (float)getWidth() / logo.getWidth();
-        canvas.scale(scale, scale);
+        canvas.setMatrix(gameMatrix);
 
-        canvas.drawBitmap(logo, 0, 2, paint);
+        canvas.drawBitmap(logo, -12, 4, paint);
     }
 }
