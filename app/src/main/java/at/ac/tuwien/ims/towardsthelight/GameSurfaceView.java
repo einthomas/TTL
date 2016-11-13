@@ -6,26 +6,15 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.RectF;
-import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
-import android.view.SurfaceView;
 
 import at.ac.tuwien.ims.towardsthelight.level.Level;
-import at.ac.tuwien.ims.towardsthelight.level.LevelInfo;
 import at.ac.tuwien.ims.towardsthelight.ui.InGameUI;
 
-public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callback {
-
-    private final int BLOCK_WIDTH = 64;
-    private final int BLOCK_HEIGHT = 114;
-    private final int BLOCK_COUNT_WIDTH = 1;
-    private final int BLOCK_COUNT_HEIGHT = 1;
-
-    private final int GAME_WIDTH = BLOCK_COUNT_WIDTH * BLOCK_WIDTH;
-    private final int GAME_HEIGHT = BLOCK_COUNT_HEIGHT * BLOCK_HEIGHT;
+public class GameSurfaceView extends TTLSurfaceView {
 
     private GameLoop gameLoop;
     private Thread gameLoopThread;
@@ -33,8 +22,6 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     // allocated in UI thread, only used in gameLoopThread
     private Paint paint;
 
-    private Matrix gameMatrix;
-    private Matrix gameMatrixInverse;
     private Matrix levelMatrix;
 
     private Player player;
@@ -64,7 +51,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         inGameUI = new InGameUI(context.getResources());
         paint = new Paint();
 
-        selectedLevel = new Level(context, GAME_WIDTH, GAME_HEIGHT, new LevelInfo(999, 1, R.drawable.level1, R.drawable.level1collision));
+        //selectedLevel = new Level(context, GAME_WIDTH, GAME_HEIGHT, new LevelInfo(999, 1, R.drawable.level1, R.drawable.level1collision));
         levelMatrix.preTranslate(0, (-GAME_HEIGHT * (selectedLevel.bitmap.getHeight() / GAME_HEIGHT - 1)));
         player.x = 32;
     }
@@ -87,6 +74,8 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
      */
     @Override
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
+        super.surfaceCreated(surfaceHolder);
+
         // runs in UI thread
         gameLoop = new GameLoop(surfaceHolder, this);
         gameLoopThread = new Thread(gameLoop);
@@ -94,30 +83,13 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-        // runs in UI thread
-        gameMatrix.reset();
-
-        float screenAspectRatio = (float) width / height;
-        float gameAspectRatio = (float) GAME_WIDTH / GAME_HEIGHT;
-
-        float scale;
-        if (screenAspectRatio > gameAspectRatio) {
-            scale = (float) height / GAME_HEIGHT;   // fit to height
-        } else {
-            scale = (float) width / GAME_WIDTH;     // fit to width
-        }
-
-        gameMatrix.preTranslate(                    // center
-                (width - GAME_WIDTH * scale) / 2,
-                (height - GAME_HEIGHT * scale) / 2
-        );
-        gameMatrix.preScale(scale, scale);
-
-        gameMatrix.invert(gameMatrixInverse);
+        super.surfaceChanged(holder, format, width, height);
     }
 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
+        super.surfaceDestroyed(holder);
+
         // runs in UI thread
         endGame();
     }
