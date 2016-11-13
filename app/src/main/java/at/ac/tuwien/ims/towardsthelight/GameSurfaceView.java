@@ -113,10 +113,12 @@ public class GameSurfaceView extends TTLSurfaceView {
 
         player.x = position[0];
 
-        if (position[1] > 4 * BLOCK_HEIGHT && event.getAction() == MotionEvent.ACTION_MOVE) {
-            boost = true;
-        } else {
-            boost = false;
+        if (event.getAction() == MotionEvent.ACTION_MOVE) {
+            if (position[1] < GAME_HEIGHT - 12) {
+                boost = true;
+            } else {
+                boost = false;
+            }
         }
 
         return true;
@@ -128,11 +130,15 @@ public class GameSurfaceView extends TTLSurfaceView {
         invincibilityTime = Math.max(invincibilityTime - delta, 0);
 
         if (boost) {
-            player.velocityY += Player.BOOST_SPEED * delta;
+            player.velocityY += Player.BOOST_ACCELERATION * delta;
+            Log.d(getClass().getName(), "updateGame: " + player.velocityY);
         } else {
-            player.velocityY -= 16.0 * delta;
-            if (player.velocityY < 2.0) {
-                player.velocityY = Player.MIN_VELOCITY_Y;
+            // move towards MIN_VELOCITY
+            if (player.velocityY > Player.BASE_VELOCITY_Y) {
+                player.velocityY = Math.max(player.velocityY - Player.DECELERATION * delta, Player.BASE_VELOCITY_Y);
+            } else {
+                // player might have been slowed by collision
+                player.velocityY = Math.min(player.velocityY + Player.BASE_ACCELERATION * delta, Player.BASE_VELOCITY_Y);
             }
         }
 
@@ -156,8 +162,6 @@ public class GameSurfaceView extends TTLSurfaceView {
                             invincibilityTime = Player.INVINCIBILITY_TIME;
                         }
                         break;
-                    } else {
-                        player.velocityY = Player.MIN_VELOCITY_Y;
                     }
                 }
             }
