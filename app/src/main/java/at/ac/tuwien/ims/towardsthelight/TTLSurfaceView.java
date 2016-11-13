@@ -8,6 +8,7 @@ import android.view.SurfaceView;
 
 public class TTLSurfaceView extends SurfaceView implements SurfaceHolder.Callback {
 
+    // TODO: remove these
     protected final int BLOCK_WIDTH = 64;
     protected final int BLOCK_HEIGHT = 114;
     protected final int BLOCK_COUNT_WIDTH = 1;
@@ -64,12 +65,9 @@ public class TTLSurfaceView extends SurfaceView implements SurfaceHolder.Callbac
         offsetX = (resolutionX - GAME_WIDTH) / 2;
         offsetY = (resolutionY - GAME_HEIGHT) / 2;
 
-        gameMatrix.setScale(
-            (float)width / resolutionX, (float)height / resolutionY, offsetX, offsetY
-        );
-        gameMatrixInverse.setScale(
-            (float)resolutionX / width, (float)resolutionY / height,
-            (float)offsetX * width / resolutionX, (float)offsetY * height / resolutionY
-        );
+        gameMatrix.postTranslate(offsetX, offsetY);
+        gameMatrix.postScale((float)width / resolutionX, (float)height / resolutionY);
+
+        gameMatrix.invert(gameMatrixInverse);
     }
 }
