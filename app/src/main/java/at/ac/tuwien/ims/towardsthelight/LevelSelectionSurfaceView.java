@@ -34,7 +34,7 @@ public class LevelSelectionSurfaceView extends TTLSurfaceView {
         }
     }
 
-    private final int LEVEL_COUNT = 3;
+    private final int LEVEL_COUNT = 2;
 
     private ArrayList<LevelInfo> levels;
     private ArrayList<LevelInfoPosition> levelInfoPositions;
