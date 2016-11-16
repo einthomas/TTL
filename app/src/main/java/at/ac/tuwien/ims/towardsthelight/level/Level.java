@@ -5,8 +5,13 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Rect;
+import android.graphics.RectF;
+import android.util.Log;
 
 import java.nio.IntBuffer;
+import java.util.ArrayList;
+
+import at.ac.tuwien.ims.towardsthelight.R;
 
 /**
  * Holds the level's obstacles in an ArrayList. Loads the level when the constructor is called.
@@ -20,11 +25,10 @@ public class Level {
     public static final byte COLLECTABLE = 2;
 
     public LevelInfo levelInfo;
-    public int width, height;
-    public Rect rect, rectSource;
     public Bitmap bitmap;
     private Context context;
     private byte[] collisionData;
+    public ArrayList<Collectable> collectables;
 
     /**
      * Calls loadLevel to load the level according to the file name which is stored in levelInfo.
@@ -35,11 +39,13 @@ public class Level {
         this.context = context;
         this.levelInfo = levelInfo;
 
+        collectables = new ArrayList<>();
+
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inScaled = false;
         bitmap = BitmapFactory.decodeResource(context.getResources(), levelInfo.imageResource, options);
-        rect = new Rect(0, 0, GAME_HEIGHT, GAME_WIDTH);
-        rectSource = new Rect(0, bitmap.getHeight() - 114, bitmap.getWidth(), bitmap.getHeight());
+
+        Bitmap collectibleBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.collectable, options);
 
 
         // process collision image
@@ -59,8 +65,8 @@ public class Level {
                     collisionData[arrayPos] = BACKGROUND;
                 } else if (Color.red(color) == 255 && Color.green(color) == 255 && Color.blue(color) == 255) {
                     collisionData[arrayPos] = OBSTACLE;
-                } else {
-                    collisionData[arrayPos] = COLLECTABLE;
+                } else if (Color.red(color) == 0 && Color.green(color) == 0 && Color.blue(color) == 255) {
+                    collectables.add(new Collectable(x, collisionImage.getHeight() - y, collectibleBitmap));
                 }
             }
         }

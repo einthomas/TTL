@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 
+import at.ac.tuwien.ims.towardsthelight.level.Collectable;
 import at.ac.tuwien.ims.towardsthelight.level.Level;
 import at.ac.tuwien.ims.towardsthelight.level.LevelInfo;
 import at.ac.tuwien.ims.towardsthelight.ui.InGameUI;
@@ -149,9 +150,10 @@ public class GameSurfaceView extends TTLSurfaceView {
                 Math.round(player.x + Player.SIZE_X / 2), GAME_HEIGHT - Player.SIZE_Y * 6
         );
 
-        int levelPositionY = selectedLevel.bitmap.getHeight() + Math.round(-GAME_HEIGHT * (selectedLevel.bitmap.getHeight() / GAME_HEIGHT - 1) + player.y - GAME_HEIGHT + Player.SIZE_Y * 6);
+        int levelPositionY = selectedLevel.bitmap.getHeight() + Math.round(-GAME_HEIGHT * (selectedLevel.bitmap.getHeight() / GAME_HEIGHT - 1) + player.y);
+        int levelPlayerPositionY = levelPositionY - GAME_HEIGHT + Player.SIZE_Y * 6;
 
-        for (int y = Math.round(levelPositionY - Player.SIZE_Y / 2); y <= levelPositionY + Player.SIZE_Y / 2; y++) {
+        for (int y = Math.round(levelPlayerPositionY - Player.SIZE_Y / 2); y <= levelPlayerPositionY + Player.SIZE_Y / 2; y++) {
             for (int x = Math.round(player.x - Player.SIZE_X / 2); x <= player.x + Player.SIZE_X / 2; x++) {
                 if (selectedLevel.withinBounds(x, y)) {
                     if (selectedLevel.getCollisionData(x, y) == Level.OBSTACLE) {
@@ -162,6 +164,26 @@ public class GameSurfaceView extends TTLSurfaceView {
                         }
                         break;
                     }
+                }
+            }
+        }
+
+        for (int i = selectedLevel.collectables.size() - 1; i >= 0; i--) {
+            if (!selectedLevel.collectables.get(i).visible) {
+                if (selectedLevel.collectables.get(i).bottom <= levelPositionY) {
+                    selectedLevel.collectables.get(i).top = -selectedLevel.collectables.get(i).bitmap.getHeight();
+                    selectedLevel.collectables.get(i).bottom = 0;
+                    selectedLevel.collectables.get(i).visible = true;
+                }
+            } else {
+                if (playerRect.intersect(selectedLevel.collectables.get(i))) {
+                    player.score += 1;
+                    selectedLevel.collectables.remove(i);
+                } else if (selectedLevel.collectables.get(i).top > levelPositionY + GAME_HEIGHT) {
+                    selectedLevel.collectables.remove(i);
+                } else {
+                    selectedLevel.collectables.get(i).top += playerYDelta;
+                    selectedLevel.collectables.get(i).bottom += playerYDelta;
                 }
             }
         }
@@ -185,6 +207,16 @@ public class GameSurfaceView extends TTLSurfaceView {
             canvas.drawRect(playerRect, paint);
         }
 
-        inGameUI.draw(canvas, gameLoop.getFPS(), 1234, time, lifes);
+        for (int i = 0; i < selectedLevel.collectables.size(); i++) {
+            if (selectedLevel.collectables.get(i).visible) {
+                canvas.drawBitmap(
+                        selectedLevel.collectables.get(i).bitmap,
+                        selectedLevel.collectables.get(i).left,
+                        selectedLevel.collectables.get(i).top,
+                        null);
+            }
+        }
+
+        inGameUI.draw(canvas, gameLoop.getFPS(), player.score, time, lifes);
     }
 }

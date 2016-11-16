@@ -13,4 +13,6 @@ public class Player {
     public static final float INVINCIBILITY_TIME = 1.5f;
     public float x, y;
     public float velocityX, velocityY;
+
+    public int score = 0;
 }
