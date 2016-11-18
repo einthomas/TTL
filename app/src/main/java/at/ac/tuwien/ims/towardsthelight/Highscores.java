@@ -16,10 +16,12 @@ public class Highscores {
      * Stores score and time for a level.
      */
     public static class Score implements Serializable {
+
         /**
          * Score achieved in a level.
          */
         public int score;
+
         /**
          * Time spent in a level in milliseconds.
          */
