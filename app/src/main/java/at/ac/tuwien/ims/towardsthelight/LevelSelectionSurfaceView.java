@@ -203,6 +203,9 @@ public class LevelSelectionSurfaceView extends TTLSurfaceView {
     /**
      * If a touch ACTION_UP event on a level entry is registered, the {@link GameActivity} activity
      * is started and parameterized by the corresponding {@link LevelInfo}.
+     *
+     * @param event The touch event to react to.
+     * @return Whether the event was handled. Always true.
      */
     @Override
     public boolean onTouchEvent(MotionEvent event) {

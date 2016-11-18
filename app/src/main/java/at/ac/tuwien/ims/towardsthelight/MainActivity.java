@@ -5,8 +5,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 
+/**
+ * Fullscreen activity for main menu. <tt>activity_main</tt> is the corresponding layout.
+ *
+ * @author Felix Kugler
+ * @author Thomas Koch
+ */
 public class MainActivity extends AppCompatActivity {
 
+    /**
+     * Sets the activity to fullscreen and sets the content view.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
