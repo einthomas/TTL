@@ -3,14 +3,39 @@ package at.ac.tuwien.ims.towardsthelight;
 import android.graphics.Canvas;
 import android.view.SurfaceHolder;
 
+/**
+ * Calls {@link GameSurfaceView#updateGame(float)} and {@link GameSurfaceView#drawGame(Canvas)}
+ * in a loop.
+ * @author Felix Kugler
+ */
 public class GameLoop implements Runnable {
 
+    /**
+     * The SurfaceHolder to draw unto.
+     */
     private SurfaceHolder surfaceHolder;
+    /**
+     * The GameSurfaceView doing the work.
+     */
     private GameSurfaceView gameSurfaceView;
+    /**
+     * Loop runs until this is set to false.
+     */
     private boolean running;
+    /**
+     * Time of the last frame as returned by <tt>System.currentTimeMillis()</tt>
+     */
     private long previousFrameTime;
+    /**
+     * Time difference since last frame in seconds.
+     */
     private float deltaTime;
 
+    /**
+     * Create a new <tt>GameLoop</tt> for the given {@link GameSurfaceView}.
+     * @param surfaceHolder <tt>SurfaceHolder</tt> to draw onto.
+     * @param gameSurfaceView {@link GameSurfaceView} handling logic and drawing.
+     */
     public GameLoop(SurfaceHolder surfaceHolder, GameSurfaceView gameSurfaceView) {
         this.surfaceHolder = surfaceHolder;
         this.gameSurfaceView = gameSurfaceView;
@@ -21,6 +46,7 @@ public class GameLoop implements Runnable {
     }
 
     /**
+     * Set the running status of the loop. When called with false, the loop stops.
      * @param running indicates if the game loop is being executed
      */
     public void setRunning(boolean running) {
