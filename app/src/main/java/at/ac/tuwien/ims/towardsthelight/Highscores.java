@@ -29,6 +29,7 @@ public class Highscores {
 
         /**
          * Creates a new score.
+         *
          * @param time Time spent in a level.
          * @param score Score achieved in a level.
          */
@@ -46,6 +47,7 @@ public class Highscores {
     /**
      * Create a new object for reading and writing scores.
      * This will create a new database if it doesn't already exist.
+     *
      * @param path Path to the SQLite database file.
      */
     public Highscores(String path) {
@@ -60,6 +62,7 @@ public class Highscores {
 
     /**
      * Access the score for a given level.
+     *
      * @param level The level index.
      * @return The score for that level.
      */
@@ -82,6 +85,7 @@ public class Highscores {
 
     /**
      * Store a new score.
+     *
      * @param level The level index on which the score was achieved.
      * @param score The score that was achieved on the level.
      */
