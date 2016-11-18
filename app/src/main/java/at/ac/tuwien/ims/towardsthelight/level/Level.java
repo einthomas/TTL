@@ -13,6 +13,8 @@ import at.ac.tuwien.ims.towardsthelight.R;
 /**
  * Holds the level's obstacles in an ArrayList. Loads the level when the constructor is called.
  *
+ * Parses
+ *
  * @author Thomas Koch
  */
 public class Level {
