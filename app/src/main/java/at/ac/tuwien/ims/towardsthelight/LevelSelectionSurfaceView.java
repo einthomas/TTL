@@ -17,15 +17,38 @@ import at.ac.tuwien.ims.towardsthelight.level.LevelInfo;
 import at.ac.tuwien.ims.towardsthelight.ui.SpriteFont;
 
 /**
+ * Draws the level selection screen. For each level either a "normal" or a "diamond" border, the
+ * number of the level, the highscore, the best achieved time and the achieved medals (bronze, medal,
+ * gold) are displayed.
+ * <br />
+ * If a touch ACTION_UP event on a level entry is registered, the activity {@link GameActivity} is
+ * started. The intent is parameterized by the corresponding {@link LevelInfo} object.
+ *
  * @author Thomas Koch
  */
 public class LevelSelectionSurfaceView extends TTLSurfaceView {
 
+    /**
+     * Holds the {@link LevelInfoPosition#number} of the Level and the top and left position of the
+     * level entry.
+     */
     private class LevelInfoPosition {
 
+        /**
+         * The number of the level.
+         */
         public int number;
+
+        /**
+         * The top and left position of the level entry.
+         */
         public float top, left;
 
+        /**
+         * @param number {@link #number}
+         * @param top {@link #top}
+         * @param left {@link #left}
+         */
         public LevelInfoPosition(int number, float top, float left) {
             this.number = number;
             this.top = top;
@@ -33,14 +56,39 @@ public class LevelSelectionSurfaceView extends TTLSurfaceView {
         }
     }
 
+    /**
+     * The number of levels.
+     */
     private final int LEVEL_COUNT = 3;
 
+    /**
+     * Contains a {@link LevelInfo} object for each level.
+     */
     private ArrayList<LevelInfo> levels;
+
+    /**
+     * Contains a {@link LevelInfoPosition} object for each level.
+     */
     private ArrayList<LevelInfoPosition> levelInfoPositions;
+
+    /**
+     * The loaded font which is used to draw the text.
+     */
     private SpriteFont uiFont;
+
+    /**
+     * The loaded border and diamond border images.
+     */
     private Bitmap normalBorder, diamondBorder;
+
+    /**
+     * Contains the loaded medal images.
+     */
     private Bitmap[] medalBitmaps;
 
+    /**
+     * Creates a surface view.
+     */
     public LevelSelectionSurfaceView(Context context, AttributeSet attrs) {
         super(context, attrs);
         getHolder().addCallback(this);
@@ -52,9 +100,10 @@ public class LevelSelectionSurfaceView extends TTLSurfaceView {
     }
 
     /**
-     * Iterates through the level resource images (levelx and levelxcollision, where top is a number),
-     * queries the score (best time and highscore) from the database and adds a LevelInfo object
-     * for each level containing these variables to the levels ArrayList.
+     * Iterates through the image resources <tt>levelx</tt> and <tt>levelxcollision</tt>, where
+     * <tt>x</tt> is <tt>{@link LevelInfo#number} - 1</tt>, queries the score (best time and highscore) from the database and
+     * adds a {@link LevelInfo} object containing these variables for each level to the levels
+     * list {@link #levels}.
      */
     private void loadLevels() {
         Highscores highscores = new Highscores(getContext().getFilesDir().getAbsolutePath() + "/highscore.db");
@@ -75,6 +124,18 @@ public class LevelSelectionSurfaceView extends TTLSurfaceView {
         }
     }
 
+    /**
+     * Iterates through the levels according to {@link #LEVEL_COUNT}. Calculates the top and left
+     * position for each level and adds a {@link LevelInfoPosition} object containing these values
+     * to {@link #levelInfoPositions}.
+     *
+     * For each level a border, the achieved medals, the number of the level, the best time and the
+     * highscore is drawn. A diamond border is drawn if the highscore is greater than the largest
+     * score in the resource file <tt>levelx_medal_points</tt>, where <tt>x</tt> is
+     * <tt>{@link LevelInfo#number} - 1</tt>. The resource file also decides which medals are displayed.
+     *
+     * @param canvas the canvas which is drawn on
+     */
     private void drawLevelInfos(Canvas canvas) {
         levelInfoPositions.clear();
 
@@ -139,6 +200,10 @@ public class LevelSelectionSurfaceView extends TTLSurfaceView {
         }
     }
 
+    /**
+     * If a touch ACTION_UP event on a level entry is registered, the {@link GameActivity} activity
+     * is started and parameterized by the corresponding {@link LevelInfo}.
+     */
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_UP) {
@@ -161,6 +226,10 @@ public class LevelSelectionSurfaceView extends TTLSurfaceView {
         return true;
     }
 
+    /**
+     * Loads {@link #uiFont}, the {@link #normalBorder normal} and {@link #diamondBorder diamond border}
+     * images and the {@link #medalBitmaps medal images} and calls {@link #loadLevels()}.
+     */
     @Override
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
         super.surfaceCreated(surfaceHolder);
@@ -191,6 +260,9 @@ public class LevelSelectionSurfaceView extends TTLSurfaceView {
         loadLevels();
     }
 
+    /**
+     * Locks the <tt>canvas</tt> and calls {@link #drawLevelInfos(Canvas)}.
+     */
     @Override
     public void surfaceChanged(SurfaceHolder surfaceHolder, int format, int width, int height) {
         super.surfaceChanged(surfaceHolder, format, width, height);
@@ -208,6 +280,9 @@ public class LevelSelectionSurfaceView extends TTLSurfaceView {
         }
     }
 
+    /**
+     * Calls <tt>super.surfaceDestroyed(SurfaceHolder)</tt>.
+     */
     @Override
     public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
         super.surfaceDestroyed(surfaceHolder);
