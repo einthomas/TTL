@@ -4,9 +4,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.Rect;
-import android.graphics.RectF;
-import android.util.Log;
 
 import java.nio.IntBuffer;
 import java.util.ArrayList;
@@ -22,7 +19,6 @@ public class Level {
 
     public static final byte BACKGROUND = 0;
     public static final byte OBSTACLE = 1;
-    public static final byte COLLECTABLE = 2;
 
     public LevelInfo levelInfo;
     public Bitmap bitmap;
@@ -35,7 +31,7 @@ public class Level {
      *
      * @param levelInfo the level to be loaded.
      */
-    public Level(Context context, final int GAME_HEIGHT, final int GAME_WIDTH, LevelInfo levelInfo) {
+    public Level(Context context, LevelInfo levelInfo) {
         this.context = context;
         this.levelInfo = levelInfo;
 

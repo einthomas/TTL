@@ -12,7 +12,7 @@ public class Player {
     public static final float DECELERATION = 16.0f;
     public static final float INVINCIBILITY_TIME = 1.5f;
     public float x, y;
-    public float velocityX, velocityY;
+    public float velocityY;
 
     public int score = 0;
 }

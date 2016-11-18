@@ -7,7 +7,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 
@@ -123,12 +122,14 @@ public class LevelSelectionSurfaceView extends TTLSurfaceView {
                 }
                 uiFont.drawText(canvas, null, text, borderLeft + 2, borderTop + 2);
 
+
                 // draw best time
                 text = levels.get(i).score.time / 1000 / 60 + ":" +
                         String.format(Locale.US, "%02d", levels.get(i).score.time / 1000 % 60) + "." +
                         levels.get(i).score.time / 100 % 10;
                 textDimensions = uiFont.getDimensions(text);
                 uiFont.drawText(canvas, null, text, borderLeft + borderWidth - 2 - textDimensions[0], borderTop + 2);
+
 
                 // draw highscore
                 text = "" + levels.get(i).score.score;
