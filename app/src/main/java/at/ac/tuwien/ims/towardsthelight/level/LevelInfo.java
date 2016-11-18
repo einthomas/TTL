@@ -28,8 +28,8 @@ public class LevelInfo implements Serializable {
     public int imageResource;
 
     /**
-     * Not to be displayed. Holds collision information. White pixels represent collidable objects
-     * and red pixels represent collectables.
+     * Not to be displayed. Holds collision information. White pixels represent collidable objects,
+     * red pixels represent collectables and black pixels represent the background.
      */
     public int collisionResource;
 
