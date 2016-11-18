@@ -5,10 +5,16 @@ import android.os.Bundle;
 import android.view.View;
 
 /**
+ * Fullscreen activity for level selection. <tt>activity_level_selection</tt> is the corresponding
+ * layout.
+ *
  * @author Thomas Koch
  */
 public class LevelSelectionActivity extends AppCompatActivity {
 
+    /**
+     * Sets the activity to fullscreen and sets the content view.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
