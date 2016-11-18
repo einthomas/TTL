@@ -75,11 +75,6 @@ public class GameSurfaceView extends TTLSurfaceView {
     private int time = 0;
 
     /**
-     * Number of lives the player has left.
-     */
-    private int lives = 3;
-
-    /**
      *  Time the player is invincible in seconds.
      */
     private float invincibilityTime = 0;
@@ -212,7 +207,7 @@ public class GameSurfaceView extends TTLSurfaceView {
                     if (selectedLevel.getCollisionData(x, y) == Level.OBSTACLE) {
                         player.velocityY = Player.SLOWED_VELOCITY_Y;
                         if (invincibilityTime == 0) {
-                            lives--;
+                            player.lives--;
                             invincibilityTime = Player.INVINCIBILITY_TIME;
                         }
                         break;
@@ -274,6 +269,6 @@ public class GameSurfaceView extends TTLSurfaceView {
             }
         }
 
-        inGameUI.draw(canvas, gameLoop.getFPS(), player.score, time, lives);
+        inGameUI.draw(canvas, gameLoop.getFPS(), player.score, time, player.lives);
     }
 }

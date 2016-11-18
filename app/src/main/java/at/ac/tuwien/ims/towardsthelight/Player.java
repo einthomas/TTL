@@ -63,4 +63,8 @@ public class Player {
      * Number of collectibles that have been collected.
      */
     public int score = 0;
+    /**
+     * Number of lives the player has left.
+     */
+    public int lives = 3;
 }
