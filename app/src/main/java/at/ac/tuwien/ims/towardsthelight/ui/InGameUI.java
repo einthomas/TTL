@@ -11,7 +11,7 @@ import at.ac.tuwien.ims.towardsthelight.R;
 
 public class InGameUI {
 
-    private int fps;
+    private float softFps;
 
     private SpriteFont uiFont;
 
@@ -48,9 +48,9 @@ public class InGameUI {
             1, 92
         );
 
-        // display fps
-        uiFont.drawText(canvas, paint, this.fps + "", 1, 85);
+        // display softFps
+        uiFont.drawText(canvas, paint, Math.round(this.softFps) + "", 1, 85);
 
-        this.fps = (this.fps * 9 + fps) / 10;
+        this.softFps = (this.softFps * 9 + fps) / 10;
     }
 }

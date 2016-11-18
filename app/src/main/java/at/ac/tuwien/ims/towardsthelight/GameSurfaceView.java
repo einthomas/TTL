@@ -15,30 +15,80 @@ import at.ac.tuwien.ims.towardsthelight.level.Level;
 import at.ac.tuwien.ims.towardsthelight.level.LevelInfo;
 import at.ac.tuwien.ims.towardsthelight.ui.InGameUI;
 
+/**
+ * Drawing and logic code for the main game.
+ *
+ * @author Thomas Koch
+ * @author Felix Kugler
+ */
 public class GameSurfaceView extends TTLSurfaceView {
 
+    /**
+     * Current level info.
+     */
     public LevelInfo levelInfo;
 
+    /**
+     * The GameLoop that calls this object's {@link #updateGame(float)} and
+     * {@link #drawGame(Canvas)} functions.
+     */
     private GameLoop gameLoop;
+
+    /**
+     * The thread {@link #gameLoop} runs in.
+     */
     private Thread gameLoopThread;
 
-    // allocated in UI thread, only used in gameLoopThread
+    /**
+     * Paint object used in {@link #drawGame(Canvas)}.
+     */
     private Paint paint;
 
+    /**
+     * Transformation of the level on the screen.
+     */
     private Matrix levelMatrix;
 
+    /**
+     * Stores position, velocity and score of the player.
+     */
     private Player player;
+
+    /**
+     * Current level data.
+     */
     private Level selectedLevel;
 
+    /**
+     * Collision rectangle of the player.
+     */
     RectF playerRect;
 
+    /**
+     * Draws the overlay.
+     */
     private InGameUI inGameUI;
 
+    /**
+     * Time since start of the level in milliseconds.
+     */
     private int time = 0;
-    private int lifes = 3;
+
+    /**
+     *  Time the player is invincible in seconds.
+     */
     private float invincibilityTime = 0;
+
+    /**
+     * True if the player accelerates, false otherwise.
+     */
     private boolean boost = false;
 
+    /**
+     * Creates a new GameSurfaceView to play the game.
+     * @param context Used to load resources.
+     * @param attrs See SurfaceView(Context, AttributeSet)
+     */
     public GameSurfaceView(Context context, AttributeSet attrs) {
         // runs in UI thread
         super(context, attrs);
@@ -58,20 +108,8 @@ public class GameSurfaceView extends TTLSurfaceView {
     }
 
     /**
-     * Stops the game loop and the game loop thread.
-     */
-    private void endGame() {
-        // runs in UI thread
-        gameLoop.setRunning(false);
-        try {
-            gameLoopThread.join();
-        } catch (InterruptedException e) {
-            Log.e("Error", e.getMessage());
-        }
-    }
-
-    /**
      * Initializes the game loop and the game loop thread.
+     * @param surfaceHolder SurfaceHolder used for drawing.
      */
     @Override
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
@@ -86,19 +124,28 @@ public class GameSurfaceView extends TTLSurfaceView {
         gameLoopThread = new Thread(gameLoop);
     }
 
-    @Override
-    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-        super.surfaceChanged(holder, format, width, height);
-    }
-
+    /**
+     * Stops the game loop and the game loop thread.
+     * @param holder
+     */
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
         super.surfaceDestroyed(holder);
 
         // runs in UI thread
-        endGame();
+        gameLoop.setRunning(false);
+        try {
+            gameLoopThread.join();
+        } catch (InterruptedException e) {
+            Log.e("Error", e.getMessage());
+        }
     }
 
+    /**
+     * React to touch events.
+     * @param event The touch event to react to.
+     * @return Whether the event was handled. Always true.
+     */
     @Override
     public synchronized boolean onTouchEvent(MotionEvent event) {
         // runs in UI thread
@@ -122,6 +169,10 @@ public class GameSurfaceView extends TTLSurfaceView {
         return true;
     }
 
+    /**
+     * Apply game logic for the given time interval.
+     * @param delta Time since last call to this function in seconds.
+     */
     public synchronized void updateGame(float delta) {
         // runs in gameLoopThread
         time += Math.round(delta * 1000);
@@ -156,7 +207,7 @@ public class GameSurfaceView extends TTLSurfaceView {
                     if (selectedLevel.getCollisionData(x, y) == Level.OBSTACLE) {
                         player.velocityY = Player.SLOWED_VELOCITY_Y;
                         if (invincibilityTime == 0) {
-                            lifes--;
+                            player.lives--;
                             invincibilityTime = Player.INVINCIBILITY_TIME;
                         }
                         break;
@@ -188,6 +239,10 @@ public class GameSurfaceView extends TTLSurfaceView {
         levelMatrix.preTranslate(0, playerYDelta);
     }
 
+    /**
+     * Draw game graphics onto canvas.
+     * @param canvas The canvas to draw onto.
+     */
     public synchronized void drawGame(Canvas canvas) {
         // runs in gameLoopThread
         canvas.drawColor(Color.BLACK);
@@ -214,6 +269,6 @@ public class GameSurfaceView extends TTLSurfaceView {
             }
         }
 
-        inGameUI.draw(canvas, gameLoop.getFPS(), player.score, time, lifes);
+        inGameUI.draw(canvas, gameLoop.getFPS(), player.score, time, player.lives);
     }
 }
