@@ -9,12 +9,27 @@ import java.util.Locale;
 
 import at.ac.tuwien.ims.towardsthelight.R;
 
+/**
+ * Draws score, lives and FPS.
+ * @author Thomas Koch
+ * @author Felix Kugler
+ */
 public class InGameUI {
 
+    /**
+     * FPS averaged over multiple frames.
+     */
     private float softFps;
 
+    /**
+     * Font used for UI.
+     */
     private SpriteFont uiFont;
 
+    /**
+     * Constructs a new ui.
+     * @param context Resources used for loading resources.
+     */
     public InGameUI(Resources context) {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inScaled = false;
@@ -24,9 +39,16 @@ public class InGameUI {
             "0123456789:.♥♡",
             new int[]{3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 1, 1, 5, 5}
         );
-
     }
 
+    /**
+     * Draws the UI.
+     * @param canvas Canvas used for drawing.
+     * @param fps FPS the game is running at.
+     * @param score The Players score.
+     * @param time Time since level begin in milliseconds.
+     * @param lives Lives the player has left.
+     */
     public void draw(Canvas canvas, int fps, int score, int time, int lives) {
         Paint paint = new Paint();
 
