@@ -7,22 +7,45 @@ import android.database.sqlite.SQLiteDatabase;
 import java.io.Serializable;
 
 /**
+ * Handles reading and writing scores from and to the database.
  * @author Felix Kugler
  */
 public class Highscores {
 
+    /**
+     * Stores score and time for a level.
+     */
     public static class Score implements Serializable {
+        /**
+         * Score achieved in a level.
+         */
         public int score;
-        public int time; // number of milliseconds
+        /**
+         * Time spent in a level in milliseconds.
+         */
+        public int time;
 
+        /**
+         * Creates a new score.
+         * @param time Time spent in a level.
+         * @param score Score achieved in a level.
+         */
         public Score(int time, int score) {
             this.time = time;
             this.score = score;
         }
     }
 
-    SQLiteDatabase database;
+    /**
+     * Database used for storing scores.
+     */
+    private SQLiteDatabase database;
 
+    /**
+     * Create a new object for reading and writing scores.
+     * This will create a new database if it doesn't already exist.
+     * @param path Path to the SQLite database file.
+     */
     public Highscores(String path) {
         database = SQLiteDatabase.openOrCreateDatabase(path, null);
 
@@ -33,6 +56,11 @@ public class Highscores {
         );
     }
 
+    /**
+     * Access the score for a given level.
+     * @param level The level index.
+     * @return The score for that level.
+     */
     public Score getHighscore(int level) {
         Cursor cursor = database.rawQuery(
             "SELECT time, score FROM highscore WHERE level = ?;", new String[] {
@@ -50,7 +78,13 @@ public class Highscores {
         return score;
     }
 
+    /**
+     * Store a new score.
+     * @param level The level index on which the score was achieved.
+     * @param score The score that was achieved on the level.
+     */
     public void putHighscore(int level, Score score) {
+        // TODO: check whether the new score is actually better than the previous one.
         ContentValues record = new ContentValues();
         record.put("level", level);
         record.put("time", score.time);
