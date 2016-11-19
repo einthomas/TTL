@@ -12,12 +12,26 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+/**
+ * Draws the main menu.
+ *
+ * @author Felix Kugler
+ */
 public class MenuSurfaceView extends TTLSurfaceView {
 
     private Paint paint;
 
+    /**
+     * The logo graphic.
+     */
     private Bitmap logo;
 
+    /**
+     * Creates a new MenuSurfaceView.
+     *
+     * @param context Used to load resources.
+     * @param attrs See <tt>SurfaceView.SurfaceView(Context, AttributeSet)</tt>.
+     */
     public MenuSurfaceView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
@@ -33,23 +47,37 @@ public class MenuSurfaceView extends TTLSurfaceView {
     }
 
     /**
-     * Initializes the game loop and the game loop thread.
+     * Calls {@link #invalidate()}. See <tt>SurfaceHolder.Callback</tt>.
      */
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
         invalidate();
     }
 
+    /**
+     * Calls {@link #invalidate()} and {@link TTLSurfaceView#surfaceChanged(SurfaceHolder, int, int, int)}.
+     * See <tt>SurfaceHolder.Callback</tt>
+     */
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
         super.surfaceChanged(holder, format, width, height);
         invalidate();
     }
 
+    /**
+     * See <tt>SurfaceHolder.Callback</tt>.
+     */
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
     }
 
+    /**
+     * Starts the {@link LevelSelectionActivity} activity if an <tt>ACTION_UP</tt> action is
+     * registered. (See <tt>SurfaceView</tt>).
+     * 
+     * @param event The touch event to react to.
+     * @return Whether the event was handled. Always true.
+     */
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_UP) {
@@ -59,6 +87,11 @@ public class MenuSurfaceView extends TTLSurfaceView {
         return true;
     }
 
+    /**
+     * Draws a black background and the logo image {@link #logo}.
+     *
+     * @param canvas the canvas to be drawn on
+     */
     public void onDraw(Canvas canvas) {
         canvas.drawColor(Color.BLACK);
 
