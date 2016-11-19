@@ -38,6 +38,8 @@ public class GameLoop implements Runnable {
 
     /**
      * Create a new <tt>GameLoop</tt> for the given {@link GameSurfaceView}.
+     * <br /> Author: Thomas Koch, Felix Kugler
+     *
      * @param surfaceHolder <tt>SurfaceHolder</tt> to draw onto.
      * @param gameSurfaceView {@link GameSurfaceView} handling logic and drawing.
      */
@@ -52,6 +54,8 @@ public class GameLoop implements Runnable {
 
     /**
      * Set the running status of the loop. When called with false, the loop stops.
+     * <br /> Author: Thomas Koch, Felix Kugler
+     *
      * @param running indicates if the game loop is being executed
      */
     public void setRunning(boolean running) {
@@ -60,8 +64,8 @@ public class GameLoop implements Runnable {
 
     /**
      * Calculate how long the last frame has needed to draw the screen
+     * <br /> Author: Thomas Koch
      *
-     * @author Thomas Koch
      * @return the length of the last frame
      */
     private float calculateDeltaTime() {
@@ -74,8 +78,8 @@ public class GameLoop implements Runnable {
 
     /**
      * Calculates FPS
+     * <br /> Author: Thomas Koch
      *
-     * @author Thomas Koch
      * @return the frames per second
      */
     public int getFPS() {
@@ -84,6 +88,7 @@ public class GameLoop implements Runnable {
 
     /**
      * Executes the game loop
+     * <br /> Author: Thomas Koch, Felix Kugler
      */
     @Override
     public void run() {

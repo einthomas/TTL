@@ -12,6 +12,7 @@ import java.util.Map;
 /**
  * Describes a font as an image containing all characters.
  * @author Felix Kugler
+ * @author Thomas Koch
  */
 public class SpriteFont {
 
@@ -32,6 +33,7 @@ public class SpriteFont {
 
     /**
      * Creates a new font from the given image.
+     * <br />Author: Felix Kugler
      * @param bitmap Image containing all the characters densely packed.
      * @param characters Characters in the order they appear in the bitmap.
      * @param widths Width of each character.
@@ -52,6 +54,7 @@ public class SpriteFont {
 
     /**
      * Draw text with the font.
+     * <br />Author: Felix Kugler
      * @param canvas Canvas used to draw.
      * @param paint Paint used to draw.
      * @param text Text to draw.
@@ -74,12 +77,11 @@ public class SpriteFont {
     }
 
     /**
-     * Calculates the dimensions (width, height) of "text"
-     *
+     * Calculates the dimensions (width, height) of <tt>text</tt>.
+     * <br />Author: Thomas Koch
      * @param text the string which dimensions are calculated
-     * @return the dimensions of "text" as an integer array. Index 0 contains the width, index 1 the
-     *         height.
-     * @author Thomas Koch
+     * @return the dimensions of <tt>text</tt> as an integer array. Index 0 contains the width,
+     *         index 1 the height.
      */
     public int[] getDimensions(String text) {
         int[] dimensions = new int[2];  // [0] -> width, [1] -> height

@@ -86,6 +86,7 @@ public class GameSurfaceView extends TTLSurfaceView {
 
     /**
      * Creates a new GameSurfaceView to play the game.
+     * <br /> Author: Felix Kugler, Thomas Koch
      * @param context Used to load resources.
      * @param attrs See SurfaceView(Context, AttributeSet)
      */
@@ -109,6 +110,7 @@ public class GameSurfaceView extends TTLSurfaceView {
 
     /**
      * Initializes the game loop and the game loop thread.
+     * <br /> Author: Felix Kugler, Thomas Koch
      * @param surfaceHolder SurfaceHolder used for drawing.
      */
     @Override
@@ -126,6 +128,7 @@ public class GameSurfaceView extends TTLSurfaceView {
 
     /**
      * Stops the game loop and the game loop thread.
+     * <br /> Author: Felix Kugler, Thomas Koch
      * @param holder
      */
     @Override
@@ -143,6 +146,7 @@ public class GameSurfaceView extends TTLSurfaceView {
 
     /**
      * React to touch events.
+     * <br /> Author: Felix Kugler, Thomas Koch
      * @param event The touch event to react to.
      * @return Whether the event was handled. Always true.
      */
@@ -171,6 +175,7 @@ public class GameSurfaceView extends TTLSurfaceView {
 
     /**
      * Apply game logic for the given time interval.
+     * <br /> Author: Felix Kugler, Thomas Koch
      * @param delta Time since last call to this function in seconds.
      */
     public synchronized void updateGame(float delta) {
@@ -241,6 +246,7 @@ public class GameSurfaceView extends TTLSurfaceView {
 
     /**
      * Draw game graphics onto canvas.
+     * <br /> Author: Felix Kugler, Thomas Koch
      * @param canvas The canvas to draw onto.
      */
     public synchronized void drawGame(Canvas canvas) {

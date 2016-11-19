@@ -11,7 +11,6 @@ import at.ac.tuwien.ims.towardsthelight.R;
 
 /**
  * Draws score, lives and FPS.
- * @author Thomas Koch
  * @author Felix Kugler
  */
 public class InGameUI {
