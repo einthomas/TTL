@@ -10,15 +10,17 @@ import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
-import android.view.SurfaceView;
 
 /**
- * Draws the main menu.
+ * Represents the main menu.
  *
  * @author Felix Kugler
  */
 public class MenuSurfaceView extends TTLSurfaceView {
 
+    /**
+     * Paint used for drawing.
+     */
     private Paint paint;
 
     /**
