@@ -10,14 +10,28 @@ import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
-import android.view.SurfaceView;
 
+/**
+ * Represents the main menu.
+ * @author Felix Kugler
+ */
 public class MenuSurfaceView extends TTLSurfaceView {
 
+    /**
+     * Paint used for drawing.
+     */
     private Paint paint;
 
+    /**
+     * Graphic used as the logo.
+     */
     private Bitmap logo;
 
+    /**
+     * Creates a main menu.
+     * @param context Context used for loading resources.
+     * @param attrs Passed to super class.
+     */
     public MenuSurfaceView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
@@ -33,23 +47,32 @@ public class MenuSurfaceView extends TTLSurfaceView {
     }
 
     /**
-     * Initializes the game loop and the game loop thread.
+     * See <tt>SurfaceHolder.Callback</tt>.
      */
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
         invalidate();
     }
 
+    /**
+     * See <tt>SurfaceHolder.Callback</tt>.
+     */
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
         super.surfaceChanged(holder, format, width, height);
         invalidate();
     }
 
+    /**
+     * See <tt>SurfaceHolder.Callback</tt>.
+     */
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
     }
 
+    /**
+     * See <tt>View</tt>.
+     */
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_UP) {
@@ -59,6 +82,10 @@ public class MenuSurfaceView extends TTLSurfaceView {
         return true;
     }
 
+    /**
+     * Draws the menu.
+     * @param canvas Canvas used for drawing.
+     */
     public void onDraw(Canvas canvas) {
         canvas.drawColor(Color.BLACK);
 
