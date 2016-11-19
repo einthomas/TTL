@@ -10,15 +10,32 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * Describes a font as an image containing all characters.
  * @author Felix Kugler
  */
 public class SpriteFont {
 
+    /**
+     * Image containing all the characters.
+     */
     private Bitmap bitmap;
+
+    /**
+     * Maps a Character to a rectangular area on {@link #bitmap}.
+     */
     private Map<Character, Rect> glyphMap;
 
+    /**
+     * Height of the characters.
+     */
     private int height;
 
+    /**
+     * Creates a new font from the given image.
+     * @param bitmap Image containing all the characters densely packed.
+     * @param characters Characters in the order they appear in the bitmap.
+     * @param widths Width of each character.
+     */
     public SpriteFont(Bitmap bitmap, String characters, int[] widths) {
         this.bitmap = bitmap;
         height = bitmap.getHeight();
@@ -33,6 +50,14 @@ public class SpriteFont {
         }
     }
 
+    /**
+     * Draw text with the font.
+     * @param canvas Canvas used to draw.
+     * @param paint Paint used to draw.
+     * @param text Text to draw.
+     * @param x X position of text.
+     * @param y Y position of text.
+     */
     public void drawText(Canvas canvas, Paint paint, String text, float x, float y) {
         RectF destination = new RectF(x, y, 0, y + height);
 
