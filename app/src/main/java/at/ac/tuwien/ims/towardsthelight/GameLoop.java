@@ -14,18 +14,22 @@ public class GameLoop implements Runnable {
      * The SurfaceHolder to draw unto.
      */
     private SurfaceHolder surfaceHolder;
+
     /**
      * The GameSurfaceView doing the work.
      */
     private GameSurfaceView gameSurfaceView;
+
     /**
      * Loop runs until this is set to false.
      */
     private boolean running;
+
     /**
      * Time of the last frame as returned by <tt>System.currentTimeMillis()</tt>
      */
     private long previousFrameTime;
+
     /**
      * Time difference since last frame in seconds.
      */
