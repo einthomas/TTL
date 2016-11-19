@@ -7,6 +7,7 @@ import android.view.SurfaceHolder;
  * Calls {@link GameSurfaceView#updateGame(float)} and {@link GameSurfaceView#drawGame(Canvas)}
  * in a loop.
  * @author Felix Kugler
+ * @author Thomas Koch
  */
 public class GameLoop implements Runnable {
 
