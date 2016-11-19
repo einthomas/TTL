@@ -59,7 +59,7 @@ public class LevelSelectionSurfaceView extends TTLSurfaceView {
     /**
      * The number of levels.
      */
-    private final int LEVEL_COUNT = 3;
+    private final int LEVEL_COUNT = 2;
 
     /**
      * Contains a {@link LevelInfo} object for each level.
@@ -111,9 +111,9 @@ public class LevelSelectionSurfaceView extends TTLSurfaceView {
         int imageResource;
         int collisionResource;
         for (int i = 1; i <= LEVEL_COUNT; i++) {
-            //imageResource = getResources().getIdentifier("level" + i, "drawable", getContext().getPackageName());
+            imageResource = getResources().getIdentifier("level" + i, "drawable", getContext().getPackageName());
             collisionResource = getResources().getIdentifier("level" + i + "collision", "drawable", getContext().getPackageName());
-            imageResource = collisionResource;
+            //imageResource = collisionResource;
 
             Highscores.Score score = highscores.getHighscore(i);
             if (score == null) {
