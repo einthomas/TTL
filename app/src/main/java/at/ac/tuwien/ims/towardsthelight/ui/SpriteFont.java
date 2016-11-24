@@ -71,7 +71,7 @@ public class SpriteFont {
 
                 destination.right = destination.left + source.width();
                 canvas.drawBitmap(bitmap, source, destination, paint);
-                destination.left += source.width() + 1;
+                destination.left += source.width() - 1;
             }
         }
     }
