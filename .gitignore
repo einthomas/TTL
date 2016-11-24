@@ -4,8 +4,8 @@
 /local.properties
 /.idea/workspace.xml
 /.idea/libraries
-/.idea
-build.gradle
+/.idea/gradle.xml
+/.idea/modules.xml
 
 # mac stuff
 .DS_Store
@@ -14,5 +14,3 @@ build.gradle
 /build
 /captures
 .externalNativeBuild
-/app/build
-/app/build.gradle
