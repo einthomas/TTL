@@ -84,6 +84,8 @@ public class GameSurfaceView extends TTLSurfaceView {
      */
     private boolean boost = false;
 
+    private boolean paused;
+
     /**
      * Creates a new GameSurfaceView to play the game.
      * @param context Used to load resources.
@@ -104,7 +106,13 @@ public class GameSurfaceView extends TTLSurfaceView {
         inGameUI = new InGameUI(context.getResources());
         paint = new Paint();
 
+        paused = true;
+
         player.x = 32;
+        playerRect = new RectF(
+            Math.round(player.x - Player.SIZE_X / 2), GAME_HEIGHT - Player.SIZE_Y * 7,
+            Math.round(player.x + Player.SIZE_X / 2), GAME_HEIGHT - Player.SIZE_Y * 6
+        );
     }
 
     /**
@@ -121,7 +129,9 @@ public class GameSurfaceView extends TTLSurfaceView {
 
         // runs in UI thread
         gameLoop = new GameLoop(surfaceHolder, this);
+        gameLoop.setRunning(true);
         gameLoopThread = new Thread(gameLoop);
+        gameLoopThread.start();
     }
 
     /**
@@ -149,8 +159,8 @@ public class GameSurfaceView extends TTLSurfaceView {
     @Override
     public synchronized boolean onTouchEvent(MotionEvent event) {
         // runs in UI thread
-        if (event.getAction() == MotionEvent.ACTION_UP && !gameLoopThread.isAlive()) {
-            gameLoopThread.start();
+        if (event.getAction() == MotionEvent.ACTION_UP) {
+            paused = false;
         }
 
         float[] position = new float[]{event.getX(), event.getY()};
@@ -175,68 +185,70 @@ public class GameSurfaceView extends TTLSurfaceView {
      */
     public synchronized void updateGame(float delta) {
         // runs in gameLoopThread
-        time += Math.round(delta * 1000);
-        invincibilityTime = Math.max(invincibilityTime - delta, 0);
+        if (!paused) {
+            time += Math.round(delta * 1000);
+            invincibilityTime = Math.max(invincibilityTime - delta, 0);
 
-        // move towards MIN_VELOCITY
-        if (player.velocityY >= Player.BASE_VELOCITY_Y) {
-            if (boost) {
-                player.velocityY += Player.BOOST_ACCELERATION * delta;
+            // move towards MIN_VELOCITY
+            if (player.velocityY >= Player.BASE_VELOCITY_Y) {
+                if (boost) {
+                    player.velocityY += Player.BOOST_ACCELERATION * delta;
+                } else {
+                    player.velocityY = Math.max(player.velocityY - Player.DECELERATION * delta, Player.BASE_VELOCITY_Y);
+                }
             } else {
-                player.velocityY = Math.max(player.velocityY - Player.DECELERATION * delta, Player.BASE_VELOCITY_Y);
+                // player might have been slowed by collision
+                player.velocityY = Math.min(player.velocityY + Player.BASE_ACCELERATION * delta, Player.BASE_VELOCITY_Y);
             }
-        } else {
-            // player might have been slowed by collision
-            player.velocityY = Math.min(player.velocityY + Player.BASE_ACCELERATION * delta, Player.BASE_VELOCITY_Y);
-        }
 
-        float playerYDelta = (float) (player.velocityY * delta * Player.SPEED);
-        player.y += playerYDelta;
+            float playerYDelta = (float) (player.velocityY * delta * Player.SPEED);
+            player.y += playerYDelta;
 
-        playerRect = new RectF(
-                Math.round(player.x - Player.SIZE_X / 2), GAME_HEIGHT - Player.SIZE_Y * 7,
-                Math.round(player.x + Player.SIZE_X / 2), GAME_HEIGHT - Player.SIZE_Y * 6
-        );
+            playerRect = new RectF(
+                    Math.round(player.x - Player.SIZE_X / 2), GAME_HEIGHT - Player.SIZE_Y * 7,
+                    Math.round(player.x + Player.SIZE_X / 2), GAME_HEIGHT - Player.SIZE_Y * 6
+            );
 
-        int levelPositionY = selectedLevel.bitmap.getHeight() + Math.round(-GAME_HEIGHT * (selectedLevel.bitmap.getHeight() / GAME_HEIGHT - 1) + player.y);
-        int levelPlayerPositionY = levelPositionY - GAME_HEIGHT + Player.SIZE_Y * 6;
+            int levelPositionY = selectedLevel.bitmap.getHeight() + Math.round(-GAME_HEIGHT * (selectedLevel.bitmap.getHeight() / GAME_HEIGHT - 1) + player.y);
+            int levelPlayerPositionY = levelPositionY - GAME_HEIGHT + Player.SIZE_Y * 6;
 
-        for (int y = Math.round(levelPlayerPositionY - Player.SIZE_Y / 2); y <= levelPlayerPositionY + Player.SIZE_Y / 2; y++) {
-            for (int x = Math.round(player.x - Player.SIZE_X / 2); x <= player.x + Player.SIZE_X / 2; x++) {
-                if (selectedLevel.withinBounds(x, y)) {
-                    if (selectedLevel.getCollisionData(x, y) == Level.OBSTACLE) {
-                        player.velocityY = Player.SLOWED_VELOCITY_Y;
-                        if (invincibilityTime == 0) {
-                            player.lives--;
-                            invincibilityTime = Player.INVINCIBILITY_TIME;
+            for (int y = Math.round(levelPlayerPositionY - Player.SIZE_Y / 2); y <= levelPlayerPositionY + Player.SIZE_Y / 2; y++) {
+                for (int x = Math.round(player.x - Player.SIZE_X / 2); x <= player.x + Player.SIZE_X / 2; x++) {
+                    if (selectedLevel.withinBounds(x, y)) {
+                        if (selectedLevel.getCollisionData(x, y) == Level.OBSTACLE) {
+                            player.velocityY = Player.SLOWED_VELOCITY_Y;
+                            if (invincibilityTime == 0) {
+                                player.lives--;
+                                invincibilityTime = Player.INVINCIBILITY_TIME;
+                            }
+                            break;
                         }
-                        break;
                     }
                 }
             }
-        }
 
-        for (int i = selectedLevel.collectables.size() - 1; i >= 0; i--) {
-            if (!selectedLevel.collectables.get(i).visible) {
-                if (selectedLevel.collectables.get(i).bottom <= levelPositionY) {
-                    selectedLevel.collectables.get(i).top = -selectedLevel.collectables.get(i).bitmap.getHeight();
-                    selectedLevel.collectables.get(i).bottom = 0;
-                    selectedLevel.collectables.get(i).visible = true;
-                }
-            } else {
-                if (playerRect.intersect(selectedLevel.collectables.get(i))) {
-                    player.score += 1;
-                    selectedLevel.collectables.remove(i);
-                } else if (selectedLevel.collectables.get(i).top > levelPositionY + GAME_HEIGHT) {
-                    selectedLevel.collectables.remove(i);
+            for (int i = selectedLevel.collectables.size() - 1; i >= 0; i--) {
+                if (!selectedLevel.collectables.get(i).visible) {
+                    if (selectedLevel.collectables.get(i).bottom <= levelPositionY) {
+                        selectedLevel.collectables.get(i).top = -selectedLevel.collectables.get(i).bitmap.getHeight();
+                        selectedLevel.collectables.get(i).bottom = 0;
+                        selectedLevel.collectables.get(i).visible = true;
+                    }
                 } else {
-                    selectedLevel.collectables.get(i).top += playerYDelta;
-                    selectedLevel.collectables.get(i).bottom += playerYDelta;
+                    if (playerRect.intersect(selectedLevel.collectables.get(i))) {
+                        player.score += 1;
+                        selectedLevel.collectables.remove(i);
+                    } else if (selectedLevel.collectables.get(i).top > levelPositionY + GAME_HEIGHT) {
+                        selectedLevel.collectables.remove(i);
+                    } else {
+                        selectedLevel.collectables.get(i).top += playerYDelta;
+                        selectedLevel.collectables.get(i).bottom += playerYDelta;
+                    }
                 }
             }
-        }
 
-        levelMatrix.preTranslate(0, playerYDelta);
+            levelMatrix.preTranslate(0, playerYDelta);
+        }
     }
 
     /**
