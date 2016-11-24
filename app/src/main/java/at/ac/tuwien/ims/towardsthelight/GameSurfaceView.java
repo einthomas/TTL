@@ -1,6 +1,7 @@
 package at.ac.tuwien.ims.towardsthelight;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
@@ -211,6 +212,17 @@ public class GameSurfaceView extends TTLSurfaceView {
 
             int levelPositionY = selectedLevel.bitmap.getHeight() + Math.round(-GAME_HEIGHT * (selectedLevel.bitmap.getHeight() / GAME_HEIGHT - 1) + player.y);
             int levelPlayerPositionY = levelPositionY - GAME_HEIGHT + Player.SIZE_Y * 6;
+
+            Log.d("player y", "" + levelPlayerPositionY + " " + selectedLevel.bitmap.getHeight());
+
+            if (levelPlayerPositionY >= selectedLevel.bitmap.getHeight()) {
+                gameLoop.setRunning(false);
+                Intent intent = new Intent(getContext(), LevelResultActivity.class);
+                intent.putExtra("LevelScore", player.score);
+                intent.putExtra("LevelNumber", selectedLevel.levelInfo.number);
+                intent.putExtra("LevelTime", time);
+                getContext().startActivity(intent);
+            }
 
             for (int y = Math.round(levelPlayerPositionY - Player.SIZE_Y / 2); y <= levelPlayerPositionY + Player.SIZE_Y / 2; y++) {
                 for (int x = Math.round(player.x - Player.SIZE_X / 2); x <= player.x + Player.SIZE_X / 2; x++) {

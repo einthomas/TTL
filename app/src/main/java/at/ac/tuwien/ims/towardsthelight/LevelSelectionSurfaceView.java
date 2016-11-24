@@ -59,7 +59,7 @@ public class LevelSelectionSurfaceView extends TTLSurfaceView {
     /**
      * The number of levels.
      */
-    private final int LEVEL_COUNT = 2;
+    private final int LEVEL_COUNT = 3;
 
     /**
      * Contains a {@link LevelInfo} object for each level.

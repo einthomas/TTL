@@ -4,15 +4,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
-import at.ac.tuwien.ims.towardsthelight.level.LevelInfo;
-
 /**
- * Fullscreen activity for level selection. <tt>activity_level_selection</tt> is the corresponding
- * layout.
+ * Fullscreen activity displayed after finishing a level. <tt>activity_level_result</tt> is the
+ * corresponding layout.
  *
  * @author Thomas Koch
  */
-public class LevelSelectionActivity extends AppCompatActivity {
+public class LevelResultActivity extends AppCompatActivity {
 
     /**
      * Sets the activity to fullscreen and sets the content view.
@@ -28,6 +26,14 @@ public class LevelSelectionActivity extends AppCompatActivity {
                 | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
         getSupportActionBar().hide();
 
-        setContentView(R.layout.activity_level_selection);
+        int levelScore = getIntent().getIntExtra("LevelScore", 0);
+        int levelTime = getIntent().getIntExtra("LevelTime", 0);
+        int levelNumber = getIntent().getIntExtra("LevelNumber", 0);
+
+        setContentView(R.layout.activity_level_result);
+
+        ((LevelResultSurfaceView)findViewById(R.id.level_result_drawing_area)).levelScore = levelScore;
+        ((LevelResultSurfaceView)findViewById(R.id.level_result_drawing_area)).levelTime = levelTime;
+        ((LevelResultSurfaceView)findViewById(R.id.level_result_drawing_area)).levelNumber = levelNumber;
     }
 }
