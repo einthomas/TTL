@@ -13,4 +13,11 @@
         <item>1600</item>
         <item>2500</item>
     </integer-array>
+
+    <integer-array name="level3_medal_points">
+        <item>400</item>
+        <item>800</item>
+        <item>1600</item>
+        <item>2500</item>
+    </integer-array>
 </resources>
