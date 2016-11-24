@@ -1,6 +1,8 @@
 package at.ac.tuwien.ims.towardsthelight.ui;
 
+import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
@@ -9,12 +11,25 @@ import android.graphics.RectF;
 import java.util.HashMap;
 import java.util.Map;
 
+import at.ac.tuwien.ims.towardsthelight.R;
+
 /**
  * Describes a font as an image containing all characters.
  * @author Felix Kugler
  * @author Thomas Koch
  */
 public class SpriteFont {
+
+    public static SpriteFont hudFont(Resources context) {
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inScaled = false;
+
+        return new SpriteFont(
+            BitmapFactory.decodeResource(context, R.drawable.hud_font, options),
+            "0123456789:.♥♡",
+            new int[]{5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 3, 3, 7, 7}
+        );
+    }
 
     /**
      * Image containing all the characters.
@@ -62,7 +77,7 @@ public class SpriteFont {
      * @param y Y position of text.
      */
     public void drawText(Canvas canvas, Paint paint, String text, float x, float y) {
-        RectF destination = new RectF(x, y, 0, y + height);
+        RectF destination = new RectF(x - 1, y - 1, 0, y + height - 1); // -1 to remove outline
 
         for (int i = 0; i < text.length(); i++) {
 
