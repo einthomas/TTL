@@ -242,11 +242,7 @@ public class LevelSelectionSurfaceView extends TTLSurfaceView {
 
 
         // load ui font
-        uiFont = new SpriteFont(
-                BitmapFactory.decodeResource(getResources(), R.drawable.hud_font, options),
-                "0123456789:.♥♡",
-                new int[] {3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 1, 1, 5, 5}
-        );
+        uiFont = SpriteFont.hudFont(getResources());
 
 
         // load border bitmaps

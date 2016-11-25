@@ -33,11 +33,7 @@ public class InGameUI {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inScaled = false;
 
-        uiFont = new SpriteFont(
-            BitmapFactory.decodeResource(context, R.drawable.hud_font, options),
-            "0123456789:.♥♡",
-            new int[]{3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 1, 1, 5, 5}
-        );
+        uiFont = SpriteFont.hudFont(context);
     }
 
     /**

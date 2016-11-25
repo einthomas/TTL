@@ -1,6 +1,8 @@
 package at.ac.tuwien.ims.towardsthelight.ui;
 
+import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
@@ -9,12 +11,52 @@ import android.graphics.RectF;
 import java.util.HashMap;
 import java.util.Map;
 
+import at.ac.tuwien.ims.towardsthelight.R;
+
 /**
  * Describes a font as an image containing all characters.
  * @author Felix Kugler
  * @author Thomas Koch
  */
 public class SpriteFont {
+
+    /**
+     * Load main font
+     * @param context Context to load from
+     * @return Main SpriteFont
+     */
+    public static SpriteFont mainFont(Resources context) {
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inScaled = false;
+
+        return new SpriteFont(
+            BitmapFactory.decodeResource(context, R.drawable.main_font, options),
+            "ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜ! 0123456789",
+            new int[]{
+                7, 7, 7, 7, 7, 7, 7, 7, 5,
+                7, 7, 7, 7, 7, 7, 7, 7, 7,
+                7, 7, 7, 7, 7, 7, 7, 7, 7,
+                7, 7, 3, 4, 7, 5, 7, 7, 7,
+                7, 7, 7, 7, 7
+            }
+        );
+    }
+
+    /**
+     * Load font for hud
+     * @param context Context to load from
+     * @return SpriteFont for hud
+     */
+    public static SpriteFont hudFont(Resources context) {
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inScaled = false;
+
+        return new SpriteFont(
+                BitmapFactory.decodeResource(context, R.drawable.hud_font, options),
+                "0123456789:.♥♡",
+                new int[]{5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 3, 3, 7, 7}
+        );
+    }
 
     /**
      * Image containing all the characters.
@@ -62,7 +104,7 @@ public class SpriteFont {
      * @param y Y position of text.
      */
     public void drawText(Canvas canvas, Paint paint, String text, float x, float y) {
-        RectF destination = new RectF(x, y, 0, y + height);
+        RectF destination = new RectF(x - 1, y - 1, 0, y + height - 1); // -1 to remove outline
 
         for (int i = 0; i < text.length(); i++) {
 
@@ -71,7 +113,7 @@ public class SpriteFont {
 
                 destination.right = destination.left + source.width();
                 canvas.drawBitmap(bitmap, source, destination, paint);
-                destination.left += source.width() + 1;
+                destination.left += source.width() - 1;
             }
         }
     }
@@ -84,7 +126,7 @@ public class SpriteFont {
      *         index 1 the height.
      */
     public int[] getDimensions(String text) {
-        int[] dimensions = new int[2];  // [0] -> width, [1] -> height
+        int[] dimensions = new int[] {0, height - 2};  // [0] -> width, [1] -> height
         for (int i = 0; i < text.length(); i++) {
 
             Rect source = glyphMap.get(text.charAt(i));
@@ -92,11 +134,7 @@ public class SpriteFont {
 
                 dimensions[0] += source.width();
                 if (i < text.length() - 1) {
-                    dimensions[0] += 1;
-                }
-
-                if (source.height() > dimensions[1]) {
-                    dimensions[1] = source.height();
+                    dimensions[0] -= 1; // remove outline
                 }
             }
         }
