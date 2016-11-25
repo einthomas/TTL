@@ -20,7 +20,7 @@ public class LevelResultSurfaceView extends TTLSurfaceView {
     /**
      * The loaded font which is used to draw the text.
      */
-    private SpriteFont uiFont;
+    private SpriteFont uiFont, mainFont;
 
     public int levelScore;
     public int levelTime;
@@ -46,11 +46,11 @@ public class LevelResultSurfaceView extends TTLSurfaceView {
 
 
         // draw title
-        text = "Passed 00";
-        textDimensions = uiFont.getDimensions(text);
+        text = "PASSED 00";
+        textDimensions = mainFont.getDimensions(text);
         int titleTop = 10;
         int titleBottom = titleTop + textDimensions[1];
-        uiFont.drawText(canvas, null, text, GAME_WIDTH / 2 - textDimensions[0] / 2, titleTop);
+        mainFont.drawText(canvas, null, text, GAME_WIDTH / 2 - textDimensions[0] / 2, titleTop);
 
 
         // draw medals
@@ -100,11 +100,8 @@ public class LevelResultSurfaceView extends TTLSurfaceView {
 
 
         // load ui font
-        uiFont = new SpriteFont(
-                BitmapFactory.decodeResource(getResources(), R.drawable.hud_font, options),
-                "0123456789:.♥♡",
-                new int[]{3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 1, 1, 5, 5}
-        );
+        uiFont = SpriteFont.hudFont(getResources());
+        mainFont = SpriteFont.mainFont(getResources());
 
 
         // load medal bitmaps

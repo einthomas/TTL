@@ -20,14 +20,41 @@ import at.ac.tuwien.ims.towardsthelight.R;
  */
 public class SpriteFont {
 
+    /**
+     * Load main font
+     * @param context Context to load from
+     * @return Main SpriteFont
+     */
+    public static SpriteFont mainFont(Resources context) {
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inScaled = false;
+
+        return new SpriteFont(
+            BitmapFactory.decodeResource(context, R.drawable.main_font, options),
+            "ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜ! 0123456789",
+            new int[]{
+                7, 7, 7, 7, 7, 7, 7, 7, 5,
+                7, 7, 7, 7, 7, 7, 7, 7, 7,
+                7, 7, 7, 7, 7, 7, 7, 7, 7,
+                7, 7, 3, 4, 7, 5, 7, 7, 7,
+                7, 7, 7, 7, 7
+            }
+        );
+    }
+
+    /**
+     * Load font for hud
+     * @param context Context to load from
+     * @return SpriteFont for hud
+     */
     public static SpriteFont hudFont(Resources context) {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inScaled = false;
 
         return new SpriteFont(
-            BitmapFactory.decodeResource(context, R.drawable.hud_font, options),
-            "0123456789:.♥♡",
-            new int[]{5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 3, 3, 7, 7}
+                BitmapFactory.decodeResource(context, R.drawable.hud_font, options),
+                "0123456789:.♥♡",
+                new int[]{5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 3, 3, 7, 7}
         );
     }
 
