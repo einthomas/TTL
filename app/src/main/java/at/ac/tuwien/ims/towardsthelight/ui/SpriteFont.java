@@ -126,7 +126,7 @@ public class SpriteFont {
      *         index 1 the height.
      */
     public int[] getDimensions(String text) {
-        int[] dimensions = new int[2];  // [0] -> width, [1] -> height
+        int[] dimensions = new int[] {0, height - 2};  // [0] -> width, [1] -> height
         for (int i = 0; i < text.length(); i++) {
 
             Rect source = glyphMap.get(text.charAt(i));
@@ -134,11 +134,7 @@ public class SpriteFont {
 
                 dimensions[0] += source.width();
                 if (i < text.length() - 1) {
-                    dimensions[0] += 1;
-                }
-
-                if (source.height() > dimensions[1]) {
-                    dimensions[1] = source.height();
+                    dimensions[0] -= 1; // remove outline
                 }
             }
         }
