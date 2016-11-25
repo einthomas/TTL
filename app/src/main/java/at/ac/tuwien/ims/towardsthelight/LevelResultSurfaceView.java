@@ -17,6 +17,8 @@ public class LevelResultSurfaceView extends TTLSurfaceView {
 
     private Bitmap[] medalBitmaps;
 
+    private Bitmap background;
+
     /**
      * The loaded font which is used to draw the text.
      */
@@ -43,6 +45,10 @@ public class LevelResultSurfaceView extends TTLSurfaceView {
         canvas.setMatrix(gameMatrix);
         String text;
         int[] textDimensions;
+
+
+        // draw background
+        canvas.drawBitmap(background, 0, 0, null);
 
 
         // draw title
@@ -111,6 +117,10 @@ public class LevelResultSurfaceView extends TTLSurfaceView {
         medalBitmaps[0] = BitmapFactory.decodeResource(getResources(), R.drawable.bronze_medal_big, options);
         medalBitmaps[1] = BitmapFactory.decodeResource(getResources(), R.drawable.silver_medal_big, options);
         medalBitmaps[2] = BitmapFactory.decodeResource(getResources(), R.drawable.gold_medal_big, options);
+
+
+        // load background bitmap
+        background = BitmapFactory.decodeResource(getResources(), R.drawable.level_result_background, options);
     }
 
     @Override
