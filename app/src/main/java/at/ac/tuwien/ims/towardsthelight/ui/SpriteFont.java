@@ -59,6 +59,22 @@ public class SpriteFont {
     }
 
     /**
+     * Load font for countdown
+     * @param context Context to load from
+     * @return SpriteFont for countdown
+     */
+    public static SpriteFont countdownFont(Resources context) {
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inScaled = false;
+
+        return new SpriteFont(
+                BitmapFactory.decodeResource(context, R.drawable.countdown, options),
+                "321GO!",
+                new int[]{11, 11, 8, 13, 13, 5}
+        );
+    }
+
+    /**
      * Image containing all the characters.
      */
     private Bitmap bitmap;
@@ -116,6 +132,20 @@ public class SpriteFont {
                 destination.left += source.width() - 1;
             }
         }
+    }
+
+    /**
+     * Draw text with this font centered at given position.
+     * <br />Author: Felix Kugler
+     * @param canvas Canvas used to draw.
+     * @param paint Paint used to draw.
+     * @param text Text to draw.
+     * @param x X position of text.
+     * @param y Y position of text.
+     */
+    public void drawCentered(Canvas canvas, Paint paint, String text, float x, float y) {
+        int[] dimension = getDimensions(text);
+        drawText(canvas, paint, text, Math.round(x - dimension[0] * 0.5), Math.round(y - dimension[1] * 0.5));
     }
 
     /**
