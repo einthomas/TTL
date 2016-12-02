@@ -69,18 +69,34 @@ public class InGameUI {
         );
 
         if (time < 750) {
-            switch ((int)Math.ceil(time / 750f)) {
-                case -2:
-                    countdownFont.drawCentered(canvas, paint, "3", 32, 58);
-                    break;
-                case -1:
-                    countdownFont.drawCentered(canvas, paint, "2", 32, 58);
-                    break;
-                case 0:
-                    countdownFont.drawCentered(canvas, paint, "1", 32, 58);
-                    break;
-                case 1:
-                    countdownFont.drawCentered(canvas, paint, "GO!", 32, 58);
+            float number = time / 750f;
+            if (Animation.range(number, -3f, -1.8f)) {
+                countdownFont.drawCentered(
+                    canvas, paint, "3", 32,
+                        Animation.animate(Animation.squareIn(number, -3f, -2.8f), 58 - 18,
+                        Animation.animate(Animation.squareIn(number, -2f, -1.8f), 58, 58 + 18))
+                );
+            }
+            if (Animation.range(number, -2f, -0.8f)) {
+                countdownFont.drawCentered(
+                        canvas, paint, "2", 32,
+                        Animation.animate(Animation.squareIn(number, -2f, -1.8f), 58 - 18,
+                        Animation.animate(Animation.squareIn(number, -1f, -0.8f), 58, 58 + 18))
+                );
+            }
+            if (Animation.range(number, -1f, 0.2f)) {
+                countdownFont.drawCentered(
+                        canvas, paint, "1", 32,
+                        Animation.animate(Animation.squareIn(number, -1f, -0.8f), 58 - 18,
+                        Animation.animate(Animation.squareIn(number, 0f, 0.2f), 58, 58 + 18))
+                );
+            }
+            if (Animation.range(number, 0f, 1.2f)) {
+                countdownFont.drawCentered(
+                        canvas, paint, "GO!", 32,
+                        Animation.animate(Animation.squareIn(number, 0f, 0.2f), 58 - 18,
+                        Animation.animate(Animation.squareIn(number, 1f, 1.2f), 58, 58 + 18))
+                );
             }
         }
 
