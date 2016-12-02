@@ -21,7 +21,10 @@
             android:name=".GameActivity"
             android:screenOrientation="portrait" />
         <activity android:name=".LevelSelectionActivity" />
-        <activity android:name=".LevelResultActivity"></activity>
+        <activity
+            android:name=".LevelResultActivity"
+            android:parentActivityName=".LevelSelectionActivity">
+        </activity>
     </application>
 
 </manifest>

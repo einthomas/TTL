@@ -1,7 +1,9 @@
 package at.ac.tuwien.ims.towardsthelight;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 
 /**
@@ -35,5 +37,16 @@ public class LevelResultActivity extends AppCompatActivity {
         ((LevelResultSurfaceView)findViewById(R.id.level_result_drawing_area)).levelScore = levelScore;
         ((LevelResultSurfaceView)findViewById(R.id.level_result_drawing_area)).levelTime = levelTime;
         ((LevelResultSurfaceView)findViewById(R.id.level_result_drawing_area)).levelNumber = levelNumber;
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            Intent intent = new Intent(this, LevelSelectionActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }
