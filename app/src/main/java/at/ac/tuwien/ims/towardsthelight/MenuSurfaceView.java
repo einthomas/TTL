@@ -8,8 +8,12 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
+
+import at.ac.tuwien.ims.towardsthelight.ui.ImageButton;
+import at.ac.tuwien.ims.towardsthelight.ui.SpriteFont;
 
 /**
  * Represents the main menu.
@@ -29,6 +33,13 @@ public class MenuSurfaceView extends TTLSurfaceView {
     private Bitmap logo;
 
     /**
+     * The background graphic
+     */
+    private Bitmap background;
+
+    private SpriteFont mainFont;
+
+    /**
      * Creates a new MenuSurfaceView.
      *
      * @param context Used to load resources.
@@ -44,6 +55,25 @@ public class MenuSurfaceView extends TTLSurfaceView {
         options.inScaled = false;
 
         logo = BitmapFactory.decodeResource(context.getResources(), R.drawable.menu_logo, options);
+        background = BitmapFactory.decodeResource(context.getResources(), R.drawable.menu_bg, options);
+        mainFont = SpriteFont.mainFont(context.getResources());
+
+        Bitmap button = BitmapFactory.decodeResource(context.getResources(), R.drawable.menu_button, options);
+        Bitmap buttonPressed = BitmapFactory.decodeResource(context.getResources(), R.drawable.menu_button_pressed, options);
+
+        buttons.add(new ImageButton(mainFont, "START", button, buttonPressed, 32, 70 - 14) {
+            @Override
+            protected void clicked() {
+                getContext().startActivity(new Intent(getContext(), LevelSelectionActivity.class));
+            }
+        });
+
+        buttons.add(new ImageButton(mainFont, "HELP", button, buttonPressed, 32, 70) {
+            @Override
+            protected void clicked() {
+                // TODO
+            }
+        });
 
         paint = new Paint();
     }
@@ -82,11 +112,8 @@ public class MenuSurfaceView extends TTLSurfaceView {
      */
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if (event.getAction() == MotionEvent.ACTION_UP) {
-            getContext().startActivity(new Intent(getContext(), LevelSelectionActivity.class));
-        }
-
-        return true;
+        invalidate();
+        return super.onTouchEvent(event);
     }
 
     /**
@@ -99,6 +126,9 @@ public class MenuSurfaceView extends TTLSurfaceView {
 
         canvas.setMatrix(gameMatrix);
 
+        canvas.drawBitmap(background, -12, 0, paint);
         canvas.drawBitmap(logo, -12, 4, paint);
+
+        drawButtons(canvas, paint);
     }
 }

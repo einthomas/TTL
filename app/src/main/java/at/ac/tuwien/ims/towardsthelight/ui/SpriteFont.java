@@ -156,7 +156,7 @@ public class SpriteFont {
      *         index 1 the height.
      */
     public int[] getDimensions(String text) {
-        int[] dimensions = new int[] {0, height - 2};  // [0] -> width, [1] -> height
+        int[] dimensions = new int[] {-1, height - 2};  // [0] -> width, [1] -> height
         for (int i = 0; i < text.length(); i++) {
 
             Rect source = glyphMap.get(text.charAt(i));
