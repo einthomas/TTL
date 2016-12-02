@@ -124,7 +124,6 @@ public class GameSurfaceView extends TTLSurfaceView {
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
         super.surfaceCreated(surfaceHolder);
 
-        //selectedLevel = new Level(context, GAME_WIDTH, GAME_HEIGHT, new LevelInfo(999, 1, R.drawable.level1, R.drawable.level1collision));
         selectedLevel = new Level(getContext(), levelInfo);
         levelMatrix.preTranslate(0, (-GAME_HEIGHT * (selectedLevel.bitmap.getHeight() / GAME_HEIGHT - 1)));
 

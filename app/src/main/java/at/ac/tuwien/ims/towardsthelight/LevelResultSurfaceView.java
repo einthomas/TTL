@@ -40,8 +40,6 @@ public class LevelResultSurfaceView extends TTLSurfaceView {
     }
 
     private void drawLevelResult(Canvas canvas) {
-        levelScore = 9000;
-
         canvas.setMatrix(gameMatrix);
         String text;
         int[] textDimensions;
@@ -52,7 +50,11 @@ public class LevelResultSurfaceView extends TTLSurfaceView {
 
 
         // draw title
-        text = "PASSED 00";
+        text = "PASSED ";
+        if (levelNumber < 10) {
+            text += "0";
+        }
+        text += levelNumber;
         textDimensions = mainFont.getDimensions(text);
         int titleTop = 10;
         int titleBottom = titleTop + textDimensions[1];
