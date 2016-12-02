@@ -25,6 +25,8 @@ public class InGameUI {
      */
     private SpriteFont uiFont;
 
+    private SpriteFont countdownFont;
+
     /**
      * Constructs a new ui.
      * @param context Resources used for loading resources.
@@ -34,6 +36,7 @@ public class InGameUI {
         options.inScaled = false;
 
         uiFont = SpriteFont.hudFont(context);
+        countdownFont = SpriteFont.countdownFont(context);
     }
 
     /**
@@ -64,6 +67,22 @@ public class InGameUI {
             time / 100 % 10,
             1, 92
         );
+
+        if (time < 750) {
+            switch ((int)Math.ceil(time / 750f)) {
+                case -2:
+                    countdownFont.drawCentered(canvas, paint, "3", 32, 58);
+                    break;
+                case -1:
+                    countdownFont.drawCentered(canvas, paint, "2", 32, 58);
+                    break;
+                case 0:
+                    countdownFont.drawCentered(canvas, paint, "1", 32, 58);
+                    break;
+                case 1:
+                    countdownFont.drawCentered(canvas, paint, "GO!", 32, 58);
+            }
+        }
 
         // display softFps
         uiFont.drawText(canvas, paint, Math.round(this.softFps) + "", 1, 85);
