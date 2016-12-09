@@ -19,7 +19,7 @@ public class GameLoop implements Runnable {
     /**
      * The GameSurfaceView doing the work.
      */
-    private GameSurfaceView gameSurfaceView;
+    private TTLSurfaceView ttlSurfaceView;
 
     /**
      * Loop runs until this is set to false.
@@ -41,11 +41,11 @@ public class GameLoop implements Runnable {
      * <br /> Author: Thomas Koch, Felix Kugler
      *
      * @param surfaceHolder <tt>SurfaceHolder</tt> to draw onto.
-     * @param gameSurfaceView {@link GameSurfaceView} handling logic and drawing.
+     * @param ttlSurfaceView {@link TTLSurfaceView} handling logic and drawing.
      */
-    public GameLoop(SurfaceHolder surfaceHolder, GameSurfaceView gameSurfaceView) {
+    public GameLoop(SurfaceHolder surfaceHolder, TTLSurfaceView ttlSurfaceView) {
         this.surfaceHolder = surfaceHolder;
-        this.gameSurfaceView = gameSurfaceView;
+        this.ttlSurfaceView = ttlSurfaceView;
 
         // set it here to avoid the case where
         // setRunning is called before run
@@ -102,14 +102,14 @@ public class GameLoop implements Runnable {
             deltaTime = calculateDeltaTime();
 
             // Update
-            gameSurfaceView.updateGame(deltaTime);
+            ttlSurfaceView.updateGame(deltaTime);
 
             // Render
             canvas = null;
             try {
                 canvas = surfaceHolder.lockCanvas(null);
                 if (canvas != null) {
-                    gameSurfaceView.drawGame(canvas);
+                    ttlSurfaceView.drawGame(canvas);
                 }
             } finally {
                 if (canvas != null) {

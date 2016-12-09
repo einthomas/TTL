@@ -255,7 +255,6 @@ public class LevelSelectionSurfaceView extends TTLSurfaceView {
         medalBitmaps[1] = BitmapFactory.decodeResource(getResources(), R.drawable.silver_medal, options);
         medalBitmaps[2] = BitmapFactory.decodeResource(getResources(), R.drawable.gold_medal, options);
 
-
         loadLevels();
     }
 

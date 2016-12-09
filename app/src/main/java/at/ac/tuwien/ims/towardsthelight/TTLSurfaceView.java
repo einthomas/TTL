@@ -1,6 +1,7 @@
 package at.ac.tuwien.ims.towardsthelight;
 
 import android.content.Context;
+import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.util.AttributeSet;
 import android.view.SurfaceHolder;
@@ -30,6 +31,13 @@ public class TTLSurfaceView extends SurfaceView implements SurfaceHolder.Callbac
      */
     protected Matrix gameMatrix, gameMatrixInverse;
 
+    protected GameLoop gameLoop;
+
+    /**
+     * The thread {@link #gameLoop} runs in.
+     */
+    protected Thread gameLoopThread;
+
     /**
      * Creates a new TTLSurfaceView
      * @param context See <tt>SurfaceView</tt>.
@@ -40,6 +48,12 @@ public class TTLSurfaceView extends SurfaceView implements SurfaceHolder.Callbac
 
         gameMatrix = new Matrix();
         gameMatrixInverse = new Matrix();
+    }
+
+    public synchronized void updateGame(float delta) {
+    }
+
+    public synchronized void drawGame(Canvas canvas) {
     }
 
     /**
@@ -98,5 +112,12 @@ public class TTLSurfaceView extends SurfaceView implements SurfaceHolder.Callbac
         gameMatrix.postScale((float)width / resolutionX, (float)height / resolutionY);
 
         gameMatrix.invert(gameMatrixInverse);
+    }
+
+    protected void startGameLoop(SurfaceHolder surfaceHolder) {
+        gameLoop = new GameLoop(surfaceHolder, this);
+        gameLoop.setRunning(true);
+        gameLoopThread = new Thread(gameLoop);
+        gameLoopThread.start();
     }
 }

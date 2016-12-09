@@ -30,22 +30,6 @@ public class GameSurfaceView extends TTLSurfaceView {
     public LevelInfo levelInfo;
 
     /**
-     * The GameLoop that calls this object's {@link #updateGame(float)} and
-     * {@link #drawGame(Canvas)} functions.
-     */
-    private GameLoop gameLoop;
-
-    /**
-     * The thread {@link #gameLoop} runs in.
-     */
-    private Thread gameLoopThread;
-
-    /**
-     * Paint object used in {@link #drawGame(Canvas)}.
-     */
-    private Paint paint;
-
-    /**
      * Transformation of the level on the screen.
      */
     private Matrix levelMatrix;
@@ -105,7 +89,6 @@ public class GameSurfaceView extends TTLSurfaceView {
         levelMatrix = new Matrix();
         player = new Player();
         inGameUI = new InGameUI(context.getResources());
-        paint = new Paint();
 
         paused = true;
 
@@ -128,10 +111,7 @@ public class GameSurfaceView extends TTLSurfaceView {
         levelMatrix.preTranslate(0, (-GAME_HEIGHT * (selectedLevel.bitmap.getHeight() / GAME_HEIGHT - 1)));
 
         // runs in UI thread
-        gameLoop = new GameLoop(surfaceHolder, this);
-        gameLoop.setRunning(true);
-        gameLoopThread = new Thread(gameLoop);
-        gameLoopThread.start();
+        startGameLoop(surfaceHolder);
     }
 
     /**
@@ -213,8 +193,6 @@ public class GameSurfaceView extends TTLSurfaceView {
 
                 int levelPositionY = selectedLevel.bitmap.getHeight() + Math.round(-GAME_HEIGHT * (selectedLevel.bitmap.getHeight() / GAME_HEIGHT - 1) + player.y);
                 int levelPlayerPositionY = levelPositionY - GAME_HEIGHT + Player.SIZE_Y * 6;
-
-                Log.d("player y", "" + levelPlayerPositionY + " " + selectedLevel.bitmap.getHeight());
 
                 if (levelPlayerPositionY >= selectedLevel.bitmap.getHeight()) {
                     gameLoop.setRunning(false);
