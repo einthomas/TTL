@@ -3,9 +3,16 @@ package at.ac.tuwien.ims.towardsthelight;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
+import android.graphics.Paint;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import at.ac.tuwien.ims.towardsthelight.ui.Button;
 
 /**
  * Super class for all our SurfaceView implementation.
@@ -38,6 +45,8 @@ public class TTLSurfaceView extends SurfaceView implements SurfaceHolder.Callbac
      */
     protected Thread gameLoopThread;
 
+    protected List<Button> buttons;
+
     /**
      * Creates a new TTLSurfaceView
      * @param context See <tt>SurfaceView</tt>.
@@ -45,9 +54,29 @@ public class TTLSurfaceView extends SurfaceView implements SurfaceHolder.Callbac
      */
     public TTLSurfaceView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        setFocusable(true);
 
         gameMatrix = new Matrix();
         gameMatrixInverse = new Matrix();
+        buttons = new ArrayList<>();
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        float[] position = {event.getX(), event.getY()};
+        gameMatrixInverse.mapPoints(position);
+        for (Button button : buttons) {
+            if (button.event(event.getAction(), position[0], position[1])) {
+                return true;
+            }
+        }
+        return super.onTouchEvent(event);
+    }
+
+    protected void drawButtons(Canvas canvas, Paint paint) {
+        for (Button button : buttons) {
+            button.draw(canvas, paint);
+        }
     }
 
     public synchronized void updateGame(float delta) {
