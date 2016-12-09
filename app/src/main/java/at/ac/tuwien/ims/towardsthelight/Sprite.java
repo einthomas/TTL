@@ -18,7 +18,6 @@ public class Sprite {
     private float elapsedTime;
     private Rect sourceRect;
     private RectF targetRect;
-    public boolean done;
 
     public Sprite(Bitmap bitmap, int x, int y, int frameWidth, int frameHeight, int totalFrames, float frameDisplayDuration) {
         this.bitmap = bitmap;
@@ -31,7 +30,6 @@ public class Sprite {
         drawnFrames = 0;
         sourceRect = new Rect(0, 0, frameWidth, frameHeight);
         targetRect = new RectF(x, y, x + frameWidth, y + frameHeight);
-        done = false;
     }
 
     public void update(float delta) {
@@ -41,19 +39,18 @@ public class Sprite {
             if (sourceRect.left + frameWidth >= bitmap.getWidth()) {
                 sourceRect.left = 0;
                 sourceRect.right = frameWidth;
-                done = true;
             } else {
                 sourceRect.left += frameWidth;
                 sourceRect.right += frameWidth;
-                if (totalFrames > 0) {
-                    drawnFrames++;
-                }
+            }
+            if (totalFrames > 0) {
+                drawnFrames++;
             }
         }
     }
 
     public void draw(Canvas canvas) {
-        if (drawnFrames < totalFrames && !done) {
+        if (drawnFrames < totalFrames) {
             canvas.drawBitmap(bitmap, sourceRect, targetRect, null);
         }
     }
@@ -64,8 +61,11 @@ public class Sprite {
 
     public void reset() {
         drawnFrames = 0;
-        done = false;
         sourceRect.left = 0;
         sourceRect.right = frameWidth;
+    }
+
+    public boolean isDone() {
+        return drawnFrames >= totalFrames;
     }
 }

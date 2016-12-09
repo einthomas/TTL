@@ -86,7 +86,7 @@ public class LevelResultSurfaceView extends TTLSurfaceView {
             if (levelScore >= pointsArray.getInt(k, 0)) {
                 canvas.drawBitmap(medalBitmaps[k], medalLeft, medalTop, null);
                 medalLeft += medalBitmaps[k].getWidth() + 3;
-                if (k == randomMedal && sparkleSprite.done && random.nextInt(100) > 97) {
+                if (k == randomMedal && sparkleSprite.isDone() && random.nextInt(100) > 97) {
                     sparkleSprite.setPosition(
                         medalLeft + random.nextInt(medalBitmaps[k].getWidth()) - medalBitmaps[k].getWidth() - sparkleSprite.frameWidth / 2,
                         medalTop + random.nextInt(medalBitmaps[k].getHeight()) - sparkleSprite.frameHeight / 2
@@ -147,7 +147,7 @@ public class LevelResultSurfaceView extends TTLSurfaceView {
 
         // load sparkle sprite
         Bitmap sparkleBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.sparkles, options);
-        sparkleSprite = new Sprite(sparkleBitmap, 10, 10, 7, 7, 3, 0.20f);
+        sparkleSprite = new Sprite(sparkleBitmap, 10, 10, 7, 7, 3, 0.15f);
 
 
         startGameLoop(surfaceHolder);
