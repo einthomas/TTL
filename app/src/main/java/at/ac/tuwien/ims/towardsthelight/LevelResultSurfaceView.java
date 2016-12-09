@@ -1,18 +1,16 @@
 package at.ac.tuwien.ims.towardsthelight;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 
 import java.util.Locale;
+import java.util.Random;
 
 import at.ac.tuwien.ims.towardsthelight.ui.SpriteFont;
 
@@ -27,9 +25,13 @@ public class LevelResultSurfaceView extends TTLSurfaceView {
      */
     private SpriteFont uiFont, mainFont;
 
+    private Sprite sparkleSprite;
+
     public int levelScore;
     public int levelTime;
     public int levelNumber;
+
+    private Random random;
 
     /**
      * Creates a surface view.
@@ -40,9 +42,18 @@ public class LevelResultSurfaceView extends TTLSurfaceView {
         setFocusable(true);
 
         medalBitmaps = new Bitmap[3];
+        random = new Random();
     }
 
-    private void drawLevelResult(Canvas canvas) {
+    @Override
+    public synchronized void updateGame(float delta) {
+        sparkleSprite.update(delta);
+    }
+
+    @Override
+    public synchronized void drawGame(Canvas canvas) {
+        levelScore = 9999;  // TODO: remove
+
         canvas.setMatrix(gameMatrix);
         String text;
         int[] textDimensions;
@@ -70,14 +81,23 @@ public class LevelResultSurfaceView extends TTLSurfaceView {
         int medalBottom = medalTop + medalBitmaps[0].getHeight();
         int arrayId = getResources().getIdentifier("level" + (levelNumber) + "_medal_points", "array", getContext().getPackageName());
         TypedArray pointsArray = getResources().obtainTypedArray(arrayId);
+        int randomMedal = random.nextInt(medalBitmaps.length);
         for (int k = 0; k < pointsArray.length() - 1; k++) {
             if (levelScore >= pointsArray.getInt(k, 0)) {
                 canvas.drawBitmap(medalBitmaps[k], medalLeft, medalTop, null);
                 medalLeft += medalBitmaps[k].getWidth() + 3;
+                if (k == randomMedal && sparkleSprite.done && random.nextInt(100) > 97) {
+                    sparkleSprite.setPosition(
+                        medalLeft + random.nextInt(medalBitmaps[k].getWidth()) - medalBitmaps[k].getWidth() - sparkleSprite.frameWidth / 2,
+                        medalTop + random.nextInt(medalBitmaps[k].getHeight()) - sparkleSprite.frameHeight / 2
+                    );
+                    sparkleSprite.reset();
+                }
             } else {
                 break;
             }
         }
+        sparkleSprite.draw(canvas);
         pointsArray.recycle();
 
 
@@ -123,22 +143,13 @@ public class LevelResultSurfaceView extends TTLSurfaceView {
 
         // load background bitmap
         background = BitmapFactory.decodeResource(getResources(), R.drawable.level_result_background, options);
-    }
 
-    @Override
-    public void surfaceChanged(SurfaceHolder surfaceHolder, int format, int width, int height) {
-        super.surfaceChanged(surfaceHolder, format, width, height);
 
-        Canvas canvas = null;
-        try {
-            canvas = surfaceHolder.lockCanvas(null);
-            if (canvas != null) {
-                drawLevelResult(canvas);
-            }
-        } finally {
-            if (canvas != null) {
-                surfaceHolder.unlockCanvasAndPost(canvas);
-            }
-        }
+        // load sparkle sprite
+        Bitmap sparkleBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.sparkles, options);
+        sparkleSprite = new Sprite(sparkleBitmap, 10, 10, 7, 7, 3, 0.20f);
+
+
+        startGameLoop(surfaceHolder);
     }
 }
