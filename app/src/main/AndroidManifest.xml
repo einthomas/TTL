@@ -23,16 +23,20 @@
             android:name=".GameActivity"
             android:screenOrientation="portrait" />
 
-        <activity android:name=".LevelSelectionActivity" />
+        <activity
+            android:name=".LevelSelectionActivity"
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".LevelResultActivity"
             android:parentActivityName=".LevelSelectionActivity"
-            android:noHistory="true" />
+            android:noHistory="true"
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".PauseMenuActivity"
-            android:noHistory="true" />
+            android:noHistory="true"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>
