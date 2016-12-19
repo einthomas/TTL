@@ -11,7 +11,7 @@ import android.view.MotionEvent;
 
 public abstract class Button {
     public RectF position;
-    protected boolean pressed = false;
+    public boolean pressed = false;
 
     public Button(RectF position) {
         this.position = position;

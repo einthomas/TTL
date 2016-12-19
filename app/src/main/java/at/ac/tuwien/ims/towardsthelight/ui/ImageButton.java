@@ -14,6 +14,17 @@ public abstract  class ImageButton extends Button {
     public String text;
     public Bitmap releasedBitmap, pressedBitmap;
 
+    public ImageButton(Bitmap releasedBitmap, Bitmap pressedBitmap, float x, float y) {
+        super(new RectF(
+                x - (releasedBitmap.getWidth() + 1) / 2, // ensure proper rounding
+                y - (releasedBitmap.getHeight() + 1) / 2,
+                x + releasedBitmap.getWidth() / 2,
+                y + releasedBitmap.getHeight() / 2
+        ));
+        this.releasedBitmap = releasedBitmap;
+        this.pressedBitmap = pressedBitmap;
+    }
+
     public ImageButton(SpriteFont font, String text, Bitmap releasedBitmap, Bitmap pressedBitmap, float x, float y) {
         super(new RectF(
             x - (releasedBitmap.getWidth() + 1) / 2, // ensure proper rounding
@@ -35,7 +46,9 @@ public abstract  class ImageButton extends Button {
             canvas.drawBitmap(releasedBitmap, position.left, position.top, paint);
         }
 
-        font.drawCentered(canvas, paint, text, position.centerX(), position.centerY());
+        if (font != null) {
+            font.drawCentered(canvas, paint, text, position.centerX(), position.centerY());
+        }
     }
 }
 

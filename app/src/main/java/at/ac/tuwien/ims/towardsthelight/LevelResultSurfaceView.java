@@ -64,7 +64,7 @@ public class LevelResultSurfaceView extends TTLSurfaceView {
 
 
         // draw title
-        text = getResources().getString(R.string.levelresult_passed);
+        text = getResources().getString(R.string.passed);
         if (levelNumber < 10) {
             text += "0";
         }

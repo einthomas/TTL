@@ -2,6 +2,8 @@ package at.ac.tuwien.ims.towardsthelight;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
@@ -17,6 +19,7 @@ import java.util.Locale;
 import at.ac.tuwien.ims.towardsthelight.level.Level;
 import at.ac.tuwien.ims.towardsthelight.level.LevelInfo;
 import at.ac.tuwien.ims.towardsthelight.ui.Animation;
+import at.ac.tuwien.ims.towardsthelight.ui.ImageButton;
 import at.ac.tuwien.ims.towardsthelight.ui.SpriteFont;
 
 /**
@@ -67,7 +70,7 @@ public class GameSurfaceView extends TTLSurfaceView {
      */
     private boolean boost = false;
 
-    private boolean paused;
+    public boolean paused;
 
     /**
      * FPS averaged over multiple frames.
@@ -79,6 +82,8 @@ public class GameSurfaceView extends TTLSurfaceView {
      */
     private SpriteFont uiFont;
     private SpriteFont countdownFont;
+
+    public boolean pausePressed;
 
     /**
      * Creates a new GameSurfaceView to play the game.
@@ -98,13 +103,52 @@ public class GameSurfaceView extends TTLSurfaceView {
         levelMatrix = new Matrix();
         player = new Player();
 
-        paused = true;
+        paused = false;
+        pausePressed = false;
 
         player.x = 32;
         playerRect = new RectF(
             Math.round(player.x - Player.SIZE_X / 2), GAME_HEIGHT - Player.SIZE_Y * 7,
             Math.round(player.x + Player.SIZE_X / 2), GAME_HEIGHT - Player.SIZE_Y * 6
         );
+
+        uiFont = SpriteFont.hudFont(getContext().getResources());
+        countdownFont = SpriteFont.countdownFont(getContext().getResources());
+
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inScaled = false;
+
+        Bitmap button = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.pause_button, options);
+        Bitmap buttonPressed = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.pause_button_pressed, options);
+
+        buttons.add(new ImageButton(button, buttonPressed, GAME_WIDTH - button.getWidth() - 1, GAME_HEIGHT - button.getHeight() - 1) {
+            @Override
+            protected void clicked() {
+                pausePressed = true;
+                pause();
+                getContext().startActivity(new Intent(getContext(), PauseMenuActivity.class));
+            }
+        });
+    }
+
+    public void setLevelInfo(LevelInfo levelInfo) {
+        selectedLevel = new Level(getContext(), levelInfo);
+        levelMatrix.preTranslate(0, (-GAME_HEIGHT * (selectedLevel.bitmap.getHeight() / GAME_HEIGHT - 1)));
+    }
+
+    public void pause() {
+        if (gameLoop != null) {
+            gameLoop.setRunning(false);
+            paused = true;
+        }
+    }
+
+    public void unpause() {
+        if (gameLoop != null) {
+            gameLoop.setRunning(true);
+            paused = false;
+            pausePressed = false;
+        }
     }
 
     /**
@@ -115,14 +159,10 @@ public class GameSurfaceView extends TTLSurfaceView {
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
         super.surfaceCreated(surfaceHolder);
 
-        uiFont = SpriteFont.hudFont(getContext().getResources());
-        countdownFont = SpriteFont.countdownFont(getContext().getResources());
-
-        selectedLevel = new Level(getContext(), levelInfo);
-        levelMatrix.preTranslate(0, (-GAME_HEIGHT * (selectedLevel.bitmap.getHeight() / GAME_HEIGHT - 1)));
-
         // runs in UI thread
         startGameLoop(surfaceHolder);
+        paused = false;
+        //pausePressed = false;
     }
 
     /**
@@ -149,21 +189,21 @@ public class GameSurfaceView extends TTLSurfaceView {
      */
     @Override
     public synchronized boolean onTouchEvent(MotionEvent event) {
+        super.onTouchEvent(event);
+
         // runs in UI thread
-        if (event.getAction() == MotionEvent.ACTION_UP) {
-            paused = false;
-        }
+        if (!buttons.get(0).pressed && event.getAction() != MotionEvent.ACTION_UP) {
+            float[] position = new float[]{event.getX(), event.getY()};
+            gameMatrixInverse.mapPoints(position);
 
-        float[] position = new float[]{event.getX(), event.getY()};
-        gameMatrixInverse.mapPoints(position);
+            player.x = position[0];
 
-        player.x = position[0];
-
-        if (event.getAction() == MotionEvent.ACTION_MOVE) {
-            if (position[1] < GAME_HEIGHT - 12) {
-                boost = true;
-            } else {
-                boost = false;
+            if (event.getAction() == MotionEvent.ACTION_MOVE) {
+                if (position[1] < GAME_HEIGHT - 12) {
+                    boost = true;
+                } else {
+                    boost = false;
+                }
             }
         }
 
@@ -348,5 +388,7 @@ public class GameSurfaceView extends TTLSurfaceView {
         uiFont.drawText(canvas, paint, Math.round(this.softFps) + "", 1, 85);
 
         this.softFps = (this.softFps * 9 + gameLoop.getFPS()) / 10;
+
+        drawButtons(canvas, paint);
     }
 }

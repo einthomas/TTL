@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Towards the Light</string>
+    <string name="start">Start</string>
+    <string name="help">Hilfe</string>
+    <string name="paused">Pausiert</string>
+    <string name="resume">Fortsetzen</string>
+    <string name="passed">Geschafft</string>
+</resources>

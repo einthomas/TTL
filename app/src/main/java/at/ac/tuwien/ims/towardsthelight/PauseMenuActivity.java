@@ -6,17 +6,8 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 
-/**
- * Fullscreen activity displayed after finishing a level. <tt>activity_level_result</tt> is the
- * corresponding layout.
- *
- * @author Thomas Koch
- */
-public class LevelResultActivity extends AppCompatActivity {
+public class PauseMenuActivity extends AppCompatActivity {
 
-    /**
-     * Sets the activity to fullscreen and sets the content view.
-     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,15 +19,7 @@ public class LevelResultActivity extends AppCompatActivity {
                 | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
         getSupportActionBar().hide();
 
-        int levelScore = getIntent().getIntExtra("LevelScore", 0);
-        int levelTime = getIntent().getIntExtra("LevelTime", 0);
-        int levelNumber = getIntent().getIntExtra("LevelNumber", 0);
-
-        setContentView(R.layout.activity_level_result);
-
-        ((LevelResultSurfaceView)findViewById(R.id.level_result_drawing_area)).levelScore = levelScore;
-        ((LevelResultSurfaceView)findViewById(R.id.level_result_drawing_area)).levelTime = levelTime;
-        ((LevelResultSurfaceView)findViewById(R.id.level_result_drawing_area)).levelNumber = levelNumber;
+        setContentView(R.layout.activity_pause_menu);
     }
 
     @Override
@@ -54,7 +37,7 @@ public class LevelResultActivity extends AppCompatActivity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            Intent intent = new Intent(this, LevelSelectionActivity.class);
+            Intent intent = new Intent(this, GameSurfaceView.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
             return true;
