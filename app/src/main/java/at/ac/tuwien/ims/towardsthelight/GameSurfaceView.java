@@ -12,9 +12,12 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 
+import java.util.Locale;
+
 import at.ac.tuwien.ims.towardsthelight.level.Level;
 import at.ac.tuwien.ims.towardsthelight.level.LevelInfo;
-import at.ac.tuwien.ims.towardsthelight.ui.InGameUI;
+import at.ac.tuwien.ims.towardsthelight.ui.Animation;
+import at.ac.tuwien.ims.towardsthelight.ui.SpriteFont;
 
 /**
  * Drawing and logic code for the main game.
@@ -50,11 +53,6 @@ public class GameSurfaceView extends TTLSurfaceView {
     RectF playerRect;
 
     /**
-     * Draws the overlay.
-     */
-    private InGameUI inGameUI;
-
-    /**
      * Time since start of the level in milliseconds.
      */
     private int time = -750 * 3; // countdown length
@@ -70,6 +68,17 @@ public class GameSurfaceView extends TTLSurfaceView {
     private boolean boost = false;
 
     private boolean paused;
+
+    /**
+     * FPS averaged over multiple frames.
+     */
+    private float softFps;
+
+    /**
+     * Font used for UI.
+     */
+    private SpriteFont uiFont;
+    private SpriteFont countdownFont;
 
     /**
      * Creates a new GameSurfaceView to play the game.
@@ -88,7 +97,6 @@ public class GameSurfaceView extends TTLSurfaceView {
         gameMatrixInverse = new Matrix();
         levelMatrix = new Matrix();
         player = new Player();
-        inGameUI = new InGameUI(context.getResources());
 
         paused = true;
 
@@ -106,6 +114,9 @@ public class GameSurfaceView extends TTLSurfaceView {
     @Override
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
         super.surfaceCreated(surfaceHolder);
+
+        uiFont = SpriteFont.hudFont(getContext().getResources());
+        countdownFont = SpriteFont.countdownFont(getContext().getResources());
 
         selectedLevel = new Level(getContext(), levelInfo);
         levelMatrix.preTranslate(0, (-GAME_HEIGHT * (selectedLevel.bitmap.getHeight() / GAME_HEIGHT - 1)));
@@ -273,6 +284,69 @@ public class GameSurfaceView extends TTLSurfaceView {
             }
         }
 
-        inGameUI.draw(canvas, gameLoop.getFPS(), player.score, time, player.lives);
+        drawUI(canvas);
+    }
+
+    /**
+     * Draws the UI.
+     * @param canvas Canvas used for drawing.
+     */
+    private synchronized void drawUI(Canvas canvas) {
+        Paint paint = new Paint();
+
+        String health = "";
+        int hearts = 0;
+        for (; hearts < player.lives; hearts++) {
+            health += '♥';
+        }
+        for (; hearts < 3; hearts++) {
+            health += '♡';
+        }
+        uiFont.drawText(canvas, paint, health, 1, 106);
+
+        uiFont.drawText(canvas, paint, player.score + "", 1, 99);
+        uiFont.drawText(canvas, paint,
+                time / 1000 / 60 + ":" +
+                        String.format(Locale.US, "%02d", time / 1000 % 60) + "." +
+                        time / 100 % 10,
+                1, 92
+        );
+
+        if (time < 750) {
+            float number = time / 750f;
+            if (Animation.range(number, -3f, -1.8f)) {
+                countdownFont.drawCentered(
+                        canvas, paint, "3", 32,
+                        Animation.animate(Animation.squareIn(number, -3f, -2.8f), 58 - 18,
+                                Animation.animate(Animation.squareIn(number, -2f, -1.8f), 58, 58 + 18))
+                );
+            }
+            if (Animation.range(number, -2f, -0.8f)) {
+                countdownFont.drawCentered(
+                        canvas, paint, "2", 32,
+                        Animation.animate(Animation.squareIn(number, -2f, -1.8f), 58 - 18,
+                                Animation.animate(Animation.squareIn(number, -1f, -0.8f), 58, 58 + 18))
+                );
+            }
+            if (Animation.range(number, -1f, 0.2f)) {
+                countdownFont.drawCentered(
+                        canvas, paint, "1", 32,
+                        Animation.animate(Animation.squareIn(number, -1f, -0.8f), 58 - 18,
+                                Animation.animate(Animation.squareIn(number, 0f, 0.2f), 58, 58 + 18))
+                );
+            }
+            if (Animation.range(number, 0f, 1.2f)) {
+                countdownFont.drawCentered(
+                        canvas, paint, "GO!", 32,
+                        Animation.animate(Animation.squareIn(number, 0f, 0.2f), 58 - 18,
+                                Animation.animate(Animation.squareIn(number, 1f, 1.2f), 58, 58 + 18))
+                );
+            }
+        }
+
+        // display softFps
+        uiFont.drawText(canvas, paint, Math.round(this.softFps) + "", 1, 85);
+
+        this.softFps = (this.softFps * 9 + gameLoop.getFPS()) / 10;
     }
 }
