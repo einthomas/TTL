@@ -8,7 +8,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
-import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 
@@ -61,14 +60,14 @@ public class MenuSurfaceView extends TTLSurfaceView {
         Bitmap button = BitmapFactory.decodeResource(context.getResources(), R.drawable.menu_button, options);
         Bitmap buttonPressed = BitmapFactory.decodeResource(context.getResources(), R.drawable.menu_button_pressed, options);
 
-        buttons.add(new ImageButton(mainFont, "START", button, buttonPressed, 32, 70 - 14) {
+        buttons.add(new ImageButton(mainFont, getResources().getString(R.string.mainmenu_start), button, buttonPressed, 32, 70 - 14) {
             @Override
             protected void clicked() {
                 getContext().startActivity(new Intent(getContext(), LevelSelectionActivity.class));
             }
         });
 
-        buttons.add(new ImageButton(mainFont, "HELP", button, buttonPressed, 32, 70) {
+        buttons.add(new ImageButton(mainFont, getResources().getString(R.string.mainmenu_help), button, buttonPressed, 32, 70) {
             @Override
             protected void clicked() {
                 // TODO
