@@ -5,9 +5,12 @@ import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.support.v4.view.VelocityTrackerCompat;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
+import android.view.VelocityTracker;
 
 import java.util.Locale;
 import java.util.Random;
@@ -43,6 +46,31 @@ public class LevelResultSurfaceView extends TTLSurfaceView {
 
         medalBitmaps = new Bitmap[3];
         random = new Random();
+
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inScaled = false;
+
+        // load ui font
+        uiFont = SpriteFont.hudFont(getResources());
+        mainFont = SpriteFont.mainFont(getResources());
+
+        // load medal bitmaps
+        medalBitmaps[0] = BitmapFactory.decodeResource(getResources(), R.drawable.bronze_medal_big, options);
+        medalBitmaps[1] = BitmapFactory.decodeResource(getResources(), R.drawable.silver_medal_big, options);
+        medalBitmaps[2] = BitmapFactory.decodeResource(getResources(), R.drawable.gold_medal_big, options);
+
+        // load background bitmap
+        background = BitmapFactory.decodeResource(getResources(), R.drawable.level_result_background, options);
+
+        // load sparkle sprite
+        Bitmap sparkleBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.sparkles, options);
+        sparkleSprite = new Sprite(sparkleBitmap, 10, 10, 7, 7, 3, 0.15f);
+    }
+
+    public void pause() {
+        if (gameLoop != null) {
+            gameLoop.setRunning(false);
+        }
     }
 
     @Override
@@ -125,30 +153,6 @@ public class LevelResultSurfaceView extends TTLSurfaceView {
     @Override
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
         super.surfaceCreated(surfaceHolder);
-
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inScaled = false;
-
-
-        // load ui font
-        uiFont = SpriteFont.hudFont(getResources());
-        mainFont = SpriteFont.mainFont(getResources());
-
-
-        // load medal bitmaps
-        medalBitmaps[0] = BitmapFactory.decodeResource(getResources(), R.drawable.bronze_medal_big, options);
-        medalBitmaps[1] = BitmapFactory.decodeResource(getResources(), R.drawable.silver_medal_big, options);
-        medalBitmaps[2] = BitmapFactory.decodeResource(getResources(), R.drawable.gold_medal_big, options);
-
-
-        // load background bitmap
-        background = BitmapFactory.decodeResource(getResources(), R.drawable.level_result_background, options);
-
-
-        // load sparkle sprite
-        Bitmap sparkleBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.sparkles, options);
-        sparkleSprite = new Sprite(sparkleBitmap, 10, 10, 7, 7, 3, 0.15f);
-
 
         startGameLoop(surfaceHolder);
     }

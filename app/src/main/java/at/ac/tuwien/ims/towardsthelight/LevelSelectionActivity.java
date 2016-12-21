@@ -1,10 +1,8 @@
 package at.ac.tuwien.ims.towardsthelight;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-
-import at.ac.tuwien.ims.towardsthelight.level.LevelInfo;
 
 /**
  * Fullscreen activity for level selection. <tt>activity_level_selection</tt> is the corresponding
@@ -29,6 +27,12 @@ public class LevelSelectionActivity extends AppCompatActivity {
         getSupportActionBar().hide();
 
         setContentView(R.layout.activity_level_selection);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        ((LevelSelectionSurfaceView) findViewById(R.id.level_selection_drawing_area)).pause();
     }
 
     @Override

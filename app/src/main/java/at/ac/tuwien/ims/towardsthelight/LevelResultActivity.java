@@ -34,9 +34,15 @@ public class LevelResultActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_level_result);
 
-        ((LevelResultSurfaceView)findViewById(R.id.level_result_drawing_area)).levelScore = levelScore;
-        ((LevelResultSurfaceView)findViewById(R.id.level_result_drawing_area)).levelTime = levelTime;
-        ((LevelResultSurfaceView)findViewById(R.id.level_result_drawing_area)).levelNumber = levelNumber;
+        ((LevelResultSurfaceView) findViewById(R.id.level_result_drawing_area)).levelScore = levelScore;
+        ((LevelResultSurfaceView) findViewById(R.id.level_result_drawing_area)).levelTime = levelTime;
+        ((LevelResultSurfaceView) findViewById(R.id.level_result_drawing_area)).levelNumber = levelNumber;
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        ((LevelResultSurfaceView) findViewById(R.id.level_result_drawing_area)).pause();
     }
 
     @Override

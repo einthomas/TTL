@@ -6,7 +6,10 @@ import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.support.v4.view.GestureDetectorCompat;
 import android.util.AttributeSet;
+import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 
@@ -46,14 +49,75 @@ public class LevelSelectionSurfaceView extends TTLSurfaceView {
 
         /**
          * @param number {@link #number}
-         * @param top {@link #top}
-         * @param left {@link #left}
+         * @param top    {@link #top}
+         * @param left   {@link #left}
          */
         public LevelInfoPosition(int number, float top, float left) {
             this.number = number;
             this.top = top;
             this.left = left;
         }
+    }
+
+    private class GestureListener extends GestureDetector.SimpleOnGestureListener {
+
+        private float previousDistanceY = 0.0f;
+
+        @Override
+        public boolean onDown(MotionEvent event) {
+            fingerUp = false;
+            return true;
+        }
+
+        @Override
+        public boolean onScroll(MotionEvent event1, MotionEvent event2, float distanceX, float distanceY) {
+            yOffset -= distanceY / 17;
+            if (Math.signum(distanceY) != Math.signum(previousDistanceY)) {
+                previousDistanceY = 0;
+            }
+            velocity = (distanceY - previousDistanceY) / 17;
+            scrollUp = velocity < 0;
+            if (scrollUp) {
+                velocity = Math.max(velocity, -5);
+            } else {
+                velocity = Math.min(velocity, 5);
+            }
+            scrollDeceleration = velocity * 0.05f;
+            previousDistanceY = distanceY;
+
+            return true;
+        }
+
+        @Override
+        public boolean onSingleTapUp(MotionEvent event) {
+            float[] touchPosition = { event.getX(), event.getY() };
+            gameMatrixInverse.mapVectors(touchPosition);
+
+            for (int i = 0; i < levelInfoPositions.size(); i++) {
+                if (touchPosition[0] >= levelInfoPositions.get(i).left
+                        && touchPosition[0] <= levelInfoPositions.get(i).left + normalBorder.getWidth()
+                        && touchPosition[1] >= levelInfoPositions.get(i).top
+                        && touchPosition[1] <= levelInfoPositions.get(i).top + normalBorder.getHeight()) {
+                    Intent intent = new Intent(getContext(), GameActivity.class);
+                    intent.putExtra("LevelInfo", levels.get(levelInfoPositions.get(i).number - 1));
+                    getContext().startActivity(intent);
+                    break;
+                }
+            }
+            return true;
+        }
+    }
+
+    private float scrollDeceleration;
+    private GestureDetectorCompat gestureDetector;
+    private boolean fingerUp = false;
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_UP) {
+            fingerUp = true;
+        }
+        return gestureDetector.onTouchEvent(event);
     }
 
     /**
@@ -86,6 +150,10 @@ public class LevelSelectionSurfaceView extends TTLSurfaceView {
      */
     private Bitmap[] medalBitmaps;
 
+    private float yOffset;
+    private float velocity;
+    private boolean scrollUp;
+
     /**
      * Creates a surface view.
      */
@@ -94,9 +162,35 @@ public class LevelSelectionSurfaceView extends TTLSurfaceView {
         getHolder().addCallback(this);
         setFocusable(true);
 
+        gestureDetector = new GestureDetectorCompat(getContext(), new GestureListener());
+
+        yOffset = 0.0f;
         levels = new ArrayList<>();
         levelInfoPositions = new ArrayList<>();
         medalBitmaps = new Bitmap[3];
+
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inScaled = false;
+
+        // load ui font
+        uiFont = SpriteFont.hudFont(getResources());
+
+        // load border bitmaps
+        normalBorder = BitmapFactory.decodeResource(getResources(), R.drawable.normal_border, options);
+        diamondBorder = BitmapFactory.decodeResource(getResources(), R.drawable.diamond_border, options);
+
+        // load medal bitmaps
+        medalBitmaps[0] = BitmapFactory.decodeResource(getResources(), R.drawable.bronze_medal, options);
+        medalBitmaps[1] = BitmapFactory.decodeResource(getResources(), R.drawable.silver_medal, options);
+        medalBitmaps[2] = BitmapFactory.decodeResource(getResources(), R.drawable.gold_medal, options);
+
+        loadLevels();
+    }
+
+    public void pause() {
+        if (gameLoop != null) {
+            gameLoop.setRunning(false);
+        }
     }
 
     /**
@@ -113,7 +207,6 @@ public class LevelSelectionSurfaceView extends TTLSurfaceView {
         for (int i = 1; i <= LEVEL_COUNT; i++) {
             imageResource = getResources().getIdentifier("level" + i, "drawable", getContext().getPackageName());
             collisionResource = getResources().getIdentifier("level" + i + "collision", "drawable", getContext().getPackageName());
-            //imageResource = collisionResource;
 
             Highscores.Score score = highscores.getHighscore(i);
             if (score == null) {
@@ -121,6 +214,14 @@ public class LevelSelectionSurfaceView extends TTLSurfaceView {
             }
 
             levels.add(new LevelInfo(i, score, imageResource, collisionResource));
+        }
+    }
+
+    @Override
+    public synchronized void updateGame(float delta) {
+        if (fingerUp && ((!scrollUp && velocity > 0.0f) || (scrollUp && velocity < 0.0f))) {
+            yOffset += velocity;
+            velocity -= scrollDeceleration;
         }
     }
 
@@ -136,22 +237,23 @@ public class LevelSelectionSurfaceView extends TTLSurfaceView {
      *
      * @param canvas the canvas which is drawn on
      */
-    private void drawLevelInfos(Canvas canvas) {
+    @Override
+    public synchronized void drawGame(Canvas canvas) {
+        canvas.drawColor(Color.BLACK);
+        canvas.setMatrix(gameMatrix);
         levelInfoPositions.clear();
 
-        canvas.setMatrix(gameMatrix);
-
+        float yOffsetTemp = yOffset;
         String text = "";
         int[] textDimensions;
         for (int i = 0; i < LEVEL_COUNT; i++) {
-            float borderTop = GAME_HEIGHT - (normalBorder.getHeight() + 2) * (i + 1);
-            if (borderTop >= 0 && borderTop <= GAME_HEIGHT) {
+            float borderTop = yOffsetTemp + GAME_HEIGHT - (normalBorder.getHeight() + 2) * (i + 1);
+            float borderHeight = normalBorder.getHeight();
+            if (borderTop >= -borderHeight && borderTop <= GAME_HEIGHT) {
                 float borderLeft = (GAME_WIDTH - normalBorder.getWidth()) / 2.0f;
                 float borderWidth = normalBorder.getWidth();
-                float borderHeight = normalBorder.getHeight();
 
                 levelInfoPositions.add(new LevelInfoPosition(levels.get(i).number, borderTop, borderLeft));
-
 
                 // draw border
                 int arrayId = getResources().getIdentifier("level" + (i + 1) + "_medal_points", "array", getContext().getPackageName());
@@ -161,7 +263,6 @@ public class LevelSelectionSurfaceView extends TTLSurfaceView {
                 } else {
                     canvas.drawBitmap(normalBorder, borderLeft, borderTop, null);
                 }
-
 
                 // draw medals
                 int medalX = 14;
@@ -175,7 +276,6 @@ public class LevelSelectionSurfaceView extends TTLSurfaceView {
                 }
                 pointsArray.recycle();
 
-
                 // draw number
                 text = "" + levels.get(i).number;
                 if (levels.get(i).number < 10) {
@@ -183,14 +283,12 @@ public class LevelSelectionSurfaceView extends TTLSurfaceView {
                 }
                 uiFont.drawText(canvas, null, text, borderLeft + 2, borderTop + 2);
 
-
                 // draw best time
                 text = levels.get(i).score.time / 1000 / 60 + ":" +
                         String.format(Locale.US, "%02d", levels.get(i).score.time / 1000 % 60) + "." +
                         levels.get(i).score.time / 100 % 10;
                 textDimensions = uiFont.getDimensions(text);
                 uiFont.drawText(canvas, null, text, borderLeft + borderWidth - 2 - textDimensions[0], borderTop + 2);
-
 
                 // draw highscore
                 text = "" + levels.get(i).score.score;
@@ -201,35 +299,6 @@ public class LevelSelectionSurfaceView extends TTLSurfaceView {
     }
 
     /**
-     * If a touch ACTION_UP event on a level entry is registered, the {@link GameActivity} activity
-     * is started and parameterized by the corresponding {@link LevelInfo}.
-     *
-     * @param event The touch event to react to.
-     * @return Whether the event was handled. Always true.
-     */
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        if (event.getAction() == MotionEvent.ACTION_UP) {
-            float[] touchPosition = { event.getX(), event.getY() };
-            gameMatrixInverse.mapVectors(touchPosition);
-
-            for (int i = 0; i < levelInfoPositions.size(); i++) {
-                if (touchPosition[0] >= levelInfoPositions.get(i).left
-                        && touchPosition[0] <= levelInfoPositions.get(i).left + normalBorder.getWidth()
-                        && touchPosition[1] >= levelInfoPositions.get(i).top
-                        && touchPosition[1] <= levelInfoPositions.get(i).top + normalBorder.getHeight()) {
-                    Intent intent = new Intent(getContext(), GameActivity.class);
-                    intent.putExtra("LevelInfo", levels.get(levelInfoPositions.get(i).number - 1));
-                    getContext().startActivity(intent);
-                    break;
-                }
-            }
-        }
-
-        return true;
-    }
-
-    /**
      * Loads {@link #uiFont}, the {@link #normalBorder normal} and {@link #diamondBorder diamond border}
      * images and the {@link #medalBitmaps medal images} and calls {@link #loadLevels()}.
      */
@@ -237,45 +306,8 @@ public class LevelSelectionSurfaceView extends TTLSurfaceView {
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
         super.surfaceCreated(surfaceHolder);
 
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inScaled = false;
-
-
-        // load ui font
-        uiFont = SpriteFont.hudFont(getResources());
-
-
-        // load border bitmaps
-        normalBorder = BitmapFactory.decodeResource(getResources(), R.drawable.normal_border, options);
-        diamondBorder = BitmapFactory.decodeResource(getResources(), R.drawable.diamond_border, options);
-
-
-        // load medal bitmaps
-        medalBitmaps[0] = BitmapFactory.decodeResource(getResources(), R.drawable.bronze_medal, options);
-        medalBitmaps[1] = BitmapFactory.decodeResource(getResources(), R.drawable.silver_medal, options);
-        medalBitmaps[2] = BitmapFactory.decodeResource(getResources(), R.drawable.gold_medal, options);
-
-        loadLevels();
-    }
-
-    /**
-     * Locks the <tt>canvas</tt> and calls {@link #drawLevelInfos(Canvas)}.
-     */
-    @Override
-    public void surfaceChanged(SurfaceHolder surfaceHolder, int format, int width, int height) {
-        super.surfaceChanged(surfaceHolder, format, width, height);
-
-        Canvas canvas = null;
-        try {
-            canvas = surfaceHolder.lockCanvas(null);
-            if (canvas != null) {
-                drawLevelInfos(canvas);
-            }
-        } finally {
-            if (canvas != null) {
-                surfaceHolder.unlockCanvasAndPost(canvas);
-            }
-        }
+        yOffset = 0.0f;
+        startGameLoop(surfaceHolder);
     }
 
     /**
