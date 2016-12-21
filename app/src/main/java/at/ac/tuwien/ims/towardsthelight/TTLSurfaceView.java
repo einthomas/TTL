@@ -147,11 +147,19 @@ public class TTLSurfaceView extends SurfaceView implements SurfaceHolder.Callbac
         if (gameLoop == null) {
             gameLoop = new GameLoop(surfaceHolder, this);
         }
+
+        if (gameLoopThread != null) {
+            gameLoop.setRunning(false);
+
+            try {
+                gameLoopThread.join();
+            } catch (InterruptedException e) {
+            }
+        }
+
         gameLoop.setRunning(true);
 
-        if (gameLoopThread == null) {
-            gameLoopThread = new Thread(gameLoop);
-        }
+        gameLoopThread = new Thread(gameLoop);
         gameLoopThread.start();
     }
 }
