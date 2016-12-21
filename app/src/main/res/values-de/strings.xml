@@ -4,6 +4,6 @@
     <string name="start">START</string>
     <string name="help">HILFE</string>
     <string name="paused">PAUSIERT</string>
-    <string name="resume">FORTSETZEN</string>
+    <string name="resume">WEITER</string>
     <string name="passed">BEENDET</string>
 </resources>
