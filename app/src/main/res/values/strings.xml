@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Towards the Light</string>
-    <string name="start">Start</string>
-    <string name="help">Help</string>
-    <string name="paused">Paused</string>
-    <string name="resume">Resume</string>
-    <string name="passed">Passed</string>
+    <string name="start">START</string>
+    <string name="help">HELP</string>
+    <string name="paused">PAUSED</string>
+    <string name="resume">RESUME</string>
+    <string name="passed">PASSED</string>
 </resources>
