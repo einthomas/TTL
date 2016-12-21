@@ -215,6 +215,8 @@ public class LevelSelectionSurfaceView extends TTLSurfaceView {
 
             levels.add(new LevelInfo(i, score, imageResource, collisionResource));
         }
+
+        highscores.closeConnection();
     }
 
     @Override
