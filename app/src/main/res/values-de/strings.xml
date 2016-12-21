@@ -5,5 +5,5 @@
     <string name="help">HILFE</string>
     <string name="paused">PAUSIERT</string>
     <string name="resume">FORTSETZEN</string>
-    <string name="passed">GESCHAFFT</string>
+    <string name="passed">BEENDET</string>
 </resources>
