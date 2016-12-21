@@ -61,11 +61,6 @@ public class PauseMenuSurfaceView extends TTLSurfaceView {
             @Override
             protected void clicked() {
                 ((PauseMenuActivity) getContext()).finish();
-                /*
-                Intent intent = new Intent(getContext(), GameActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                getContext().startActivity(intent);
-                */
             }
         });
 

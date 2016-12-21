@@ -37,9 +37,7 @@ public class PauseMenuActivity extends AppCompatActivity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            Intent intent = new Intent(this, GameSurfaceView.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);
+            finish();
             return true;
         }
 
