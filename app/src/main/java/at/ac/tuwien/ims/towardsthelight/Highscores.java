@@ -98,4 +98,8 @@ public class Highscores {
 
         database.insert("highscore", null, record);
     }
+
+    public void closeConnection() {
+        database.close();
+    }
 }
