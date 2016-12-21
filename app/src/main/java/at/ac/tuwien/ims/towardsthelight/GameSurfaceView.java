@@ -83,6 +83,8 @@ public class GameSurfaceView extends TTLSurfaceView {
     private SpriteFont uiFont;
     private SpriteFont countdownFont;
 
+    private Sprite playerSprite;
+
     public boolean pausePressed;
 
     /**
@@ -95,8 +97,6 @@ public class GameSurfaceView extends TTLSurfaceView {
         super(context, attrs);
         getHolder().addCallback(this);
         setFocusable(true);
-
-        // TODO: initialize assets
 
         gameMatrix = new Matrix();
         gameMatrixInverse = new Matrix();
@@ -112,11 +112,16 @@ public class GameSurfaceView extends TTLSurfaceView {
             Math.round(player.x + Player.SIZE_X / 2), GAME_HEIGHT - Player.SIZE_Y * 6
         );
 
-        uiFont = SpriteFont.hudFont(getContext().getResources());
-        countdownFont = SpriteFont.countdownFont(getContext().getResources());
-
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inScaled = false;
+
+        Bitmap playerBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.player, options);
+        playerSprite = new Sprite(playerBitmap, (int)player.x, (int)player.y, 11, 18, 5, 0.1f);
+        playerSprite.setPosition((int)playerRect.left, (int)playerRect.top);
+        playerSprite.loop = true;
+
+        uiFont = SpriteFont.hudFont(getContext().getResources());
+        countdownFont = SpriteFont.countdownFont(getContext().getResources());
 
         Bitmap button = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.pause_button, options);
         Bitmap buttonPressed = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.pause_button_pressed, options);
@@ -242,6 +247,19 @@ public class GameSurfaceView extends TTLSurfaceView {
                         Math.round(player.x + Player.SIZE_X / 2), GAME_HEIGHT - Player.SIZE_Y * 6
                 );
 
+                // player animations
+                if (boost) {
+                    playerSprite.startFrame = 2;
+                    playerSprite.endFrame = 5;
+                } else {
+                    playerSprite.startFrame = 0;
+                    playerSprite.endFrame = 2;
+                }
+
+                playerSprite.setPosition((int)playerRect.left, (int)playerRect.top);
+                playerSprite.update(delta);
+
+                // level position
                 int levelPositionY = selectedLevel.bitmap.getHeight() + Math.round(-GAME_HEIGHT * (selectedLevel.bitmap.getHeight() / GAME_HEIGHT - 1) + player.y);
                 int levelPlayerPositionY = levelPositionY - GAME_HEIGHT + Player.SIZE_Y * 6;
 
@@ -311,16 +329,19 @@ public class GameSurfaceView extends TTLSurfaceView {
 
         if (invincibilityTime * 5 - Math.floor(invincibilityTime * 5) < 0.5) {
             paint.setARGB(255, 255, 0, 0);
-            canvas.drawRect(playerRect, paint);
+            //canvas.drawRect(playerRect, paint);
+
+            playerSprite.draw(canvas);
         }
 
         for (int i = 0; i < selectedLevel.collectables.size(); i++) {
             if (selectedLevel.collectables.get(i).visible) {
                 canvas.drawBitmap(
-                        selectedLevel.collectables.get(i).bitmap,
-                        selectedLevel.collectables.get(i).left,
-                        selectedLevel.collectables.get(i).top,
-                        null);
+                    selectedLevel.collectables.get(i).bitmap,
+                    selectedLevel.collectables.get(i).left,
+                    selectedLevel.collectables.get(i).top,
+                    null
+                );
             }
         }
 

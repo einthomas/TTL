@@ -13,11 +13,16 @@ public class Sprite {
     public int frameWidth;
     public int frameHeight;
     private int totalFrames;
-    private int drawnFrames;
     private float frameDisplayDuration;
     private float elapsedTime;
     private Rect sourceRect;
     private RectF targetRect;
+
+    public int startFrame;
+    public int endFrame;
+    public boolean loop = false;
+
+    private boolean done = false;
 
     public Sprite(Bitmap bitmap, int x, int y, int frameWidth, int frameHeight, int totalFrames, float frameDisplayDuration) {
         this.bitmap = bitmap;
@@ -27,30 +32,33 @@ public class Sprite {
         this.frameHeight = frameHeight;
         this.totalFrames = totalFrames;
         this.frameDisplayDuration = frameDisplayDuration;
-        drawnFrames = 0;
+
+        elapsedTime = 0;
+        this.startFrame = 0;
+        this.endFrame = totalFrames;
+
         sourceRect = new Rect(0, 0, frameWidth, frameHeight);
         targetRect = new RectF(x, y, x + frameWidth, y + frameHeight);
     }
 
     public void update(float delta) {
         elapsedTime += delta;
-        if (elapsedTime >= frameDisplayDuration) {
-            elapsedTime = 0;
-            if (sourceRect.left + frameWidth >= bitmap.getWidth()) {
-                sourceRect.left = 0;
-                sourceRect.right = frameWidth;
-            } else {
-                sourceRect.left += frameWidth;
-                sourceRect.right += frameWidth;
-            }
-            if (totalFrames > 0) {
-                drawnFrames++;
-            }
+
+        int frameNumber = (int)(elapsedTime / frameDisplayDuration);
+
+        if (loop || frameNumber < endFrame - startFrame) {
+            int frameIndex = frameNumber % (endFrame - startFrame) + startFrame;
+
+            sourceRect.left = frameIndex * frameWidth;
+            sourceRect.right = sourceRect.left + frameWidth;
+        } else {
+            // end of animation
+            done = true;
         }
     }
 
     public void draw(Canvas canvas) {
-        if (drawnFrames < totalFrames) {
+        if (!done) {
             canvas.drawBitmap(bitmap, sourceRect, targetRect, null);
         }
     }
@@ -60,12 +68,13 @@ public class Sprite {
     }
 
     public void reset() {
-        drawnFrames = 0;
+        elapsedTime = 0;
+        done = false;
         sourceRect.left = 0;
         sourceRect.right = frameWidth;
     }
 
     public boolean isDone() {
-        return drawnFrames >= totalFrames;
+        return done;
     }
 }
