@@ -8,9 +8,6 @@
     android:layout_height="match_parent"
     tools:context="at.ac.tuwien.ims.towardsthelight.MainActivity"
 
-    android:clipChildren="false"
-    android:clipToPadding="false"
-
     app:virtualHeight="114"
     app:virtualWidth="64"
     app:offsetX="11"
@@ -21,9 +18,6 @@
         android:layout_width="86px"
         android:layout_height="114px"
 
-        android:clipChildren="false"
-        android:clipToPadding="false"
-
         app:imageResource="@drawable/menu_bg"
     />
 
@@ -31,9 +25,6 @@
         android:layout_width="90px"
         android:layout_height="32px"
         android:layout_marginLeft="-2px"
-
-        android:clipChildren="false"
-        android:clipToPadding="false"
 
         app:imageResource="@drawable/menu_logo"
     />
