@@ -1,14 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="at.ac.tuwien.ims.towardsthelight.MainActivity">
 
-    <at.ac.tuwien.ims.towardsthelight.MenuSurfaceView
-        android:id="@+id/menu_drawing_area"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+    <view
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        class="at.ac.tuwien.ims.towardsthelight.ui.PixelImageView"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/background"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
 
+        app:imageResource="@drawable/menu_bg"
+    />
 </RelativeLayout>
