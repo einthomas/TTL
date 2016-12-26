@@ -18,4 +18,11 @@
         <attr name="x" format="integer" />
         <attr name="y" format="integer" />
     </declare-styleable>
+
+    <declare-styleable name="PixelLayout">
+        <attr name="virtualWidth" format="integer" />
+        <attr name="virtualHeight" format="integer" />
+        <attr name="offsetX" format="integer" />
+        <attr name="offsetY" format="integer" />
+    </declare-styleable>
 </resources>

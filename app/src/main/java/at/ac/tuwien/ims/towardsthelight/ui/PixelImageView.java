@@ -76,6 +76,10 @@ public class PixelImageView extends View {
     public PixelImageView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
+        if (isInEditMode()) {
+            return;
+        }
+
         TypedArray attributes = context.obtainStyledAttributes(attrs, R.styleable.PixelImageView);
 
         BitmapFactory.Options options = new BitmapFactory.Options();
