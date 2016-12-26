@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.graphics.RectF;
 import android.util.AttributeSet;
-import android.view.MotionEvent;
 
 import at.ac.tuwien.ims.towardsthelight.R;
 
@@ -20,12 +19,5 @@ public class MenuButtonXML extends ImageButtonXML {
         pressedBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.menu_button_pressed, options);
         position = new RectF(x, y, x + releasedBitmap.getWidth(), y + releasedBitmap.getHeight());
         font = SpriteFont.mainFont(context.getResources());
-    }
-
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        boolean result = super.onTouchEvent(event);
-        invalidate();
-        return result;
     }
 }
