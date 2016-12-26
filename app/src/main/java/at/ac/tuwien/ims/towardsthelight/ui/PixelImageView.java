@@ -5,6 +5,9 @@ import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
+import android.graphics.Paint;
+import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.View;
@@ -19,13 +22,9 @@ public class PixelImageView extends View {
 
     private Bitmap image;
 
-    public Bitmap getImage() {
-        return image;
-    }
+    private Matrix transformation;
 
-    public void setImage(Bitmap image) {
-        this.image = image;
-    }
+    private Paint paint = new Paint();
 
     /**
      * Simple constructor to use when creating a view from code.
@@ -83,6 +82,39 @@ public class PixelImageView extends View {
         options.inScaled = false;
         int imageId = attributes.getResourceId(R.styleable.PixelImageView_imageResource, 0);
         setImage(BitmapFactory.decodeResource(context.getResources(), imageId, options));
+
+        transformation = new Matrix();
+    }
+
+    /**
+     * This is called during layout when the size of this view has changed. If
+     * you were just added to the view hierarchy, you're called with the old
+     * values of 0.
+     *
+     * @param w    Current width of this view.
+     * @param h    Current height of this view.
+     * @param oldw Old width of this view.
+     * @param oldh Old height of this view.
+     */
+    @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
+
+        float viewAspectRatio = (float) w / h;
+        float imageAspectRatio = (float) image.getWidth() / image.getHeight();
+
+        float scale, offset;
+        if (viewAspectRatio < imageAspectRatio) {
+            scale = (float) h / image.getHeight();   // fit to height
+            offset = (w - image.getWidth() * scale) / 2;
+            transformation.setScale(scale, scale);
+            transformation.postTranslate(offset, 0);
+        } else {
+            scale = (float) w / image.getWidth();     // fit to width
+            offset = (h - image.getHeight() * scale) / 2;
+            transformation.setScale(scale, scale);
+            transformation.postTranslate(0, offset);
+        }
     }
 
     /**
@@ -94,10 +126,16 @@ public class PixelImageView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        canvas.drawColor(0xff000000);
-
         if (image != null) {
-            canvas.drawBitmap(image, 0, 0, null);
+            canvas.drawBitmap(image, transformation, paint);
         }
+    }
+
+    public Bitmap getImage() {
+        return image;
+    }
+
+    public void setImage(Bitmap image) {
+        this.image = image;
     }
 }

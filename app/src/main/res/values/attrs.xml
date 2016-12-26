@@ -10,7 +10,7 @@
     </declare-styleable>
 
     <declare-styleable name="PixelImageView">
-        <attr name="imageResource" format="reference"/>
+        <attr name="imageResource" format="reference" />
     </declare-styleable>
 
 </resources>
