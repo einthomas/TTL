@@ -13,4 +13,10 @@
         <attr name="imageResource" format="reference" />
     </declare-styleable>
 
+    <declare-styleable name="PixelLayout">
+        <attr name="virtualWidth" format="integer" />
+        <attr name="virtualHeight" format="integer" />
+        <attr name="offsetX" format="integer" />
+        <attr name="offsetY" format="integer" />
+    </declare-styleable>
 </resources>
