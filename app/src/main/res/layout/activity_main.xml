@@ -6,19 +6,26 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="at.ac.tuwien.ims.towardsthelight.MainActivity">
-
-    <view
+    
+    <at.ac.tuwien.ims.towardsthelight.ui.PixelImageView
+        android:id="@+id/logo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        class="at.ac.tuwien.ims.towardsthelight.ui.PixelImageView"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
+        app:imageResource="@drawable/menu_logo"
+    />
+    <at.ac.tuwien.ims.towardsthelight.ui.PixelImageView
         android:id="@+id/background"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         app:imageResource="@drawable/menu_bg"
+    />
+    <at.ac.tuwien.ims.towardsthelight.ui.MenuButtonXML
+        android:src="@drawable/menu_button_image_selector"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="buttonStartClicked"
+        app:text="@string/start"
+        app:x="10"
+        app:y="10"
     />
 </RelativeLayout>

@@ -11,6 +11,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
+import android.view.View;
 
 import at.ac.tuwien.ims.towardsthelight.ui.ImageButton;
 import at.ac.tuwien.ims.towardsthelight.ui.SpriteFont;
@@ -61,12 +62,14 @@ public class MenuSurfaceView extends TTLSurfaceView {
         Bitmap button = BitmapFactory.decodeResource(context.getResources(), R.drawable.menu_button, options);
         Bitmap buttonPressed = BitmapFactory.decodeResource(context.getResources(), R.drawable.menu_button_pressed, options);
 
+        /*
         buttons.add(new ImageButton(mainFont, getResources().getString(R.string.start), button, buttonPressed, 32, 70 - 14) {
             @Override
             protected void clicked() {
                 getContext().startActivity(new Intent(getContext(), LevelSelectionActivity.class));
             }
         });
+        */
 
         buttons.add(new ImageButton(mainFont, getResources().getString(R.string.help), button, buttonPressed, 32, 70) {
             @Override

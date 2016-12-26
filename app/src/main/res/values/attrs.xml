@@ -13,4 +13,9 @@
         <attr name="imageResource" format="reference" />
     </declare-styleable>
 
+    <declare-styleable name="ImageButtonXML">
+        <attr name="text" format="string" />
+        <attr name="x" format="integer" />
+        <attr name="y" format="integer" />
+    </declare-styleable>
 </resources>
