@@ -17,9 +17,6 @@ public class ButtonXML extends View {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        //float[] position = new float[] { event.getX(), event.getY() };
-        //gameMatrixInverse.mapPoints(position);
-        //if (position.contains(position[0], position[1])) {
         if (position.contains(event.getX(), event.getY())) {
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 pressed = true;
@@ -27,6 +24,7 @@ public class ButtonXML extends View {
             } else if (event.getAction() == MotionEvent.ACTION_UP){
                 if (pressed == true) {
                     pressed = false;
+                    performClick();
                     return true;
                 }
             }

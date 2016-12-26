@@ -38,27 +38,23 @@
         app:imageResource="@drawable/menu_logo"
     />
 
-    <!--
-    <at.ac.tuwien.ims.towardsthelight.ui.PixelImageView
-        android:id="@+id/logo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:imageResource="@drawable/menu_logo"
-    />
-    <at.ac.tuwien.ims.towardsthelight.ui.PixelImageView
-        android:id="@+id/background"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:imageResource="@drawable/menu_bg"
-    />
     <at.ac.tuwien.ims.towardsthelight.ui.MenuButtonXML
         android:src="@drawable/menu_button_image_selector"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="buttonStartClicked"
         app:text="@string/start"
-        app:x="10"
-        app:y="10"
+        app:x="18"
+        app:y="50"
     />
-    -->
+
+    <at.ac.tuwien.ims.towardsthelight.ui.MenuButtonXML
+        android:src="@drawable/menu_button_image_selector"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="buttonHelpClicked"
+        app:text="@string/help"
+        app:x="18"
+        app:y="70"
+    />
 </at.ac.tuwien.ims.towardsthelight.ui.PixelLayout>
