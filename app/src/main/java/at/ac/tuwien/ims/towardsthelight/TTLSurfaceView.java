@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import at.ac.tuwien.ims.towardsthelight.ui.Button;
+import at.ac.tuwien.ims.towardsthelight.ui.ButtonXML;
 
 /**
  * Super class for all our SurfaceView implementation.

@@ -13,6 +13,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
+import android.view.View;
 
 import java.util.Locale;
 
@@ -20,6 +21,7 @@ import at.ac.tuwien.ims.towardsthelight.level.Level;
 import at.ac.tuwien.ims.towardsthelight.level.LevelInfo;
 import at.ac.tuwien.ims.towardsthelight.ui.Animation;
 import at.ac.tuwien.ims.towardsthelight.ui.ImageButton;
+import at.ac.tuwien.ims.towardsthelight.ui.ImageButtonXML;
 import at.ac.tuwien.ims.towardsthelight.ui.SpriteFont;
 
 /**

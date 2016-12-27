@@ -15,8 +15,8 @@
 
     <declare-styleable name="ImageButtonXML">
         <attr name="text" format="string" />
-        <attr name="x" format="integer" />
-        <attr name="y" format="integer" />
+        <attr name="x" format="float" />
+        <attr name="y" format="float" />
     </declare-styleable>
 
     <declare-styleable name="PixelLayout">
