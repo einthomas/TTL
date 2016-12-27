@@ -102,22 +102,24 @@ public class PixelImageView extends View {
      */
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        super.onSizeChanged(w, h, oldw, oldh);
+        if (image != null) {
+            super.onSizeChanged(w, h, oldw, oldh);
 
-        float viewAspectRatio = (float) w / h;
-        float imageAspectRatio = (float) image.getWidth() / image.getHeight();
+            float viewAspectRatio = (float) w / h;
+            float imageAspectRatio = (float) image.getWidth() / image.getHeight();
 
-        float scale, offset;
-        if (viewAspectRatio < imageAspectRatio) {
-            scale = (float) h / image.getHeight();   // fit to height
-            offset = (w - image.getWidth() * scale) / 2;
-            transformation.setScale(scale, scale);
-            transformation.postTranslate(offset, 0);
-        } else {
-            scale = (float) w / image.getWidth();     // fit to width
-            offset = (h - image.getHeight() * scale) / 2;
-            transformation.setScale(scale, scale);
-            transformation.postTranslate(0, offset);
+            float scale, offset;
+            if (viewAspectRatio < imageAspectRatio) {
+                scale = (float) h / image.getHeight();   // fit to height
+                offset = (w - image.getWidth() * scale) / 2;
+                transformation.setScale(scale, scale);
+                transformation.postTranslate(offset, 0);
+            } else {
+                scale = (float) w / image.getWidth();     // fit to width
+                offset = (h - image.getHeight() * scale) / 2;
+                transformation.setScale(scale, scale);
+                transformation.postTranslate(0, offset);
+            }
         }
     }
 
