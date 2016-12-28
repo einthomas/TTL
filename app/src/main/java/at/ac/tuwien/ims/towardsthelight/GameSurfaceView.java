@@ -110,8 +110,8 @@ public class GameSurfaceView extends TTLSurfaceView {
 
         player.x = 32;
         playerRect = new RectF(
-            Math.round(player.x - Player.SIZE_X / 2), GAME_HEIGHT - Player.SIZE_Y * 7,
-            Math.round(player.x + Player.SIZE_X / 2), GAME_HEIGHT - Player.SIZE_Y * 6
+            player.x - Player.SIZE_X / 2f, 114 - 24 - Player.SIZE_Y,
+            player.x + Player.SIZE_X / 2f, 114 - 24
         );
 
         BitmapFactory.Options options = new BitmapFactory.Options();
@@ -254,8 +254,8 @@ public class GameSurfaceView extends TTLSurfaceView {
                 player.y += playerYDelta;
 
                 playerRect = new RectF(
-                        Math.round(player.x - Player.SIZE_X / 2), GAME_HEIGHT - Player.SIZE_Y * 7,
-                        Math.round(player.x + Player.SIZE_X / 2), GAME_HEIGHT - Player.SIZE_Y * 6
+                    player.x - Player.SIZE_X / 2f, 114 - 24 - Player.SIZE_Y,
+                    player.x + Player.SIZE_X / 2f, 114 - 24
                 );
 
                 // player animations
@@ -267,12 +267,12 @@ public class GameSurfaceView extends TTLSurfaceView {
                     playerSprite.endFrame = 2;
                 }
 
-                playerSprite.setPosition((int)playerRect.left, (int)playerRect.top);
+                playerSprite.setPosition((int)playerRect.left - 1, (int)playerRect.top - 1);
                 playerSprite.update(delta);
 
                 // level position
                 int levelPositionY = selectedLevel.bitmap.getHeight() + Math.round(-GAME_HEIGHT * (selectedLevel.bitmap.getHeight() / GAME_HEIGHT - 1) + player.y);
-                int levelPlayerPositionY = levelPositionY - GAME_HEIGHT + Player.SIZE_Y * 6;
+                int levelPlayerPositionY = levelPositionY - Math.round(playerRect.bottom);
 
                 if (levelPlayerPositionY >= selectedLevel.bitmap.getHeight()) {
                     gameLoop.setRunning(false);
@@ -330,8 +330,6 @@ public class GameSurfaceView extends TTLSurfaceView {
      */
     public synchronized void drawGame(Canvas canvas) {
         // runs in gameLoopThread
-        canvas.drawColor(Color.BLACK);
-
         canvas.setMatrix(gameMatrix);
 
         Paint paint = new Paint();
