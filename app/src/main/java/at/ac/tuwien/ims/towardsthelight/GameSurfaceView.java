@@ -85,6 +85,8 @@ public class GameSurfaceView extends TTLSurfaceView {
 
     private Sprite playerSprite;
 
+    private Sprite smokeSprite;
+
     public boolean pausePressed;
 
     /**
@@ -119,6 +121,11 @@ public class GameSurfaceView extends TTLSurfaceView {
         playerSprite = new Sprite(playerBitmap, (int)player.x, (int)player.y, 11, 18, 5, 0.1f);
         playerSprite.setPosition((int)playerRect.left, (int)playerRect.top);
         playerSprite.loop = true;
+
+        smokeSprite = new Sprite(
+            BitmapFactory.decodeResource(getResources(), R.drawable.smoke, options),
+            0, 114 - 32, 64, 32, 90, 1f / 25
+        );
 
         uiFont = SpriteFont.hudFont(getContext().getResources());
         countdownFont = SpriteFont.countdownFont(getContext().getResources());
@@ -224,8 +231,12 @@ public class GameSurfaceView extends TTLSurfaceView {
         if (!paused) {
             time += Math.round(delta * 1000);
 
+            smokeSprite.update(delta);
+
             if (time > 0) {
                 invincibilityTime = Math.max(invincibilityTime - delta, 0);
+
+                smokeSprite.setPosition(0, 114 - 32 + Math.round(player.y));
 
                 // move towards MIN_VELOCITY
                 if (player.velocityY >= Player.BASE_VELOCITY_Y) {
@@ -307,6 +318,7 @@ public class GameSurfaceView extends TTLSurfaceView {
                     }
                 }
 
+                // TODO: calculate from player.y instead
                 levelMatrix.preTranslate(0, playerYDelta);
             }
         }
@@ -333,6 +345,8 @@ public class GameSurfaceView extends TTLSurfaceView {
 
             playerSprite.draw(canvas);
         }
+
+        smokeSprite.draw(canvas);
 
         for (int i = 0; i < selectedLevel.collectables.size(); i++) {
             if (selectedLevel.collectables.get(i).visible) {
