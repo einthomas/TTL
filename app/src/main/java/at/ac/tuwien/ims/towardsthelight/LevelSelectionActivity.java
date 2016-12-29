@@ -57,6 +57,7 @@ public class LevelSelectionActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getApplicationContext(), GameActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.putExtra("LevelInfo", levels.get(position));
                 getApplicationContext().startActivity(intent);
             }
