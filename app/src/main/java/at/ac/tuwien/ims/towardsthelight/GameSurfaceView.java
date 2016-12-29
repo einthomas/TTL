@@ -367,8 +367,9 @@ public class GameSurfaceView extends TTLSurfaceView {
         for (Sign sign : selectedLevel.signs) {
             float relativeDistance = (sign.getY() - player.y) / player.velocityY / Player.SPEED;
             if (
-                (relativeDistance < 1 && relativeDistance > 0.75) ||
-                (relativeDistance < 0.5 && relativeDistance > 0.25)
+                (relativeDistance < 2 && relativeDistance > 1.5) ||
+                (relativeDistance < 1 && relativeDistance > .75) ||
+                (relativeDistance < .5 && relativeDistance > .25)
             ) {
                 canvas.drawBitmap(warningSign, sign.getX() - warningSign.getWidth() / 2, 5, paint);
             }
