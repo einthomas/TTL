@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.util.Log;
 
 import java.nio.IntBuffer;
 import java.util.ArrayList;
@@ -41,6 +42,8 @@ public class Level {
      */
     public ArrayList<Collectable> collectables;
 
+    public ArrayList<Sign> signs;
+
     /**
      * Loads the level image and the collision image according to {@link #levelInfo} and the
      * collectable graphic. Also processes the collision image and fills the {@link #collisionData}
@@ -53,6 +56,7 @@ public class Level {
         this.levelInfo = levelInfo;
 
         collectables = new ArrayList<>();
+        signs = new ArrayList<>();
 
         // load images
         BitmapFactory.Options options = new BitmapFactory.Options();
@@ -73,12 +77,16 @@ public class Level {
                 int arrayPos = y * collisionImage.getWidth() + x;
                 int color = pixelBuffer.get(arrayPos);
                 arrayPos = collisionImage.getWidth() * (collisionImage.getHeight() - 1) - y * collisionImage.getWidth() + x;
-                if (Color.red(color) == 0 && Color.green(color) == 0 && Color.blue(color) == 0) {
+                if (color == 0xFF000000) {
                     collisionData[arrayPos] = BACKGROUND;
-                } else if (Color.red(color) == 255 && Color.green(color) == 255 && Color.blue(color) == 255) {
+                } else if (color == 0xFFFFFFFF) {
                     collisionData[arrayPos] = OBSTACLE;
-                } else if (Color.red(color) == 0 && Color.green(color) == 0 && Color.blue(color) == 255) {
+                } else if (color == 0xFF0000FF) {
                     collectables.add(new Collectable(x, collisionImage.getHeight() - y, collectibleBitmap));
+                } else if (color == 0xFF00FF00) {
+                    signs.add(new Sign(x, collisionImage.getHeight() - y));
+                } else {
+                    Log.d("Level", "unknown collision color " + color);
                 }
             }
         }

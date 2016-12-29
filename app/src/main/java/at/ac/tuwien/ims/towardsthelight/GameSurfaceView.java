@@ -19,6 +19,7 @@ import java.util.Locale;
 
 import at.ac.tuwien.ims.towardsthelight.level.Level;
 import at.ac.tuwien.ims.towardsthelight.level.LevelInfo;
+import at.ac.tuwien.ims.towardsthelight.level.Sign;
 import at.ac.tuwien.ims.towardsthelight.ui.Animation;
 import at.ac.tuwien.ims.towardsthelight.ui.ImageButton;
 import at.ac.tuwien.ims.towardsthelight.ui.ImageButtonXML;
@@ -91,6 +92,8 @@ public class GameSurfaceView extends TTLSurfaceView {
 
     public boolean pausePressed;
 
+    private Bitmap warningSign;
+
     /**
      * Creates a new GameSurfaceView to play the game.
      * @param context Used to load resources.
@@ -128,6 +131,8 @@ public class GameSurfaceView extends TTLSurfaceView {
             BitmapFactory.decodeResource(getResources(), R.drawable.smoke, options),
             0, 114 - 32, 64, 32, 90, 1f / 25
         );
+
+        warningSign = BitmapFactory.decodeResource(getResources(), R.drawable.warning, options);
 
         uiFont = SpriteFont.hudFont(getContext().getResources());
         countdownFont = SpriteFont.countdownFont(getContext().getResources());
@@ -356,6 +361,16 @@ public class GameSurfaceView extends TTLSurfaceView {
                     selectedLevel.collectables.get(i).top,
                     null
                 );
+            }
+        }
+
+        for (Sign sign : selectedLevel.signs) {
+            float relativeDistance = (sign.getY() - player.y) / player.velocityY / Player.SPEED;
+            if (
+                (relativeDistance < 1 && relativeDistance > 0.75) ||
+                (relativeDistance < 0.5 && relativeDistance > 0.25)
+            ) {
+                canvas.drawBitmap(warningSign, sign.getX() - warningSign.getWidth() / 2, 5, paint);
             }
         }
 
