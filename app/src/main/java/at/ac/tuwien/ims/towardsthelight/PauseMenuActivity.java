@@ -1,6 +1,5 @@
 package at.ac.tuwien.ims.towardsthelight;
 
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -42,5 +41,12 @@ public class PauseMenuActivity extends AppCompatActivity {
         }
 
         return super.onKeyDown(keyCode, event);
+    }
+
+    public void buttonResumeClicked(View view) {
+        finish();
+    }
+
+    public void buttonHelpClicked(View view) {
     }
 }

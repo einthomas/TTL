@@ -1,5 +1,6 @@
 package at.ac.tuwien.ims.towardsthelight;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -44,5 +45,12 @@ public class MainActivity extends AppCompatActivity {
             View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
         );
         getSupportActionBar().hide();
+    }
+
+    public void buttonStartClicked(View view) {
+        startActivity(new Intent(this, LevelSelectionActivity.class));
+    }
+
+    public void buttonHelpClicked(View view) {
     }
 }

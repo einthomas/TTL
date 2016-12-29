@@ -20,6 +20,24 @@ import at.ac.tuwien.ims.towardsthelight.R;
  */
 public class SpriteFont {
 
+    public enum FontType {
+        mainFont(0), hudFont(1);
+        int id;
+
+        FontType(int id) {
+            this.id = id;
+        }
+
+        static FontType getFromId(int id) {
+            for (FontType fontType : values()) {
+                if (fontType.id == id) {
+                    return fontType;
+                }
+            }
+            return null;
+        }
+    }
+
     /**
      * Load main font
      * @param context Context to load from
@@ -72,6 +90,16 @@ public class SpriteFont {
                 "321GO!",
                 new int[]{11, 11, 8, 13, 13, 5}
         );
+    }
+
+    public static SpriteFont getFont(FontType spriteFont, Resources context) {
+        if (spriteFont == FontType.mainFont) {
+            return mainFont(context);
+        } else if (spriteFont == FontType.hudFont) {
+            return hudFont(context);
+        }
+
+        return null;
     }
 
     /**

@@ -1,14 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<at.ac.tuwien.ims.towardsthelight.ui.PixelLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="at.ac.tuwien.ims.towardsthelight.MainActivity">
+    tools:context="at.ac.tuwien.ims.towardsthelight.MainActivity"
 
-    <at.ac.tuwien.ims.towardsthelight.MenuSurfaceView
-        android:id="@+id/menu_drawing_area"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+    app:virtualHeight="114"
+    app:virtualWidth="64"
+    app:offsetX="11"
+    app:offsetY="0"
+    >
 
-</RelativeLayout>
+    <at.ac.tuwien.ims.towardsthelight.ui.PixelImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        app:imageResource="@drawable/menu_bg"
+    />
+
+    <at.ac.tuwien.ims.towardsthelight.ui.PixelImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="-2px"
+
+        app:imageResource="@drawable/menu_logo"
+    />
+
+    <at.ac.tuwien.ims.towardsthelight.ui.MenuButtonXML
+        android:src="@drawable/menu_button_image_selector"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="buttonStartClicked"
+        app:text="@string/start"
+        app:x="18"
+        app:y="50"
+    />
+
+    <at.ac.tuwien.ims.towardsthelight.ui.MenuButtonXML
+        android:src="@drawable/menu_button_image_selector"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="buttonHelpClicked"
+        app:text="@string/help"
+        app:x="18"
+        app:y="70"
+    />
+</at.ac.tuwien.ims.towardsthelight.ui.PixelLayout>
