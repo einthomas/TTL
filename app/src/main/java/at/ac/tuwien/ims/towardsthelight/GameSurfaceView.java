@@ -120,7 +120,7 @@ public class GameSurfaceView extends TTLSurfaceView {
         options.inScaled = false;
 
         Bitmap playerBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.player, options);
-        playerSprite = new Sprite(playerBitmap, (int)player.x, (int)player.y, 11, 18, 5, 0.1f);
+        playerSprite = new Sprite(playerBitmap, (int)player.x, (int)player.y, 10, 16, 5, 0.1f);
         playerSprite.setPosition((int)playerRect.left, (int)playerRect.top);
         playerSprite.loop = true;
 
@@ -269,7 +269,7 @@ public class GameSurfaceView extends TTLSurfaceView {
                     playerSprite.endFrame = 2;
                 }
 
-                playerSprite.setPosition((int)playerRect.left - 1, (int)playerRect.top - 1);
+                playerSprite.setPosition((int)playerRect.left - 2, (int)playerRect.top - 1);
                 playerSprite.update(delta);
 
                 // level position

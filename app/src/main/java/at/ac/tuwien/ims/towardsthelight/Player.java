@@ -9,7 +9,7 @@ public class Player {
     /**
      * Width of collision rectangle in virtual pixel.
      */
-    public static final int SIZE_X = 8;
+    public static final int SIZE_X = 6;
 
     /**
      * Height of collision rectangle in virtual pixel.
