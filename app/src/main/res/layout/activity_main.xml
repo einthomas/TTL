@@ -15,15 +15,15 @@
     >
 
     <at.ac.tuwien.ims.towardsthelight.ui.PixelImageView
-        android:layout_width="86px"
-        android:layout_height="114px"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
 
         app:imageResource="@drawable/menu_bg"
     />
 
     <at.ac.tuwien.ims.towardsthelight.ui.PixelImageView
-        android:layout_width="90px"
-        android:layout_height="32px"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="-2px"
 
         app:imageResource="@drawable/menu_logo"

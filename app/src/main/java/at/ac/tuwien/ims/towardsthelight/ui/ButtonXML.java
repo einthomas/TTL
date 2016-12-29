@@ -3,7 +3,6 @@ package at.ac.tuwien.ims.towardsthelight.ui;
 import android.content.Context;
 import android.graphics.RectF;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -22,7 +21,6 @@ public class ButtonXML extends View {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        Log.d("a", "" + event.getX() + " " + event.getY());
         if (position.contains(event.getX(), event.getY())) {
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 pressed = true;

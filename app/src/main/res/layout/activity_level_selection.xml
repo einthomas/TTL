@@ -1,14 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<at.ac.tuwien.ims.towardsthelight.ui.PixelLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_level_selection"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="at.ac.tuwien.ims.towardsthelight.LevelSelectionActivity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="at.ac.tuwien.ims.towardsthelight.LevelSelectionActivity">
+    android:background="#000000"
 
-    <at.ac.tuwien.ims.towardsthelight.LevelSelectionSurfaceView
-        android:id="@+id/level_selection_drawing_area"
+    app:virtualHeight="114"
+    app:virtualWidth="64"
+    app:offsetX="0"
+    app:offsetY="0"
+    >
+    <ListView
+        android:id="@+id/activity_level_selection_listview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:scrollingCache="true"
+        android:smoothScrollbar="true"
+        android:background="#000000"
+        android:layout_marginLeft="2px"
+        >
 
-</RelativeLayout>
+    </ListView>
+</at.ac.tuwien.ims.towardsthelight.ui.PixelLayout>

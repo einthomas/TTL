@@ -7,8 +7,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.graphics.RectF;
-import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -99,6 +97,7 @@ public class PixelImageView extends View {
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         if (image != null) {
+            getLayoutParams().width = image.getWidth();
             super.onSizeChanged(w, h, oldw, oldh);
 
             float viewAspectRatio = (float) w / h;
@@ -117,6 +116,11 @@ public class PixelImageView extends View {
                 transformation.postTranslate(0, offset);
             }
         }
+    }
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        setMeasuredDimension(image.getWidth(), image.getHeight());
     }
 
     /**

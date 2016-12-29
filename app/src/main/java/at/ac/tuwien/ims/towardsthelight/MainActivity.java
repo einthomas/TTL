@@ -48,7 +48,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void buttonStartClicked(View view) {
-        Log.d("buttonStartClicked", "buttonStartClicked");
         startActivity(new Intent(this, LevelSelectionActivity.class));
     }
 

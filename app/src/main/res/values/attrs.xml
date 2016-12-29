@@ -1,9 +1,8 @@
 <resources>
+    <attr name="text" format="string" />
+    <attr name="x" format="float" />
+    <attr name="y" format="float" />
 
-    <!-- Declare custom theme attributes that allow changing which styles are
-         used for button bars depending on the API level.
-         ?android:attr/buttonBarStyle is new as of API 11 so this is
-         necessary to support previous API levels. -->
     <declare-styleable name="ButtonBarContainerTheme">
         <attr name="metaButtonBarStyle" format="reference" />
         <attr name="metaButtonBarButtonStyle" format="reference" />
@@ -14,9 +13,9 @@
     </declare-styleable>
 
     <declare-styleable name="ImageButtonXML">
-        <attr name="text" format="string" />
-        <attr name="x" format="float" />
-        <attr name="y" format="float" />
+        <attr name="text" />
+        <attr name="x" />
+        <attr name="y" />
     </declare-styleable>
 
     <declare-styleable name="PixelLayout">
@@ -24,5 +23,15 @@
         <attr name="virtualHeight" format="integer" />
         <attr name="offsetX" format="integer" />
         <attr name="offsetY" format="integer" />
+    </declare-styleable>
+
+    <declare-styleable name="PixelText">
+        <attr name="text" />
+        <attr name="x" />
+        <attr name="y" />
+        <attr name="fontType" format="enum">
+            <enum name="mainFont" value="0"/>
+            <enum name="hudFont" value="1"/>
+        </attr>
     </declare-styleable>
 </resources>
