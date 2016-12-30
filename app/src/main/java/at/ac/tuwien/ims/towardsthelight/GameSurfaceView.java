@@ -9,6 +9,8 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.RectF;
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -94,6 +96,10 @@ public class GameSurfaceView extends TTLSurfaceView {
 
     private Bitmap warningSign;
 
+    private SoundPool soundPool;
+
+    private int collectSound;
+
     /**
      * Creates a new GameSurfaceView to play the game.
      * @param context Used to load resources.
@@ -148,6 +154,10 @@ public class GameSurfaceView extends TTLSurfaceView {
                 getContext().startActivity(new Intent(getContext(), PauseMenuActivity.class));
             }
         });
+
+        soundPool = new SoundPool(4, AudioManager.STREAM_MUSIC, 0);
+
+        collectSound = soundPool.load(context, R.raw.collect, 1);
     }
 
     public void setLevelInfo(LevelInfo levelInfo) {
@@ -314,6 +324,9 @@ public class GameSurfaceView extends TTLSurfaceView {
                         }
                     } else {
                         if (playerRect.intersect(selectedLevel.collectables.get(i))) {
+                            float relativeX = selectedLevel.collectables.get(i).centerX() / 64f;
+                            soundPool.play(collectSound, 1 - relativeX, relativeX, 1, 0, 1f);
+
                             player.score += 1;
                             selectedLevel.collectables.remove(i);
                         } else if (selectedLevel.collectables.get(i).top > levelPositionY + GAME_HEIGHT) {
