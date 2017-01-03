@@ -148,6 +148,10 @@ public class SpriteFont {
      * @param y Y position of text.
      */
     public void drawText(Canvas canvas, Paint paint, String text, float x, float y) {
+        if (text == null) {
+            return;
+        }
+
         RectF destination = new RectF(x - 1, y - 1, 0, y + height - 1); // -1 to remove outline
 
         for (int i = 0; i < text.length(); i++) {
@@ -184,6 +188,10 @@ public class SpriteFont {
      *         index 1 the height.
      */
     public int[] getDimensions(String text) {
+        if (text == null) {
+            return new int[] {0, 0};
+        }
+
         int[] dimensions = new int[] {-1, height - 2};  // [0] -> width, [1] -> height
         for (int i = 0; i < text.length(); i++) {
 
