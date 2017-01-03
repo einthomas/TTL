@@ -10,6 +10,7 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.media.SoundPool;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -102,6 +103,8 @@ public class GameSurfaceView extends TTLSurfaceView {
 
     private int boostStreamID;
 
+    private MediaPlayer mediaPlayer;
+
     /**
      * Creates a new GameSurfaceView to play the game.
      * @param context Used to load resources.
@@ -163,6 +166,10 @@ public class GameSurfaceView extends TTLSurfaceView {
         boostSound = soundPool.load(context, R.raw.boost, 1);
         boostStartSound = soundPool.load(context, R.raw.boost_start, 1);
         boostStopSound = soundPool.load(context, R.raw.boost_stop, 1);
+
+        mediaPlayer = MediaPlayer.create(context, R.raw.kick_shock);
+
+        mediaPlayer.start();
     }
 
     public void setLevelInfo(LevelInfo levelInfo) {
@@ -175,6 +182,7 @@ public class GameSurfaceView extends TTLSurfaceView {
             gameLoop.setRunning(false);
             paused = true;
             soundPool.autoPause();
+            mediaPlayer.pause();
         }
     }
 
@@ -184,6 +192,7 @@ public class GameSurfaceView extends TTLSurfaceView {
             paused = false;
             pausePressed = false;
             soundPool.autoResume();
+            mediaPlayer.start();
         }
     }
 
