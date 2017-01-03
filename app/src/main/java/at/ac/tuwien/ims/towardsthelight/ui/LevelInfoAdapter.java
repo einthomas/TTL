@@ -77,16 +77,14 @@ public class LevelInfoAdapter extends ArrayAdapter<LevelInfo> {
                 String.format(Locale.US, "%02d", levelInfo.score.time / 1000 % 60) + "." +
                 levelInfo.score.time / 100 % 10;
         int[] dimensions = timePixelText.getFont().getDimensions(timePixelText.text);
-        timePixelText.setX(background.getImage().getWidth() - 1 - dimensions[0]);
+        timePixelText.setX(background.getImage().getWidth() - 2 - dimensions[0]);
 
         // set highscore
         PixelText highscorePixelText = (PixelText) convertView.findViewById(R.id.level_info_entry_highscore);
 
         highscorePixelText.text = "" + levelInfo.score.score;
         dimensions = highscorePixelText.getFont().getDimensions(highscorePixelText.text);
-        Log.d("background width", "" + background.getImage().getWidth());
-        highscorePixelText.setX(background.getImage().getWidth() - 1 - dimensions[0]);
-
+        highscorePixelText.setX(background.getImage().getWidth() - 2 - dimensions[0]);
 
         return convertView;
     }

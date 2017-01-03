@@ -50,7 +50,7 @@
         android:layout_height="wrap_content"
         app:fontType="hudFont"
         android:layout_marginTop="2px"
-        android:layout_marginLeft="2px"
+        android:layout_marginLeft="1px"
     />
 
     <at.ac.tuwien.ims.towardsthelight.ui.PixelText

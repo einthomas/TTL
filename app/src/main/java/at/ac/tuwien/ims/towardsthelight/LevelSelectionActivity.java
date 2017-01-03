@@ -3,7 +3,6 @@ package at.ac.tuwien.ims.towardsthelight;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -12,7 +11,6 @@ import java.util.ArrayList;
 
 import at.ac.tuwien.ims.towardsthelight.level.LevelInfo;
 import at.ac.tuwien.ims.towardsthelight.ui.LevelInfoAdapter;
-import at.ac.tuwien.ims.towardsthelight.ui.PixelImageView;
 
 /**
  * Fullscreen activity for level selection. <tt>activity_level_selection</tt> is the corresponding
