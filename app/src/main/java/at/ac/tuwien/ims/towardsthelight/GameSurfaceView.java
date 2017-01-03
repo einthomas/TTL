@@ -98,7 +98,9 @@ public class GameSurfaceView extends TTLSurfaceView {
 
     private SoundPool soundPool;
 
-    private int collectSound;
+    private int collectSound, boostSound, boostStartSound, boostStopSound;
+
+    private int boostStreamID;
 
     /**
      * Creates a new GameSurfaceView to play the game.
@@ -158,6 +160,9 @@ public class GameSurfaceView extends TTLSurfaceView {
         soundPool = new SoundPool(4, AudioManager.STREAM_MUSIC, 0);
 
         collectSound = soundPool.load(context, R.raw.collect, 1);
+        boostSound = soundPool.load(context, R.raw.boost, 1);
+        boostStartSound = soundPool.load(context, R.raw.boost_start, 1);
+        boostStopSound = soundPool.load(context, R.raw.boost_stop, 1);
     }
 
     public void setLevelInfo(LevelInfo levelInfo) {
@@ -169,6 +174,7 @@ public class GameSurfaceView extends TTLSurfaceView {
         if (gameLoop != null) {
             gameLoop.setRunning(false);
             paused = true;
+            soundPool.autoPause();
         }
     }
 
@@ -177,6 +183,7 @@ public class GameSurfaceView extends TTLSurfaceView {
             gameLoop.setRunning(true);
             paused = false;
             pausePressed = false;
+            soundPool.autoResume();
         }
     }
 
@@ -229,9 +236,17 @@ public class GameSurfaceView extends TTLSurfaceView {
 
             if (event.getAction() == MotionEvent.ACTION_MOVE) {
                 if (position[1] < GAME_HEIGHT - 12) {
-                    boost = true;
+                    if (!boost) {
+                        soundPool.play(boostStartSound, 1f, 1f, 3, 0, 1f);
+                        boostStreamID = soundPool.play(boostSound, 1f, 1f, 2, -1, 1f);
+                        boost = true;
+                    }
                 } else {
-                    boost = false;
+                    if (boost) {
+                        soundPool.play(boostStopSound, 1f, 1f, 3, 0, 1f);
+                        soundPool.stop(boostStreamID);
+                        boost = false;
+                    }
                 }
             }
         }
@@ -325,7 +340,7 @@ public class GameSurfaceView extends TTLSurfaceView {
                     } else {
                         if (playerRect.intersect(selectedLevel.collectables.get(i))) {
                             float relativeX = selectedLevel.collectables.get(i).centerX() / 64f;
-                            soundPool.play(collectSound, 1 - relativeX, relativeX, 1, 0, 1f);
+                            soundPool.play(collectSound, 1 - relativeX, relativeX, 1, 1 , 1f);
 
                             player.score += 1;
                             selectedLevel.collectables.remove(i);
