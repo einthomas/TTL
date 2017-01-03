@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<at.ac.tuwien.ims.towardsthelight.ui.PixelLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="at.ac.tuwien.ims.towardsthelight.MainActivity"
+
+    app:virtualHeight="114"
+    app:virtualWidth="64"
+    app:offsetX="11"
+    app:offsetY="0"
+    >
+
+    <VideoView
+        android:id="@+id/video_view"
+        android:layout_width="86px"
+        android:layout_height="144px"
+    />
+    
+    <at.ac.tuwien.ims.towardsthelight.ui.PixelText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="12px"
+        android:layout_marginTop="103px"
+        app:fontType="mainFont"
+        app:text="@string/skip"
+        android:onClick="buttonSkipClicked"
+    />
+
+</at.ac.tuwien.ims.towardsthelight.ui.PixelLayout>

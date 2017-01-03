@@ -20,6 +20,11 @@
 
         app:imageResource="@drawable/menu_bg"
     />
+    
+    <at.ac.tuwien.ims.towardsthelight.ui.PixelText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+    />
 
     <at.ac.tuwien.ims.towardsthelight.ui.MenuButtonXML
         android:src="@drawable/menu_button_image_selector"

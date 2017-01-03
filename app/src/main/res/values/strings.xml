@@ -6,4 +6,5 @@
     <string name="paused">PAUSED</string>
     <string name="resume">RESUME</string>
     <string name="passed">PASSED</string>
+    <string name="skip">SKIP</string>
 </resources>

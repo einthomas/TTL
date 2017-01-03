@@ -75,7 +75,7 @@ public class PixelText extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        font.drawText(canvas, paint, text, x, y);
+        font.drawText(canvas, paint, text, x + 1, y);
     }
 
     public SpriteFont getFont() {
