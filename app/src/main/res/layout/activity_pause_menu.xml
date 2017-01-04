@@ -46,4 +46,15 @@
         app:y="70"
     />
 
+    <at.ac.tuwien.ims.towardsthelight.ui.MenuButtonXML
+        android:id="@+id/muteButton"
+        android:src="@drawable/menu_button_image_selector"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="buttonMusicToggle"
+        app:text="@string/mute"
+        app:x="18"
+        app:y="90"
+    />
+
 </at.ac.tuwien.ims.towardsthelight.ui.PixelLayout>

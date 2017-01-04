@@ -78,6 +78,8 @@ public class GameSurfaceView extends TTLSurfaceView {
 
     public boolean paused;
 
+    public static boolean muted;
+
     /**
      * FPS averaged over multiple frames.
      */
@@ -192,7 +194,9 @@ public class GameSurfaceView extends TTLSurfaceView {
             paused = false;
             pausePressed = false;
             soundPool.autoResume();
-            mediaPlayer.start();
+            if (!muted) {
+                mediaPlayer.start();
+            }
         }
     }
 

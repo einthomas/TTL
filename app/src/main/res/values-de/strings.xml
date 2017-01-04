@@ -7,4 +7,6 @@
     <string name="resume">WEITER</string>
     <string name="passed">BEENDET</string>
     <string name="skip">WEITER</string>
+    <string name="mute">TON AUS</string>
+    <string name="unmute">TON AN</string>
 </resources>
