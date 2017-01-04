@@ -11,6 +11,7 @@
     app:virtualWidth="64"
     app:offsetX="11"
     app:offsetY="0"
+    android:background="#000000"
     >
 
     <VideoView
