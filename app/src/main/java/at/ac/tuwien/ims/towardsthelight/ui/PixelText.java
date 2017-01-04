@@ -64,7 +64,7 @@ public class PixelText extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        font.drawCentered(canvas, paint, text, getWidth() / 2, getHeight() / 2);
+        font.drawCentered(canvas, paint, text, getWidth() / 2, getHeight() / 2 - 1);
     }
 
     public SpriteFont getFont() {
