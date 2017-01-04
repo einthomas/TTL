@@ -36,6 +36,9 @@ import at.ac.tuwien.ims.towardsthelight.ui.SpriteFont;
  */
 public class GameSurfaceView extends TTLSurfaceView {
 
+    public final int BOOST_AREA_MARGIN = 12;
+    public final int HUD_MARGIN = 1;
+
     /**
      * Current level info.
      */
@@ -99,6 +102,8 @@ public class GameSurfaceView extends TTLSurfaceView {
 
     private Bitmap warningSign;
 
+    private Bitmap boostMarker;
+
     private SoundPool soundPool;
 
     private int collectSound, boostSound, boostStartSound, boostStopSound;
@@ -146,6 +151,8 @@ public class GameSurfaceView extends TTLSurfaceView {
         );
 
         warningSign = BitmapFactory.decodeResource(getResources(), R.drawable.warning, options);
+
+        boostMarker = BitmapFactory.decodeResource(getResources(), R.drawable.boost_marker, options);
 
         uiFont = SpriteFont.hudFont(getContext().getResources());
         countdownFont = SpriteFont.countdownFont(getContext().getResources());
@@ -248,7 +255,7 @@ public class GameSurfaceView extends TTLSurfaceView {
             player.x = position[0];
 
             if (event.getAction() == MotionEvent.ACTION_MOVE) {
-                if (position[1] < GAME_HEIGHT - 12) {
+                if (position[1] < GAME_HEIGHT - BOOST_AREA_MARGIN) {
                     if (!boost) {
                         soundPool.play(boostStartSound, 1f, 1f, 3, 0, 1f);
                         boostStreamID = soundPool.play(boostSound, 1f, 1f, 2, -1, 1f);
@@ -430,6 +437,8 @@ public class GameSurfaceView extends TTLSurfaceView {
     private synchronized void drawUI(Canvas canvas) {
         Paint paint = new Paint();
 
+        canvas.drawBitmap(boostMarker, -11, GAME_HEIGHT - boostMarker.getHeight() - BOOST_AREA_MARGIN + 2, paint);
+
         String health = "";
         int hearts = 0;
         for (; hearts < player.lives; hearts++) {
@@ -438,14 +447,14 @@ public class GameSurfaceView extends TTLSurfaceView {
         for (; hearts < 3; hearts++) {
             health += '♡';
         }
-        uiFont.drawText(canvas, paint, health, 1, 106);
+        uiFont.drawText(canvas, paint, health, 1, GAME_HEIGHT - HUD_MARGIN - 7);
 
-        uiFont.drawText(canvas, paint, player.score + "", 1, 99);
+        uiFont.drawText(canvas, paint, player.score + "", 1, GAME_HEIGHT - HUD_MARGIN - 7 * 2);
         uiFont.drawText(canvas, paint,
                 time / 1000 / 60 + ":" +
                         String.format(Locale.US, "%02d", time / 1000 % 60) + "." +
                         time / 100 % 10,
-                1, 92
+                1, GAME_HEIGHT - HUD_MARGIN - 7 * 3
         );
 
         if (time < 750) {
@@ -481,7 +490,7 @@ public class GameSurfaceView extends TTLSurfaceView {
         }
 
         // display softFps
-        uiFont.drawText(canvas, paint, Math.round(this.softFps) + "", 1, 85);
+        //uiFont.drawText(canvas, paint, Math.round(this.softFps) + "", 1, 85);
 
         this.softFps = (this.softFps * 9 + gameLoop.getFPS()) / 10;
 
