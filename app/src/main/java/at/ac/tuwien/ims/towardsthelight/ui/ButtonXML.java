@@ -6,6 +6,11 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
+/**
+ * A button intended to be used in XML.
+ *
+ * @author Thomas Koch
+ */
 public class ButtonXML extends View {
 
     public RectF position;
@@ -19,6 +24,13 @@ public class ButtonXML extends View {
         super(context, attrs);
     }
 
+    /**
+     * Checks if the button has been pressed by checking if {@link #position} contains the touch
+     * position. If the button has been pressed {@link #pressed} is set to true.
+     *
+     * @param event The touch event to react to.
+     * @return Whether the event was handled. Always true.
+     */
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (position.contains(event.getX(), event.getY())) {
@@ -32,7 +44,6 @@ public class ButtonXML extends View {
                     return true;
                 }
             }
-
         } else {
             pressed = false;
         }
