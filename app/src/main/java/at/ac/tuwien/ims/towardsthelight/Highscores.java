@@ -56,7 +56,7 @@ public class Highscores {
 
         database.execSQL(
             "CREATE TABLE IF NOT EXISTS highscore (\n" +
-            "    level INTEGER, time INTEGER, score INTEGER\n" +
+            "    level INTEGER PRIMARY KEY, time INTEGER, score INTEGER\n" +
             ");"
         );
     }
