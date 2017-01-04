@@ -8,7 +8,6 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <activity
             android:name=".VideoActivity"
             android:noHistory="true"
@@ -19,30 +18,25 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".MainActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".GameActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".LevelSelectionActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".LevelResultActivity"
             android:noHistory="true"
             android:parentActivityName=".LevelSelectionActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".PauseMenuActivity"
             android:noHistory="true"
             android:screenOrientation="portrait" />
-
+        <activity android:name=".GameOverActivity"></activity>
     </application>
 
 </manifest>

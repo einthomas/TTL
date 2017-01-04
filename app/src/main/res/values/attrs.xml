@@ -27,8 +27,6 @@
 
     <declare-styleable name="PixelText">
         <attr name="text" />
-        <attr name="x" />
-        <attr name="y" />
         <attr name="fontType" format="enum">
             <enum name="mainFont" value="0"/>
             <enum name="hudFont" value="1"/>
