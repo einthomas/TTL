@@ -1,11 +1,15 @@
 package at.ac.tuwien.ims.towardsthelight;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 
+import at.ac.tuwien.ims.towardsthelight.ui.MenuButtonXML;
+
 public class PauseMenuActivity extends AppCompatActivity {
+    private MenuButtonXML muteButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,6 +23,10 @@ public class PauseMenuActivity extends AppCompatActivity {
         getSupportActionBar().hide();
 
         setContentView(R.layout.activity_pause_menu);
+
+        muteButton = (MenuButtonXML) findViewById(R.id.muteButton);
+
+        muteButton.text = GameSurfaceView.muted ? getString(R.string.mute) : getString(R.string.unmute);
     }
 
     @Override
@@ -48,5 +56,11 @@ public class PauseMenuActivity extends AppCompatActivity {
     }
 
     public void buttonHelpClicked(View view) {
+    }
+
+    public void buttonMusicToggle(View view) {
+        GameSurfaceView.muted = !GameSurfaceView.muted;
+        muteButton.text = GameSurfaceView.muted ? getString(R.string.mute) : getString(R.string.unmute);
+        muteButton.invalidate();
     }
 }

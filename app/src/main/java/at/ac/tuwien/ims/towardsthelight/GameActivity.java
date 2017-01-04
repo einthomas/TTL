@@ -18,6 +18,8 @@ import static java.security.AccessController.getContext;
  */
 public class GameActivity extends AppCompatActivity {
 
+    GameSurfaceView gameSurfaceView;
+
     /**
      * Sets the activity to fullscreen and sets the content view. Sets the {@link LevelInfo}
      * property of {@link GameSurfaceView} to the {@link LevelInfo} received by the intent.
@@ -36,13 +38,14 @@ public class GameActivity extends AppCompatActivity {
         LevelInfo levelInfo = (LevelInfo) getIntent().getSerializableExtra("LevelInfo");
 
         setContentView(R.layout.activity_game);
-        ((GameSurfaceView)findViewById(R.id.drawing_area)).setLevelInfo(levelInfo);
+        gameSurfaceView = (GameSurfaceView)findViewById(R.id.drawing_area);
+        gameSurfaceView.setLevelInfo(levelInfo);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        ((GameSurfaceView) findViewById(R.id.drawing_area)).pause();
+        gameSurfaceView.pause();
     }
 
     @Override
@@ -56,11 +59,12 @@ public class GameActivity extends AppCompatActivity {
                 | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
         getSupportActionBar().hide();
 
-        if (!((GameSurfaceView)findViewById(R.id.drawing_area)).pausePressed) {
-            ((GameSurfaceView)findViewById(R.id.drawing_area)).pausePressed = true;
-            startActivity(new Intent(this, PauseMenuActivity.class));
+        if (!gameSurfaceView.pausePressed) {
+            gameSurfaceView.pausePressed = true;
+            Intent intent = new Intent(this, PauseMenuActivity.class);
+            startActivity(intent);
         } else {
-            ((GameSurfaceView) findViewById(R.id.drawing_area)).unpause();
+            gameSurfaceView.unpause();
         }
     }
 }
