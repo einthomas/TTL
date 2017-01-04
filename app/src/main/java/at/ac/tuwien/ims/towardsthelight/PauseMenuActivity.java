@@ -26,7 +26,7 @@ public class PauseMenuActivity extends AppCompatActivity {
 
         muteButton = (MenuButtonXML) findViewById(R.id.muteButton);
 
-        muteButton.text = GameSurfaceView.muted ? getString(R.string.mute) : getString(R.string.unmute);
+        muteButton.text = GameSurfaceView.muted ? getString(R.string.unmute) : getString(R.string.mute);
     }
 
     @Override
@@ -60,7 +60,7 @@ public class PauseMenuActivity extends AppCompatActivity {
 
     public void buttonMusicToggle(View view) {
         GameSurfaceView.muted = !GameSurfaceView.muted;
-        muteButton.text = GameSurfaceView.muted ? getString(R.string.mute) : getString(R.string.unmute);
+        muteButton.text = GameSurfaceView.muted ? getString(R.string.unmute) : getString(R.string.mute);
         muteButton.invalidate();
     }
 }
