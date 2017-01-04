@@ -8,6 +8,7 @@ import android.view.View;
 
 import java.util.Locale;
 
+import at.ac.tuwien.ims.towardsthelight.level.LevelInfo;
 import at.ac.tuwien.ims.towardsthelight.ui.PixelText;
 
 /**
@@ -50,6 +51,11 @@ public class LevelResultActivity extends AppCompatActivity {
                 + String.format(Locale.US, "%02d", levelTime / 1000 % 60) + "."
                 + levelTime / 100 % 10;
         ((PixelText)findViewById(R.id.level_result_time)).text = time;
+
+        Highscores highscores = new Highscores(getFilesDir().getAbsolutePath() + "/highscore.db");
+        Highscores.Score score = new Highscores.Score(levelTime, levelScore);
+        highscores.putHighscore(levelNumber, score);
+        highscores.closeConnection();
     }
 
     @Override
