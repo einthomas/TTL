@@ -345,7 +345,9 @@ public class GameSurfaceView extends TTLSurfaceView {
                                     invincibilityTime = Player.INVINCIBILITY_TIME;
 
                                     if (player.lives == 0) {
-                                        getContext().startActivity(new Intent(getContext(), GameOverActivity.class));
+                                        Intent intent = new Intent(getContext(), GameOverActivity.class);
+                                        ((GameActivity) getContext()).finish();
+                                        getContext().startActivity(intent);
                                     }
                                 }
                                 break;

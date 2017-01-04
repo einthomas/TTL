@@ -42,5 +42,6 @@ public class GameOverActivity extends AppCompatActivity {
     }
 
     public void buttonBackClicked(View view) {
+        finish();
     }
 }
