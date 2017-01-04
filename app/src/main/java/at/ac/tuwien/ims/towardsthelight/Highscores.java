@@ -74,7 +74,7 @@ public class Highscores {
             }
         );
 
-        Score score = null;
+        Score score = new Score(0, 0);
         if (cursor.moveToNext()) {
             score = new Score(cursor.getInt(0), cursor.getInt(1));
         }
