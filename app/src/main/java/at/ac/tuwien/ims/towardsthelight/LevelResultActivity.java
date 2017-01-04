@@ -37,6 +37,9 @@ public class LevelResultActivity extends AppCompatActivity {
         int levelTime = getIntent().getIntExtra("LevelTime", 0);
         int levelNumber = getIntent().getIntExtra("LevelNumber", 0);
 
+        // add bonus points for time:
+        levelScore += 10 * 60 * 1000 / levelTime;
+
         setContentView(R.layout.activity_level_result);
 
         if (levelNumber < 10) {
