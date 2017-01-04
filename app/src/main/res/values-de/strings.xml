@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Towards the Light</string>
     <string name="start">START</string>
     <string name="help">HILFE</string>
     <string name="paused">PAUSIERT</string>
@@ -9,4 +8,6 @@
     <string name="skip">WEITER</string>
     <string name="mute">TON AUS</string>
     <string name="unmute">TON AN</string>
+    <string name="game_over">VORBEI</string>
+    <string name="back">ZURÜCK</string>
 </resources>
