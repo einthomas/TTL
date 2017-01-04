@@ -27,15 +27,17 @@
         android:layout_width="18px"
         android:layout_height="7px"
         android:layout_marginLeft="34px"
-        android:layout_marginBottom="0px"
+        android:layout_marginTop="107px"
 
         app:imageResource="@drawable/player_lying"
     />
 
     <at.ac.tuwien.ims.towardsthelight.ui.PixelText
+        android:id="@+id/game_over_title"
+
         android:layout_width="86px"
         android:layout_height="wrap_content"
-        android:layout_marginTop="2px"
+        android:layout_marginTop="10px"
         app:text="@string/game_over"
     />
 
