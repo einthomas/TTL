@@ -3,10 +3,9 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="at.ac.tuwien.ims.towardsthelight.MainActivity"
+    tools:context="at.ac.tuwien.ims.towardsthelight.VideoActivity"
 
     app:virtualHeight="114"
     app:virtualWidth="64"
@@ -16,10 +15,15 @@
 
     <VideoView
         android:id="@+id/video_view"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
         android:layout_width="86px"
-        android:layout_height="144px"
+        android:layout_height="114px"
+        android:layout_marginLeft="11px"
     />
-    
+
     <at.ac.tuwien.ims.towardsthelight.ui.PixelText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
