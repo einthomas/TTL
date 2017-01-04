@@ -3,6 +3,7 @@ package at.ac.tuwien.ims.towardsthelight;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.nfc.tech.MifareUltralight;
 
 import java.io.Serializable;
 
@@ -90,13 +91,14 @@ public class Highscores {
      * @param score The score that was achieved on the level.
      */
     public void putHighscore(int level, Score score) {
-        // TODO: check whether the new score is actually better than the previous one.
-        ContentValues record = new ContentValues();
-        record.put("level", level);
-        record.put("time", score.time);
-        record.put("score", score.score);
+        if (getHighscore(level).score < score.score) {
+            ContentValues record = new ContentValues();
+            record.put("level", level);
+            record.put("time", score.time);
+            record.put("score", score.score);
 
-        database.insert("highscore", null, record);
+            database.replace("highscore", null, record);
+        }
     }
 
     public void closeConnection() {
