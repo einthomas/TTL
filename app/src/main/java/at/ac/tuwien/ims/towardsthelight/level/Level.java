@@ -42,12 +42,16 @@ public class Level {
      */
     public ArrayList<Collectable> collectables;
 
+    /**
+     * Contains (danger) signs ordered by their position within the level ascending.
+     */
     public ArrayList<Sign> signs;
 
     /**
-     * Loads the level image and the collision image according to {@link #levelInfo} and the
-     * collectable graphic. Also processes the collision image and fills the {@link #collisionData}
-     * array.
+     * Loads the level image and the collision image according to {@link #levelInfo}. A white pixel
+     * within the collision image represents an obstacle, black represents background, blue
+     * represents a collectable and green represents a sign. Fills the {@link #collisionData} array
+     * with this information.
      *
      * @param context used to load the level's images.
      * @param levelInfo general information about the level to be loaded.
