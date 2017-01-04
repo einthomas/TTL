@@ -11,14 +11,6 @@ import android.view.View;
  *
  * @author Thomas Koch
  */
-
-/**
- * Holds the loaded level image ({@link #bitmap}) which is intended to be drawn, a {@link LevelInfo}
- * object ({@link #levelInfo}) and an array of collectables ({@link #collectables}) which are read
- * from the collision image ({@link LevelInfo#collisionResource}).
- *
- * @author Thomas Koch
- */
 public class ButtonXML extends View {
 
     public RectF position;
