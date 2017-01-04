@@ -6,6 +6,10 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 
+import java.util.Locale;
+
+import at.ac.tuwien.ims.towardsthelight.ui.PixelText;
+
 /**
  * Fullscreen activity displayed after finishing a level. <tt>activity_level_result</tt> is the
  * corresponding layout.
@@ -34,15 +38,18 @@ public class LevelResultActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_level_result);
 
-        ((LevelResultSurfaceView) findViewById(R.id.level_result_drawing_area)).levelScore = levelScore;
-        ((LevelResultSurfaceView) findViewById(R.id.level_result_drawing_area)).levelTime = levelTime;
-        ((LevelResultSurfaceView) findViewById(R.id.level_result_drawing_area)).levelNumber = levelNumber;
-    }
+        if (levelNumber < 10) {
+            ((PixelText)findViewById(R.id.level_result_passed)).text += " 0" + levelNumber;
+        } else {
+            ((PixelText)findViewById(R.id.level_result_passed)).text += " " + levelNumber;
+        }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        ((LevelResultSurfaceView) findViewById(R.id.level_result_drawing_area)).pause();
+        ((PixelText)findViewById(R.id.level_result_highscore)).text += "" + levelScore;
+
+        String time = levelTime / 1000 / 60 + ":"
+                + String.format(Locale.US, "%02d", levelTime / 1000 % 60) + "."
+                + levelTime / 100 % 10;
+        ((PixelText)findViewById(R.id.level_result_time)).text = time;
     }
 
     @Override
