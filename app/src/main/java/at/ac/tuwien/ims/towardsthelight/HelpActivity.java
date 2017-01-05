@@ -1,15 +1,14 @@
 package at.ac.tuwien.ims.towardsthelight;
 
-import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.view.KeyEvent;
+import android.support.v7.app.AppCompatActivity;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ImageView;
 
-import at.ac.tuwien.ims.towardsthelight.ui.MenuButtonXML;
-
-public class PauseMenuActivity extends AppCompatActivity {
-    private MenuButtonXML muteButton;
+public class HelpActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,16 +20,16 @@ public class PauseMenuActivity extends AppCompatActivity {
                 | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                 | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
         getSupportActionBar().hide();
+        setContentView(R.layout.activity_help);
 
-        setContentView(R.layout.activity_pause_menu);
-
-        muteButton = (MenuButtonXML) findViewById(R.id.muteButton);
-
-        muteButton.text = GameSurfaceView.muted ? getString(R.string.unmute) : getString(R.string.mute);
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inScaled = true;
+        Bitmap helpImage = BitmapFactory.decodeResource(getResources(), R.drawable.help, options);
+        ((ImageView)findViewById(R.id.help_activity_image)).setImageBitmap(helpImage);
     }
 
     @Override
-    protected void onResume() {
+    protected void onRestart() {
         super.onResume();
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE
                 | View.SYSTEM_UI_FLAG_FULLSCREEN
@@ -41,17 +40,11 @@ public class PauseMenuActivity extends AppCompatActivity {
         getSupportActionBar().hide();
     }
 
-    public void buttonResumeClicked(View view) {
-        finish();
-    }
-
-    public void buttonHelpClicked(View view) {
-        startActivity(new Intent(this, HelpActivity.class));
-    }
-
-    public void buttonMusicToggle(View view) {
-        GameSurfaceView.muted = !GameSurfaceView.muted;
-        muteButton.text = GameSurfaceView.muted ? getString(R.string.unmute) : getString(R.string.mute);
-        muteButton.invalidate();
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            finish();
+        }
+        return true;
     }
 }

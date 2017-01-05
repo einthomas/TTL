@@ -3,12 +3,9 @@ package at.ac.tuwien.ims.towardsthelight;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 
 import at.ac.tuwien.ims.towardsthelight.level.LevelInfo;
-
-import static java.security.AccessController.getContext;
 
 /**
  * Fullscreen activity for main game. <tt>activity_game</tt> is the corresponding layout.
@@ -66,5 +63,9 @@ public class GameActivity extends AppCompatActivity {
         } else {
             gameSurfaceView.unpause();
         }
+    }
+
+    public void buttonBackClicked(View view) {
+        finish();
     }
 }
