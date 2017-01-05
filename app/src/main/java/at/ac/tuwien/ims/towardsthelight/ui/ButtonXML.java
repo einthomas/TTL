@@ -29,7 +29,7 @@ public class ButtonXML extends View {
      * position. If the button has been pressed {@link #pressed} is set to true.
      *
      * @param event The touch event to react to.
-     * @return Whether the event was handled. Always true.
+     * @return Whether the event was handled.
      */
     @Override
     public boolean onTouchEvent(MotionEvent event) {
