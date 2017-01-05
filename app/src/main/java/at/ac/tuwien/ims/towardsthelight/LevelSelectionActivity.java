@@ -31,7 +31,8 @@ public class LevelSelectionActivity extends AppCompatActivity {
     private ArrayList<LevelInfo> levels;
 
     /**
-     * Sets the activity to fullscreen and sets the content view.
+     * Sets the activity to fullscreen, sets the content view and sets the adapter of the ListView
+     * contained in the layout.
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,11 +63,9 @@ public class LevelSelectionActivity extends AppCompatActivity {
         });
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-    }
-
+    /**
+     * Makes sure the activity is fullscreen (again).
+     */
     @Override
     protected void onResume() {
         super.onResume();
