@@ -34,7 +34,6 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".PauseMenuActivity"
-            android:noHistory="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".GameOverActivity"
