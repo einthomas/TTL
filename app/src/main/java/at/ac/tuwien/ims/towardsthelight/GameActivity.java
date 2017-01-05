@@ -39,12 +39,19 @@ public class GameActivity extends AppCompatActivity {
         gameSurfaceView.setLevelInfo(levelInfo);
     }
 
+    /**
+     * Calls {@link GameSurfaceView#pause()}.
+     */
     @Override
     protected void onPause() {
         super.onPause();
         gameSurfaceView.pause();
     }
 
+    /**
+     * Makes sure the activity is fullscreen (again). Starts the {@link PauseMenuActivity} if
+     * the pause button has not been pressed.
+     */
     @Override
     protected void onRestart() {
         super.onResume();
@@ -63,9 +70,5 @@ public class GameActivity extends AppCompatActivity {
         } else {
             gameSurfaceView.unpause();
         }
-    }
-
-    public void buttonBackClicked(View view) {
-        finish();
     }
 }
