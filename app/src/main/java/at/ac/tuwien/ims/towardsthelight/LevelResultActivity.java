@@ -1,6 +1,7 @@
 package at.ac.tuwien.ims.towardsthelight;
 
 import android.content.Intent;
+import android.content.res.TypedArray;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -36,6 +37,23 @@ public class LevelResultActivity extends AppCompatActivity {
         int levelScore = getIntent().getIntExtra("LevelScore", 0);
         int levelTime = getIntent().getIntExtra("LevelTime", 0);
         int levelNumber = getIntent().getIntExtra("LevelNumber", 0);
+
+        int arrayId = getResources().getIdentifier("level" + levelNumber + "_medal_points", "array", getPackageName());
+        TypedArray pointsArray = getResources().obtainTypedArray(arrayId);
+
+        // set medals
+        if (levelScore >= pointsArray.getInt(0, 0)) {
+            findViewById(R.id.level_result_bronzemedal).setVisibility(View.VISIBLE);
+            // noinspection ResourceType
+            if (levelScore >= pointsArray.getInt(1, 0)) {
+                findViewById(R.id.level_result_silvermedal).setVisibility(View.VISIBLE);
+                // noinspection ResourceType
+                if (levelScore >= pointsArray.getInt(2, 0)) {
+                    findViewById(R.id.level_result_goldmedal).setVisibility(View.VISIBLE);
+                }
+            }
+        }
+        pointsArray.recycle();
 
         // add bonus points for time:
         levelScore += 10 * 60 * 1000 / levelTime;

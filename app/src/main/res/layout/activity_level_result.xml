@@ -35,7 +35,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="25px"
         android:layout_marginLeft="17px"
-        android:visibility="visible"
+        android:visibility="invisible"
         app:imageResource="@drawable/bronze_medal_big"
     />
 
@@ -45,7 +45,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="25px"
         android:layout_marginLeft="36px"
-        android:visibility="visible"
+        android:visibility="invisible"
         app:imageResource="@drawable/silver_medal_big"
     />
 
@@ -55,7 +55,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="25px"
         android:layout_marginLeft="54px"
-        android:visibility="visible"
+        android:visibility="invisible"
         app:imageResource="@drawable/gold_medal_big"
     />
 
