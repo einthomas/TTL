@@ -21,7 +21,10 @@ import at.ac.tuwien.ims.towardsthelight.ui.PixelText;
 public class LevelResultActivity extends AppCompatActivity {
 
     /**
-     * Sets the activity to fullscreen and sets the content view.
+     * Sets the activity to fullscreen and sets the content view. Sets the visibility of the medals
+     * according to the points specified in the resource file <tt>levelx_medal_points</tt>, where
+     * <tt>x</tt> is the number of the level.
+     * Writes the new highscore to the database if the score is higher.
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +82,9 @@ public class LevelResultActivity extends AppCompatActivity {
         highscores.closeConnection();
     }
 
+    /**
+     * Makes sure the activity is fullscreen (again).
+     */
     @Override
     protected void onResume() {
         super.onResume();
@@ -91,6 +97,13 @@ public class LevelResultActivity extends AppCompatActivity {
         getSupportActionBar().hide();
     }
 
+    /**
+     * Goes back to {@link LevelSelectionActivity}.
+     *
+     * @param keyCode The key code of the event.
+     * @param event The touch event to react to.
+     * @return Whether the event was handled.
+     */
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
