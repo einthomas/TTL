@@ -92,6 +92,13 @@ public class SpriteFont {
         );
     }
 
+    /**
+     * Returns the {@link SpriteFont} specified by spriteFont.
+     *
+     * @param spriteFont The {@link FontType}.
+     * @param context The current context.
+     * @return The {@link SpriteFont} according to spriteFont.
+     */
     public static SpriteFont getFont(FontType spriteFont, Resources context) {
         if (spriteFont == FontType.mainFont) {
             return mainFont(context);
