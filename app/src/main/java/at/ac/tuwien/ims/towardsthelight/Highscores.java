@@ -101,6 +101,9 @@ public class Highscores {
         }
     }
 
+    /**
+     * Closes the database connection.
+     */
     public void closeConnection() {
         database.close();
     }
