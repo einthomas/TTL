@@ -32,6 +32,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
     }
 
+    /**
+     * Makes sure the activity is fullscreen (again).
+     */
     @Override
     protected void onResume() {
         super.onResume();
@@ -47,10 +50,20 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().hide();
     }
 
+    /**
+     * Starts the activity {@link LevelSelectionActivity}.
+     *
+     * @param view The current view.
+     */
     public void buttonStartClicked(View view) {
         startActivity(new Intent(this, LevelSelectionActivity.class));
     }
 
+    /**
+     * Starts the activity {@link HelpActivity}.
+     *
+     * @param view The current view.
+     */
     public void buttonHelpClicked(View view) {
         startActivity(new Intent(this, HelpActivity.class));
     }
