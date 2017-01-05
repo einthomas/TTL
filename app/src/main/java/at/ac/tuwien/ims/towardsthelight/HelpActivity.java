@@ -15,6 +15,7 @@ public class HelpActivity extends AppCompatActivity {
 
     /**
      * Sets the activity to fullscreen and sets the content view. Loads the bitmap.
+     * <tt>activity_help</tt> is the corresponding layout.
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
