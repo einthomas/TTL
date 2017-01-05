@@ -8,8 +8,14 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 
+/**
+ * Shows the help graphic.
+ */
 public class HelpActivity extends AppCompatActivity {
 
+    /**
+     * Sets the activity to fullscreen and sets the content view. Loads the bitmap.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,9 +31,12 @@ public class HelpActivity extends AppCompatActivity {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inScaled = true;
         Bitmap helpImage = BitmapFactory.decodeResource(getResources(), R.drawable.help, options);
-        ((ImageView)findViewById(R.id.help_activity_image)).setImageBitmap(helpImage);
+        ((ImageView) findViewById(R.id.help_activity_image)).setImageBitmap(helpImage);
     }
 
+    /**
+     * Makes sure the activity is fullscreen (again).
+     */
     @Override
     protected void onRestart() {
         super.onResume();
@@ -40,6 +49,12 @@ public class HelpActivity extends AppCompatActivity {
         getSupportActionBar().hide();
     }
 
+    /**
+     * Calls {@link #finish()} to "close" the activity if the screen has been touched.
+     *
+     * @param event The touch event to react to.
+     * @return Whether the event was handled. Always true.
+     */
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
