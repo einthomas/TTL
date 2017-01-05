@@ -79,8 +79,14 @@ public class GameSurfaceView extends TTLSurfaceView {
      */
     private boolean boost = false;
 
+    /**
+     * True if the game has been paused.
+     */
     public boolean paused;
 
+    /**
+     * True if the music has been muted.
+     */
     public static boolean muted;
 
     /**
@@ -92,24 +98,56 @@ public class GameSurfaceView extends TTLSurfaceView {
      * Font used for UI.
      */
     private SpriteFont uiFont;
+
+    /**
+     * Font used for the countdown.
+     */
     private SpriteFont countdownFont;
 
+    /**
+     * The sprite used for the player.
+     */
     private Sprite playerSprite;
 
+    /**
+     * The sprite used for the smoke.
+     */
     private Sprite smokeSprite;
 
+    /**
+     * True if the pause button has been pressed.
+     */
     public boolean pausePressed;
 
+    /**
+     * The bitmap used for the warning sign.
+     */
     private Bitmap warningSign;
 
+    /**
+     * The bitmap used for the boost area indicator.
+     */
     private Bitmap boostMarker;
 
+    /**
+     * The {@link SoundPool} used to player sounds.
+     */
     private SoundPool soundPool;
 
+    /**
+     * The loaded sounds.
+     */
     private int collectSound, boostSound, boostStartSound, boostStopSound;
 
+    /**
+     * The stream id of the played boost.
+     */
     private int boostStreamID;
 
+    /**
+     * The {@link MediaPlayer} used to play music.
+     * Loads all the needed Bitmaps and the sounds.
+     */
     private MediaPlayer mediaPlayer;
 
     /**
@@ -181,11 +219,21 @@ public class GameSurfaceView extends TTLSurfaceView {
         mediaPlayer.start();
     }
 
+    /**
+     * Sets {@link #selectedLevel} to levelInfo.
+     * Translates the {@link #levelMatrix} according to the height of the current level.
+     *
+     * @param levelInfo Contains information about the current level.
+     */
     public void setLevelInfo(LevelInfo levelInfo) {
         selectedLevel = new Level(getContext(), levelInfo);
         levelMatrix.preTranslate(0, (-GAME_HEIGHT * (selectedLevel.bitmap.getHeight() / GAME_HEIGHT - 1)));
     }
 
+    /**
+     * Stops the {@link #gameLoop}, sets {@link #paused} to <tt>true</tt> and pauses the {@link #soundPool}
+     * and the {@link #mediaPlayer}.
+     */
     public void pause() {
         if (gameLoop != null) {
             gameLoop.setRunning(false);
@@ -195,6 +243,11 @@ public class GameSurfaceView extends TTLSurfaceView {
         }
     }
 
+    /**
+     * Sets the {@link #gameLoop} to running, sets {@link #paused} and {@link #pausePressed} to
+     * <tt>false</tt> and resumes and starts the {@link #soundPool} and {@link #mediaPlayer}
+     * (if not muted).
+     */
     public void unpause() {
         if (gameLoop != null) {
             gameLoop.setRunning(true);
@@ -239,7 +292,8 @@ public class GameSurfaceView extends TTLSurfaceView {
     }
 
     /**
-     * React to touch events.
+     * React to touch events. Plays a sound if the boost has been activated.
+     *
      * @param event The touch event to react to.
      * @return Whether the event was handled. Always true.
      */
@@ -249,7 +303,7 @@ public class GameSurfaceView extends TTLSurfaceView {
 
         // runs in UI thread
         if (!buttons.get(0).pressed && event.getAction() != MotionEvent.ACTION_UP) {
-            float[] position = new float[]{event.getX(), event.getY()};
+            float[] position = new float[] { event.getX(), event.getY() };
             gameMatrixInverse.mapPoints(position);
 
             player.x = position[0];
