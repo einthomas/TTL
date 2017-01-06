@@ -8,16 +8,16 @@
     </integer-array>
 
     <integer-array name="level2_medal_points">
-        <item>40</item>
-        <item>60</item>
-        <item>80</item>
-        <item>100</item>
-    </integer-array>
-
-    <integer-array name="level3_medal_points">
         <item>400</item>
         <item>800</item>
         <item>1600</item>
         <item>2500</item>
+    </integer-array>
+
+    <integer-array name="level3_medal_points">
+        <item>40</item>
+        <item>60</item>
+        <item>80</item>
+        <item>100</item>
     </integer-array>
 </resources>
