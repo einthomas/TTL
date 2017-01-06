@@ -36,7 +36,14 @@ import at.ac.tuwien.ims.towardsthelight.ui.SpriteFont;
  */
 public class GameSurfaceView extends TTLSurfaceView {
 
+    /**
+     * Position of the area at the bottom of the screen used to activate boost.
+     */
     public final int BOOST_AREA_MARGIN = 12;
+
+    /**
+     * Distance between bottom of screen and HUD.
+     */
     public final int HUD_MARGIN = 1;
 
     /**
@@ -90,7 +97,7 @@ public class GameSurfaceView extends TTLSurfaceView {
     public static boolean muted;
 
     /**
-     * FPS averaged over multiple frames.
+     * FPS averaged over multiple frames. Only used for debugging.
      */
     private float softFps;
 
@@ -137,7 +144,7 @@ public class GameSurfaceView extends TTLSurfaceView {
     /**
      * The loaded sounds.
      */
-    private int collectSound, boostSound, boostStartSound, boostStopSound;
+    private int collectSound, boostSound, boostStartSound, boostStopSound, crashSound;
 
     /**
      * The stream id of the played boost.
@@ -146,7 +153,6 @@ public class GameSurfaceView extends TTLSurfaceView {
 
     /**
      * The {@link MediaPlayer} used to play music.
-     * Loads all the needed Bitmaps and the sounds.
      */
     private MediaPlayer mediaPlayer;
 
@@ -207,12 +213,13 @@ public class GameSurfaceView extends TTLSurfaceView {
             }
         });
 
-        soundPool = new SoundPool(4, AudioManager.STREAM_MUSIC, 0);
+        soundPool = new SoundPool(16, AudioManager.STREAM_MUSIC, 0);
 
         collectSound = soundPool.load(context, R.raw.collect, 1);
         boostSound = soundPool.load(context, R.raw.boost, 1);
         boostStartSound = soundPool.load(context, R.raw.boost_start, 1);
         boostStopSound = soundPool.load(context, R.raw.boost_stop, 1);
+        crashSound = soundPool.load(context, R.raw.crash, 1);
 
         mediaPlayer = MediaPlayer.create(context, R.raw.kick_shock);
 
@@ -397,6 +404,7 @@ public class GameSurfaceView extends TTLSurfaceView {
                                 if (invincibilityTime == 0) {
                                     player.lives--;
                                     invincibilityTime = Player.INVINCIBILITY_TIME;
+                                    soundPool.play(crashSound, 1f, 1f, 3, 0, 1f);
 
                                     if (player.lives == 0) {
                                         Intent intent = new Intent(getContext(), GameOverActivity.class);
