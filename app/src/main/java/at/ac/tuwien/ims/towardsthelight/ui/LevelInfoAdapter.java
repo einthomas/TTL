@@ -64,7 +64,7 @@ public class LevelInfoAdapter extends ArrayAdapter<LevelInfo> {
 
         // set background
         PixelImageView background = (PixelImageView) convertView.findViewById(R.id.level_info_entry_background);
-        int arrayId = getContext().getResources().getIdentifier("level" + (position + 1) + "_medal_points", "array", getContext().getPackageName());
+        int arrayId = getContext().getResources().getIdentifier("level" + levelInfo.number + "_medal_points", "array", getContext().getPackageName());
         TypedArray pointsArray = getContext().getResources().obtainTypedArray(arrayId);
         Bitmap backgroundBitmap;
         if (levelInfo.score.score >= pointsArray.getInt(pointsArray.length() - 1, 0)) {
