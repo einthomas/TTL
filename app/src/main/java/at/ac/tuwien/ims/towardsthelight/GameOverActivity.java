@@ -1,6 +1,5 @@
 package at.ac.tuwien.ims.towardsthelight;
 
-import android.animation.ObjectAnimator;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -26,7 +25,7 @@ public class GameOverActivity extends AppCompatActivity {
         super.onStart();
 
         findViewById(R.id.player).startAnimation(AnimationUtils.loadAnimation(this, R.anim.player_falling));
-        findViewById(R.id.game_over_title).startAnimation(AnimationUtils.loadAnimation(this, R.anim.text_in));
+        findViewById(R.id.game_over_title).startAnimation(AnimationUtils.loadAnimation(this, R.anim.game_over));
     }
 
     @Override

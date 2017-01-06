@@ -6,10 +6,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.animation.AnimationUtils;
 
 import java.util.Locale;
 
-import at.ac.tuwien.ims.towardsthelight.level.LevelInfo;
 import at.ac.tuwien.ims.towardsthelight.ui.PixelText;
 
 /**
@@ -80,6 +80,13 @@ public class LevelResultActivity extends AppCompatActivity {
         Highscores.Score score = new Highscores.Score(levelTime, levelScore);
         highscores.putHighscore(levelNumber, score);
         highscores.closeConnection();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        findViewById(R.id.level_result_passed).startAnimation(AnimationUtils.loadAnimation(this, R.anim.passed));
     }
 
     /**
