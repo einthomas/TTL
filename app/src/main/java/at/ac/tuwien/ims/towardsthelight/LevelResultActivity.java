@@ -41,6 +41,10 @@ public class LevelResultActivity extends AppCompatActivity {
         int levelTime = getIntent().getIntExtra("LevelTime", 0);
         int levelNumber = getIntent().getIntExtra("LevelNumber", 0);
 
+        // add bonus points for time:
+        levelScore += 10 * 60 * 1000 / levelTime;
+
+
         int arrayId = getResources().getIdentifier("level" + levelNumber + "_medal_points", "array", getPackageName());
         TypedArray pointsArray = getResources().obtainTypedArray(arrayId);
 
@@ -57,9 +61,6 @@ public class LevelResultActivity extends AppCompatActivity {
             }
         }
         pointsArray.recycle();
-
-        // add bonus points for time:
-        levelScore += 10 * 60 * 1000 / levelTime;
 
         setContentView(R.layout.activity_level_result);
 
