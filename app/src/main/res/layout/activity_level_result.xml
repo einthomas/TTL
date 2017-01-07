@@ -21,11 +21,20 @@
         app:imageResource="@drawable/menu_bg"
     />
 
+    <at.ac.tuwien.ims.towardsthelight.ui.PixelImageView
+        android:id="@+id/level_result_diamond_border"
+        android:layout_width="64px"
+        android:layout_height="114px"
+        android:layout_marginLeft="11px"
+        android:visibility="invisible"
+        app:imageResource="@drawable/diamond_result"
+    />
+
     <at.ac.tuwien.ims.towardsthelight.ui.PixelText
         android:id="@+id/level_result_passed"
         android:layout_width="86px"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5px"
+        android:layout_marginTop="9px"
         app:text="@string/passed"
     />
 
