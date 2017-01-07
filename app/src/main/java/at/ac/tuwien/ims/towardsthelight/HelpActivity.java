@@ -10,6 +10,7 @@ import android.widget.ImageView;
 
 /**
  * Shows the help graphic.
+ * @author Thomas Koch
  */
 public class HelpActivity extends AppCompatActivity {
 

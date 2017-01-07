@@ -15,6 +15,9 @@ import at.ac.tuwien.ims.towardsthelight.level.LevelInfo;
  */
 public class GameActivity extends AppCompatActivity {
 
+    /**
+     * GameSurfaceView handling this play session.
+     */
     GameSurfaceView gameSurfaceView;
 
     /**

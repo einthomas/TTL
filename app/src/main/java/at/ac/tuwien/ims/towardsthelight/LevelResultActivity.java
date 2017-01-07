@@ -20,6 +20,7 @@ import at.ac.tuwien.ims.towardsthelight.ui.PixelText;
  * corresponding layout.
  *
  * @author Thomas Koch
+ * @author Felix Kugler
  */
 public class LevelResultActivity extends AppCompatActivity {
 

@@ -16,8 +16,8 @@ import at.ac.tuwien.ims.towardsthelight.ui.Button;
 
 /**
  * Super class for all our SurfaceView implementation.
- * This class handles scaling across all views.
- * All drawing operations happen at aspect ratio dependent virtual resolution.
+ * This class handles scaling for SurfaceViews.
+ * All drawing operations happen at an aspect ratio dependent virtual resolution.
  * @author Thomas Koch
  * @author Felix Kugler
  */
@@ -38,6 +38,9 @@ public class TTLSurfaceView extends SurfaceView implements SurfaceHolder.Callbac
      */
     protected Matrix gameMatrix, gameMatrixInverse;
 
+    /**
+     * GameLoop of the SurfaceView.
+     */
     protected GameLoop gameLoop;
 
     /**
@@ -45,6 +48,10 @@ public class TTLSurfaceView extends SurfaceView implements SurfaceHolder.Callbac
      */
     protected Thread gameLoopThread;
 
+    /**
+     * Buttons on the SurfaceView.
+     * Right now this is only used for the pause button.
+     */
     protected List<Button> buttons;
 
     /**
@@ -61,6 +68,11 @@ public class TTLSurfaceView extends SurfaceView implements SurfaceHolder.Callbac
         buttons = new ArrayList<>();
     }
 
+    /**
+     * Handle touch events. This handles taps to buttons in the buttons list.
+     * @param event MotionEvent to handle.
+     * @return True if the event has been handled by a button on this SurfaceView. False otherwise.
+     */
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         float[] position = {event.getX(), event.getY()};
@@ -73,15 +85,30 @@ public class TTLSurfaceView extends SurfaceView implements SurfaceHolder.Callbac
         return super.onTouchEvent(event);
     }
 
+    /**
+     * Draw buttons in the buttons list.
+     * @param canvas The canvas to draw the buttons onto.
+     * @param paint The paint to use for the buttons.
+     */
     protected void drawButtons(Canvas canvas, Paint paint) {
         for (Button button : buttons) {
             button.draw(canvas, paint);
         }
     }
 
+    /**
+     * Handle game logic in this function.
+     * The default implementation does nothing.
+     * @param delta Seconds since the last call. Advance simulation by this amount of time.
+     */
     public synchronized void updateGame(float delta) {
     }
 
+    /**
+     * Draw the game here.
+     * The default implementation does nothing.
+     * @param canvas Canvas to draw onto.
+     */
     public synchronized void drawGame(Canvas canvas) {
     }
 
@@ -143,6 +170,10 @@ public class TTLSurfaceView extends SurfaceView implements SurfaceHolder.Callbac
         gameMatrix.invert(gameMatrixInverse);
     }
 
+    /**
+     * Starts the game loop in a new thread.
+     * @param surfaceHolder SurfaceHolder used to draw the game when frames are ready.
+     */
     protected void startGameLoop(SurfaceHolder surfaceHolder) {
         if (gameLoop == null) {
             gameLoop = new GameLoop(surfaceHolder, this);

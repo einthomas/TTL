@@ -8,8 +8,16 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.VideoView;
 
+/**
+ * Handles the intro video.
+ * @author Thomas Koch
+ */
 public class VideoActivity extends AppCompatActivity {
 
+    /**
+     * Makes the activity fullscreen and starts the video.
+     * @param savedInstanceState Unused.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,6 +47,9 @@ public class VideoActivity extends AppCompatActivity {
         videoView.start();
     }
 
+    /**
+     * Makes sure the activity is fullscreen (again).
+     */
     @Override
     protected void onResume() {
         super.onResume();
@@ -54,6 +65,10 @@ public class VideoActivity extends AppCompatActivity {
         getSupportActionBar().hide();
     }
 
+    /**
+     * Handle tapping on the skip button.
+     * @param view The view sending the event. Unused.
+     */
     public void buttonSkipClicked(View view) {
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

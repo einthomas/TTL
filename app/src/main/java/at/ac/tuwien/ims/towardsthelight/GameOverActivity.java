@@ -5,8 +5,17 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 
+/**
+ * Handles the game over screen.
+ *
+ * @author Felix Kugler
+ */
 public class GameOverActivity extends AppCompatActivity {
 
+    /**
+     * Make activity fullscreen.
+     * @param savedInstanceState Unused.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -20,6 +29,9 @@ public class GameOverActivity extends AppCompatActivity {
         setContentView(R.layout.activity_game_over);
     }
 
+    /**
+     * Animations are started here.
+     */
     @Override
     protected void onStart() {
         super.onStart();
@@ -28,6 +40,9 @@ public class GameOverActivity extends AppCompatActivity {
         findViewById(R.id.game_over_title).startAnimation(AnimationUtils.loadAnimation(this, R.anim.game_over));
     }
 
+    /**
+     * Set fullscreen again when coming back grom another activity.
+     */
     @Override
     protected void onRestart() {
         super.onRestart();
