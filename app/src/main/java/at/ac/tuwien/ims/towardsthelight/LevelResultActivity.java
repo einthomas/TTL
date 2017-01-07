@@ -23,8 +23,14 @@ import at.ac.tuwien.ims.towardsthelight.ui.PixelText;
  */
 public class LevelResultActivity extends AppCompatActivity {
 
+    /**
+     * SoundPool used for medal sound
+     */
     private SoundPool soundPool;
 
+    /**
+     * Sound played when showing the medals
+     */
     private int medal_sound;
 
     /**
@@ -102,6 +108,11 @@ public class LevelResultActivity extends AppCompatActivity {
         highscores.closeConnection();
     }
 
+    /**
+     * Plays the medal sound with the given delay and pitch
+     * @param delay Delay in milliseconds
+     * @param pitch Change pitch by given number of semitones
+     */
     private void playDelayed(int delay, final int pitch) {
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
