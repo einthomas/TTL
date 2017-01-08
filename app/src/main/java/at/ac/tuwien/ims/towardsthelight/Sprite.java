@@ -7,6 +7,7 @@ import android.graphics.RectF;
 
 /**
  * Stores a Bitmap, possibly with multiple frames, how to animate it and where to draw it.
+ *
  * @author Thomas Koch
  * @author Felix Kugler
  */

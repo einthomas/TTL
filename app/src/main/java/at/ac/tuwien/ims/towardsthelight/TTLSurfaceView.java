@@ -18,6 +18,7 @@ import at.ac.tuwien.ims.towardsthelight.ui.Button;
  * Super class for all our SurfaceView implementation.
  * This class handles scaling for SurfaceViews.
  * All drawing operations happen at an aspect ratio dependent virtual resolution.
+ *
  * @author Thomas Koch
  * @author Felix Kugler
  */

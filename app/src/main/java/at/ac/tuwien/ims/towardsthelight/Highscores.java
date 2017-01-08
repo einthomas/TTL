@@ -9,6 +9,7 @@ import java.io.Serializable;
 
 /**
  * Handles reading and writing scores from and to the database.
+ *
  * @author Felix Kugler
  */
 public class Highscores {

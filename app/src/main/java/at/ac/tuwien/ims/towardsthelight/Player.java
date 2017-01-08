@@ -2,6 +2,7 @@ package at.ac.tuwien.ims.towardsthelight;
 
 /**
  * Stores information about the player character.
+ *
  * @author Felix Kugler
  */
 public class Player {

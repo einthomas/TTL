@@ -8,6 +8,7 @@ import android.graphics.RectF;
 /**
  * Button for SurfaceView with images.
  * Currently only used for the pause button.
+ *
  * @author Felix Kugler
  */
 public abstract  class ImageButton extends Button {

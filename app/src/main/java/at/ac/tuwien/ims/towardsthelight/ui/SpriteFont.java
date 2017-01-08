@@ -15,6 +15,7 @@ import at.ac.tuwien.ims.towardsthelight.R;
 
 /**
  * Describes a font as an image containing all characters.
+ *
  * @author Felix Kugler
  * @author Thomas Koch
  */

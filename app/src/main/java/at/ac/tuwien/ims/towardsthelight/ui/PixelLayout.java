@@ -9,6 +9,7 @@ import at.ac.tuwien.ims.towardsthelight.R;
 
 /**
  * RelativeLayout with a virtual resolution that is scaled to fit the screen resolution.
+ *
  * @author Felix Kugler
  */
 public class PixelLayout extends RelativeLayout {

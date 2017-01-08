@@ -10,6 +10,7 @@ import android.widget.VideoView;
 
 /**
  * Handles the intro video.
+ * 
  * @author Thomas Koch
  */
 public class VideoActivity extends AppCompatActivity {

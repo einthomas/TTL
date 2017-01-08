@@ -14,6 +14,7 @@ import at.ac.tuwien.ims.towardsthelight.R;
 
 /**
  * Displays a pixelized image.
+ *
  * @author Felix Kugler
  */
 public class PixelImageView extends View {

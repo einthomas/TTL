@@ -9,7 +9,8 @@ import android.view.View;
 import android.widget.ImageView;
 
 /**
- * Shows the help graphic.
+ * Shows the help graphic. <tt>activity_help</tt> is the corresponding layout.
+ *
  * @author Thomas Koch
  */
 public class HelpActivity extends AppCompatActivity {

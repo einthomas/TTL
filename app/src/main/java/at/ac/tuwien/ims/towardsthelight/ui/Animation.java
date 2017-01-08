@@ -1,12 +1,10 @@
 package at.ac.tuwien.ims.towardsthelight.ui;
 
 /**
- * Created by Felix on 28.11.2016.
- */
-
-/**
  * Helper class for animations in SurfaceView.
  * Right now we only use it for the countdown at the start of the game.
+ *
+ * @author Felix Kugler
  */
 public class Animation {
     /**

@@ -10,6 +10,7 @@ import at.ac.tuwien.ims.towardsthelight.ui.MenuButtonXML;
 /**
  * The pause menu. Contains an option to mute the music and display the help activity.
  * <tt>activity_pause</tt> is the corresponding layout.
+ *
  * @author Felix Kugler
  * @author Thomas Koch
  */
