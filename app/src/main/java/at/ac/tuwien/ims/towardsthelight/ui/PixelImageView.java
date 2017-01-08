@@ -13,15 +13,24 @@ import android.view.View;
 import at.ac.tuwien.ims.towardsthelight.R;
 
 /**
- * Created by Felix on 26.12.2016.
+ * Displays a pixelized image.
+ * @author Felix Kugler
  */
-
 public class PixelImageView extends View {
 
+    /**
+     * The image to display.
+     */
     private Bitmap image;
 
+    /**
+     * Transformation of the image.
+     */
     private Matrix transformation;
 
+    /**
+     * Paint used for drawing.
+     */
     private Paint paint = new Paint();
 
     /**
@@ -118,6 +127,11 @@ public class PixelImageView extends View {
         }
     }
 
+    /**
+     * Determine the size of the view to allow using "wrap_content" in XML.
+     * @param widthMeasureSpec
+     * @param heightMeasureSpec
+     */
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         setMeasuredDimension(image.getWidth(), image.getHeight());
@@ -137,10 +151,18 @@ public class PixelImageView extends View {
         }
     }
 
+    /**
+     * Get the image.
+     * @return The image.
+     */
     public Bitmap getImage() {
         return image;
     }
 
+    /**
+     * Set the image.
+     * @param image The image.
+     */
     public void setImage(Bitmap image) {
         this.image = image;
     }

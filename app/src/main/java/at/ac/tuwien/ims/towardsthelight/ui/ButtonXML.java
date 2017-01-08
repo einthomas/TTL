@@ -12,14 +12,30 @@ import android.view.View;
  * @author Thomas Koch
  */
 public class ButtonXML extends View {
-
+    /**
+     * Position and size of the button.
+     * TODO: Use the position in View instead
+     */
     public RectF position;
+
+    /**
+     * Whether the button is currently pressed.
+     */
     public boolean pressed = false;
 
+    /**
+     * Construct a new ButtonXML with the given context.
+     * @param context Context object passed to View constructor.
+     */
     public ButtonXML(Context context) {
         super(context);
     }
 
+    /**
+     * Construct a new ButtonXML with the given context and attributes.
+     * @param context Context object passed to View constructor.
+     * @param attrs Attributes passed to View constructor.
+     */
     public ButtonXML(Context context, AttributeSet attrs) {
         super(context, attrs);
     }

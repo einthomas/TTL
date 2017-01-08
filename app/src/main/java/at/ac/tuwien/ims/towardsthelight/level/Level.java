@@ -20,9 +20,19 @@ import at.ac.tuwien.ims.towardsthelight.R;
  */
 public class Level {
 
+    /**
+     * Number used for the background in collisionData
+     */
     public static final byte BACKGROUND = 0;
+
+    /**
+     * Number used for obstacles in collisionData
+     */
     public static final byte OBSTACLE = 1;
 
+    /**
+     * LevelInfo for this level
+     */
     public LevelInfo levelInfo;
 
     /**

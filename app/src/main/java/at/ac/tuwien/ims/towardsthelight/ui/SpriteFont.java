@@ -20,15 +20,39 @@ import at.ac.tuwien.ims.towardsthelight.R;
  */
 public class SpriteFont {
 
+    /**
+     * Enumeration of available fonts.
+     */
     public enum FontType {
-        mainFont(0), hudFont(1);
-        int id;
+        /**
+         * Large font used for menus.
+         */
+        mainFont(0),
 
-        FontType(int id) {
+        /**
+         * Small font used for the overlay in-game.
+         */
+        hudFont(1);
+
+        /**
+         * Id of the font.
+         */
+        final int id;
+
+        /**
+         * Create FontType with given id.
+         * @param id
+         */
+        private FontType(int id) {
             this.id = id;
         }
 
-        static FontType getFromId(int id) {
+        /**
+         * Get FontType of given id.
+         * @param id ID of FontType
+         * @return The FontType with the given id.
+         */
+        public static FontType getFromId(int id) {
             for (FontType fontType : values()) {
                 if (fontType.id == id) {
                     return fontType;
