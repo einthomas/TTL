@@ -160,4 +160,11 @@ public class Sprite {
     public boolean isDone() {
         return done;
     }
+
+    /**
+     * Release images.
+     */
+    public void recycle() {
+        bitmap.recycle();
+    }
 }

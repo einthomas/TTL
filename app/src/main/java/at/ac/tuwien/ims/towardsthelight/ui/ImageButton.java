@@ -85,5 +85,13 @@ public abstract  class ImageButton extends Button {
             font.drawCentered(canvas, paint, text, position.centerX(), position.centerY());
         }
     }
+
+    /**
+     * Release images.
+     */
+    public void recycle() {
+        releasedBitmap.recycle();
+        pressedBitmap.recycle();
+    }
 }
 

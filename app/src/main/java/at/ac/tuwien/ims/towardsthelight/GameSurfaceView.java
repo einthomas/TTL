@@ -24,6 +24,7 @@ import at.ac.tuwien.ims.towardsthelight.level.Level;
 import at.ac.tuwien.ims.towardsthelight.level.LevelInfo;
 import at.ac.tuwien.ims.towardsthelight.level.Sign;
 import at.ac.tuwien.ims.towardsthelight.ui.Animation;
+import at.ac.tuwien.ims.towardsthelight.ui.Button;
 import at.ac.tuwien.ims.towardsthelight.ui.ImageButton;
 import at.ac.tuwien.ims.towardsthelight.ui.ImageButtonXML;
 import at.ac.tuwien.ims.towardsthelight.ui.SpriteFont;
@@ -156,6 +157,8 @@ public class GameSurfaceView extends TTLSurfaceView {
      */
     private MediaPlayer mediaPlayer;
 
+    private boolean resourcesReady = false;
+
     /**
      * Creates a new GameSurfaceView to play the game.
      * @param context Used to load resources.
@@ -180,38 +183,6 @@ public class GameSurfaceView extends TTLSurfaceView {
             player.x - Player.SIZE_X / 2f, 114 - 24 - Player.SIZE_Y,
             player.x + Player.SIZE_X / 2f, 114 - 24
         );
-
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inScaled = false;
-
-        Bitmap playerBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.player, options);
-        playerSprite = new Sprite(playerBitmap, (int)player.x, (int)player.y, 10, 16, 5, 0.1f);
-        playerSprite.setPosition((int)playerRect.left, (int)playerRect.top);
-        playerSprite.loop = true;
-
-        smokeSprite = new Sprite(
-            BitmapFactory.decodeResource(getResources(), R.drawable.smoke, options),
-            0, 114 - 32, 64, 32, 90, 1f / 25
-        );
-
-        warningSign = BitmapFactory.decodeResource(getResources(), R.drawable.warning, options);
-
-        boostMarker = BitmapFactory.decodeResource(getResources(), R.drawable.boost_marker, options);
-
-        uiFont = SpriteFont.hudFont(getContext().getResources());
-        countdownFont = SpriteFont.countdownFont(getContext().getResources());
-
-        Bitmap button = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.pause_button, options);
-        Bitmap buttonPressed = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.pause_button_pressed, options);
-
-        buttons.add(new ImageButton(button, buttonPressed, GAME_WIDTH - button.getWidth() - 1, GAME_HEIGHT - button.getHeight() - 1) {
-            @Override
-            protected void clicked() {
-                pausePressed = true;
-                pause();
-                getContext().startActivity(new Intent(getContext(), PauseMenuActivity.class));
-            }
-        });
 
         loadResources();
     }
@@ -251,15 +222,51 @@ public class GameSurfaceView extends TTLSurfaceView {
      */
     public void unpause() {
         if (gameLoop != null) {
-            gameLoop.setRunning(true);
             paused = false;
             pausePressed = false;
 
             loadResources();
+
+            gameLoop.setRunning(true);
         }
     }
 
+    /**
+     * Load sounds and images.
+     */
     private void loadResources() {
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inScaled = false;
+
+        Bitmap playerBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.player, options);
+        playerSprite = new Sprite(playerBitmap, (int)player.x, (int)player.y, 10, 16, 5, 0.1f);
+        playerSprite.setPosition((int)playerRect.left, (int)playerRect.top);
+        playerSprite.loop = true;
+
+        smokeSprite = new Sprite(
+                BitmapFactory.decodeResource(getResources(), R.drawable.smoke, options),
+                0, 114 - 32, 64, 32, 90, 1f / 25
+        );
+
+        warningSign = BitmapFactory.decodeResource(getResources(), R.drawable.warning, options);
+
+        boostMarker = BitmapFactory.decodeResource(getResources(), R.drawable.boost_marker, options);
+
+        uiFont = SpriteFont.hudFont(getContext().getResources());
+        countdownFont = SpriteFont.countdownFont(getContext().getResources());
+
+        Bitmap button = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.pause_button, options);
+        Bitmap buttonPressed = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.pause_button_pressed, options);
+
+        buttons.add(new ImageButton(button, buttonPressed, GAME_WIDTH - button.getWidth() - 1, GAME_HEIGHT - button.getHeight() - 1) {
+            @Override
+            protected void clicked() {
+                pausePressed = true;
+                pause();
+                getContext().startActivity(new Intent(getContext(), PauseMenuActivity.class));
+            }
+        });
+
         soundPool = new SoundPool(16, AudioManager.STREAM_MUSIC, 0);
 
         collectSound = soundPool.load(getContext(), R.raw.collect, 1);
@@ -273,9 +280,30 @@ public class GameSurfaceView extends TTLSurfaceView {
         if (!muted) {
             mediaPlayer.start();
         }
+
+        resourcesReady = true;
     }
 
+    /**
+     * Release sounds and images.
+     */
     private void releaseResources() {
+        resourcesReady = false;
+
+        uiFont.recycle();
+        countdownFont.recycle();
+
+        smokeSprite.recycle();
+        playerSprite.recycle();
+
+        warningSign.recycle();
+        boostMarker.recycle();
+
+        for (Button button : buttons) {
+            button.recycle();
+        }
+        buttons.clear();
+
         soundPool.release();
         mediaPlayer.release();
     }
@@ -322,25 +350,29 @@ public class GameSurfaceView extends TTLSurfaceView {
         super.onTouchEvent(event);
 
         // runs in UI thread
-        if (!buttons.get(0).pressed && event.getAction() != MotionEvent.ACTION_UP) {
-            float[] position = new float[] { event.getX(), event.getY() };
-            gameMatrixInverse.mapPoints(position);
 
-            player.x = position[0];
+        // hack to not move the character when tapping the pause button
+        if (buttons.size() > 0 && buttons.get(0).pressed || event.getAction() == MotionEvent.ACTION_UP) {
+            return true;
+        }
 
-            if (event.getAction() == MotionEvent.ACTION_MOVE) {
-                if (position[1] < GAME_HEIGHT - BOOST_AREA_MARGIN) {
-                    if (!boost) {
-                        soundPool.play(boostStartSound, 1f, 1f, 3, 0, 1f);
-                        boostStreamID = soundPool.play(boostSound, 1f, 1f, 2, -1, 1f);
-                        boost = true;
-                    }
-                } else {
-                    if (boost) {
-                        soundPool.play(boostStopSound, 1f, 1f, 3, 0, 1f);
-                        soundPool.stop(boostStreamID);
-                        boost = false;
-                    }
+        float[] position = new float[] { event.getX(), event.getY() };
+        gameMatrixInverse.mapPoints(position);
+
+        player.x = position[0];
+
+        if (event.getAction() == MotionEvent.ACTION_MOVE) {
+            if (position[1] < GAME_HEIGHT - BOOST_AREA_MARGIN) {
+                if (!boost) {
+                    soundPool.play(boostStartSound, 1f, 1f, 3, 0, 1f);
+                    boostStreamID = soundPool.play(boostSound, 1f, 1f, 2, -1, 1f);
+                    boost = true;
+                }
+            } else {
+                if (boost) {
+                    soundPool.play(boostStopSound, 1f, 1f, 3, 0, 1f);
+                    soundPool.stop(boostStreamID);
+                    boost = false;
                 }
             }
         }
@@ -466,6 +498,11 @@ public class GameSurfaceView extends TTLSurfaceView {
      */
     public synchronized void drawGame(Canvas canvas) {
         // runs in gameLoopThread
+        if (!resourcesReady) {
+            // our game loop was too eager to draw
+            return;
+        }
+
         canvas.setMatrix(gameMatrix);
 
         Paint paint = new Paint();

@@ -239,4 +239,11 @@ public class SpriteFont {
 
         return dimensions;
     }
+
+    /**
+     * Release images.
+     */
+    public void recycle() {
+        bitmap.recycle();
+    }
 }

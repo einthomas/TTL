@@ -68,4 +68,9 @@ public abstract class Button {
      * Handle clicks.
      */
     protected abstract void clicked();
+
+    /**
+     * Release images.
+     */
+    public abstract void recycle();
 }
