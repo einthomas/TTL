@@ -51,7 +51,7 @@ public class LevelResultActivity extends AppCompatActivity {
                 | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
         getSupportActionBar().hide();
 
-        soundPool = new SoundPool(2, AudioManager.STREAM_MUSIC, 0);
+        soundPool = new SoundPool(4, AudioManager.STREAM_MUSIC, 0);
         medal_sound = soundPool.load(this, R.raw.collect, 0);
 
         int levelScore = getIntent().getIntExtra("LevelScore", 0);
@@ -107,6 +107,16 @@ public class LevelResultActivity extends AppCompatActivity {
         Highscores.Score score = new Highscores.Score(levelTime, levelScore);
         highscores.putHighscore(levelNumber, score);
         highscores.closeConnection();
+    }
+
+    /**
+     * Release resources.
+     */
+    @Override
+    protected void onStop() {
+        soundPool.release();
+
+        super.onStop();
     }
 
     /**
