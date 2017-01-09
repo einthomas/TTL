@@ -64,6 +64,17 @@ public class VideoActivity extends AppCompatActivity {
             View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
         );
         getSupportActionBar().hide();
+
+        VideoView videoView = (VideoView) findViewById(R.id.video_view);
+        videoView.resume();
+    }
+
+    @Override
+    protected void onPause() {
+        VideoView videoView = (VideoView) findViewById(R.id.video_view);
+        videoView.suspend();
+
+        super.onPause();
     }
 
     /**
