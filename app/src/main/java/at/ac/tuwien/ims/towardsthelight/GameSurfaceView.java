@@ -223,7 +223,9 @@ public class GameSurfaceView extends TTLSurfaceView {
 
         mediaPlayer = MediaPlayer.create(context, R.raw.kick_shock);
 
-        mediaPlayer.start();
+        if (!muted) {
+            mediaPlayer.start();
+        }
     }
 
     /**
