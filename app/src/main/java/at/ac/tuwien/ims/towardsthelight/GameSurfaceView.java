@@ -473,7 +473,7 @@ public class GameSurfaceView extends TTLSurfaceView {
                     } else {
                         if (playerRect.intersect(selectedLevel.collectables.get(i))) {
                             float relativeX = selectedLevel.collectables.get(i).centerX() / 64f;
-                            soundPool.play(collectSound, 1 - relativeX, relativeX, 1, 1 , 1f);
+                            soundPool.play(collectSound, 1 - relativeX, relativeX, 1, 0 , 1f);
 
                             player.score += 1;
                             selectedLevel.collectables.remove(i);
