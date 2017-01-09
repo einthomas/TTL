@@ -213,19 +213,7 @@ public class GameSurfaceView extends TTLSurfaceView {
             }
         });
 
-        soundPool = new SoundPool(16, AudioManager.STREAM_MUSIC, 0);
-
-        collectSound = soundPool.load(context, R.raw.collect, 1);
-        boostSound = soundPool.load(context, R.raw.boost, 1);
-        boostStartSound = soundPool.load(context, R.raw.boost_start, 1);
-        boostStopSound = soundPool.load(context, R.raw.boost_stop, 1);
-        crashSound = soundPool.load(context, R.raw.crash, 1);
-
-        mediaPlayer = MediaPlayer.create(context, R.raw.kick_shock);
-
-        if (!muted) {
-            mediaPlayer.start();
-        }
+        loadResources();
     }
 
     /**
@@ -246,9 +234,13 @@ public class GameSurfaceView extends TTLSurfaceView {
     public void pause() {
         if (gameLoop != null) {
             gameLoop.setRunning(false);
+            try {
+                gameLoopThread.join();
+            } catch (InterruptedException e) {
+            }
             paused = true;
-            soundPool.autoPause();
-            mediaPlayer.pause();
+
+            releaseResources();
         }
     }
 
@@ -262,11 +254,30 @@ public class GameSurfaceView extends TTLSurfaceView {
             gameLoop.setRunning(true);
             paused = false;
             pausePressed = false;
-            soundPool.autoResume();
-            if (!muted) {
-                mediaPlayer.start();
-            }
+
+            loadResources();
         }
+    }
+
+    private void loadResources() {
+        soundPool = new SoundPool(16, AudioManager.STREAM_MUSIC, 0);
+
+        collectSound = soundPool.load(getContext(), R.raw.collect, 1);
+        boostSound = soundPool.load(getContext(), R.raw.boost, 1);
+        boostStartSound = soundPool.load(getContext(), R.raw.boost_start, 1);
+        boostStopSound = soundPool.load(getContext(), R.raw.boost_stop, 1);
+        crashSound = soundPool.load(getContext(), R.raw.crash, 1);
+
+        mediaPlayer = MediaPlayer.create(getContext(), R.raw.kick_shock);
+
+        if (!muted) {
+            mediaPlayer.start();
+        }
+    }
+
+    private void releaseResources() {
+        soundPool.release();
+        mediaPlayer.release();
     }
 
     /**
