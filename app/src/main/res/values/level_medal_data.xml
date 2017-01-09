@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <integer-array name="level1_medal_points">
-        <item>30</item>    <!-- bronze -->
-        <item>35</item>    <!-- silver -->
-        <item>40</item>   <!-- gold -->
-        <item>50</item>   <!-- diamond -->
+<integer-array name="level1_medal_points">
+        <item>40</item>    <!-- bronze -->
+        <item>50</item>    <!-- silver -->
+        <item>60</item>   <!-- gold -->
+        <item>70</item>   <!-- diamond -->
     </integer-array>
 
     <integer-array name="level2_medal_points">
@@ -15,9 +15,9 @@
     </integer-array>
 
     <integer-array name="level3_medal_points">
+        <item>30</item>
+        <item>35</item>
         <item>40</item>
         <item>50</item>
-        <item>60</item>
-        <item>70</item>
     </integer-array>
 </resources>
