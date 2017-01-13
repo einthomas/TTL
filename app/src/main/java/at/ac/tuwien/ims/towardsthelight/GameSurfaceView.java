@@ -262,7 +262,6 @@ public class GameSurfaceView extends TTLSurfaceView {
             @Override
             protected void clicked() {
                 pausePressed = true;
-                pause();
                 getContext().startActivity(new Intent(getContext(), PauseMenuActivity.class));
             }
         });
@@ -549,6 +548,11 @@ public class GameSurfaceView extends TTLSurfaceView {
      * @param canvas Canvas used for drawing.
      */
     private synchronized void drawUI(Canvas canvas) {
+        if (!resourcesReady) {
+            // our game loop was too eager to draw
+            return;
+        }
+
         Paint paint = new Paint();
 
         canvas.drawBitmap(boostMarker, -11, GAME_HEIGHT - boostMarker.getHeight() - BOOST_AREA_MARGIN + 2, paint);
