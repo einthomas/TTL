@@ -275,6 +275,7 @@ public class GameSurfaceView extends TTLSurfaceView {
         crashSound = soundPool.load(getContext(), R.raw.crash, 1);
 
         mediaPlayer = MediaPlayer.create(getContext(), R.raw.kick_shock);
+        mediaPlayer.setLooping(true);
 
         if (!muted) {
             mediaPlayer.start();
